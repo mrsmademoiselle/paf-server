@@ -13,7 +13,11 @@ public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
+
+    // TODO: isFlipped macht hier keinen Sinn, weil wir Karten auch außerhalb des
+    //  Spielkontexts verwenden können (z.B. Spielerprofil). Alternative?
+    @Transient
     private boolean isFlipped;
 
     @Column
@@ -26,6 +30,10 @@ public class Card {
     public Card(String imagePath) {
         this.imagePath = imagePath;
         this.isFlipped = false;
+    }
+
+    public void flipCard() {
+        this.isFlipped = true;
     }
 
 }
