@@ -7,7 +7,6 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@Embeddable
 @Entity(name = "card")
 public class Card {
 
