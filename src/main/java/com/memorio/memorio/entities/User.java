@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * Das User-Objekt repräsentiert einen User für das Spiel.
+ */
 @Getter
 @Setter
 @Entity(name = "user")
@@ -15,13 +18,11 @@ public class User {
 	private long id;
 	@Column
 	private String username;
-	//TODO: Adjust datatype for password
+	// TODO: Adjust datatype for password
 	@Column
 	private String password;
-	@Column
-	private int wins;
-	@Column
-	private int looses;
+	@OneToOne
+	private UserProfil userProfil;
 
 	@Deprecated
 	public User() {

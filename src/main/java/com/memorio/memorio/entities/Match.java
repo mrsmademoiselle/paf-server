@@ -4,8 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Map;
+import java.util.List;
 
+/**
+ * Ein Match stellt den Zustand eines laufenden Spiels dar.
+ * Zur Laufzeit wird ein Match mit den benötigten Informationen erstellt.
+ * Nach Abschluss des Spiels wird das Match in der Datenbank persistiert.
+ * Außerdem wird das Match in den UserProfilen aller teilnehmenden Usern gespeichert.
+ */
 @Getter
 @Setter
 @Entity
@@ -14,25 +20,26 @@ public class Match {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String lobbyCode;
+    private long lobbyCode;
 
-    // TODO: Admin evtl. rauskicken, sodass alle alle Rechte haben
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User lobbyAdmin;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user", nullable = false)
-    private User amZug;
-
-    // TODO: Richtige Annotation
     @Transient
+    private User currentTurn;
+
+    /* Embedded/Embeddable benutzt man, wenn man ein Objekt in einem Objekt persistieren will,
+    das selbst keine Tabelle in der Datenbank hat. */
+    @Embedded
     private Board board;
 
-    // TODO: Richtige Annotation
-    @Transient
-    private Map<User, Integer> userScores;
+    @ElementCollection
+    private List<UserScore> userScores;
 
+    @Deprecated
     public Match() {
+    }
+
+    public Match(Long lobbyCode, User amZug, Board board) {
+        this.lobbyCode = lobbyCode;
+        this.currentTurn = amZug;
+        this.board = board;
     }
 }

@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * Dieses Objekt repräsentiert eine einzige Memory-Karte mit deren Bild.
+ */
 @Getter
 @Setter
 @Entity(name = "card")

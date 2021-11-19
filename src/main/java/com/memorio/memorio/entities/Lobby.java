@@ -4,21 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Eine Lobby wird vor Beginn des Spiels erstellt.
+ * Um mehrere User einladen zu können, wird ein LobbyCode generiert.
+ * Später wird die Lobby zum Match konvertiert, und der LobbyCode wird zur MatchId.
+ */
 public class Lobby {
 
-    private List<User> users;
+    private List<User> participant;
     private String lobbyCode;
 
     public Lobby() {
-        this.users = new ArrayList<>();
+        this.participant = new ArrayList<>();
+        generateLobbyCode();
     }
 
     public void removeParticipant(User user) {
-        users.remove(user);
+        participant.remove(user);
     }
 
     public void addParticipant(User user) {
-        this.users.add(user);
+        this.participant.add(user);
     }
 
     public void generateLobbyCode() {
