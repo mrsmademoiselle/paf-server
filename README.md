@@ -1,2 +1,2 @@
-# JavaFX Client
-
+# javafx-client
+ Memorios JavaFX Client
