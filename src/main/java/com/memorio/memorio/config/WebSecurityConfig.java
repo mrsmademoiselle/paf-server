@@ -40,7 +40,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2/**").hasRole("ADMIN")
                 .and()
                 // Baut die Login-Form für die Authentifizierung
-                .formLogin();
+                .formLogin()
+	    	.and()
+		.cors()
+		.and()
+		.csrf()
+		.disable();
     }
 
     // Passwort Hashing wird von Spring übernommen
