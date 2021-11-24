@@ -20,7 +20,7 @@
                         <!-- Bild-->
                         <VBox alignment="BOTTOM_CENTER" prefHeight="350.0" prefWidth="480.0">
                             <children>
-                                <Circle fx:id="profilePic" styleClass="profile_pic"/>
+                                <Circle onMouseClicked="#uploadPicture" onMouseEntered="#hoverOverProfilePic" onMouseExited="#setDefaultProfilePic" fx:id="profilePic" styleClass="profile_pic"/>
                                 <Button styleClass="edit_profile_pic" fx:id="editProfilePic"
                                         onAction="#editProfilePic"/>
                             </children>
