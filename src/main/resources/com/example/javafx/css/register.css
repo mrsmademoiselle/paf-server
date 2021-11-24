@@ -1,0 +1,57 @@
+
+.edit_profile_pic {
+    -fx-shape: "M58.5462 6.20435L67.7962 15.4543L60.7446 22.509L51.4946 13.259L58.5462 6.20435ZM24.6665 49.334H33.9165L56.3848 26.8658L47.1348 17.6158L24.6665 40.084V49.334Z M58.5833 58.5833H25.1538C25.0737 58.5833 24.9904 58.6142 24.9103 58.6142C24.8085 58.6142 24.7067 58.5864 24.6019 58.5833H15.4167V15.4167H36.5282L42.6949 9.25H15.4167C12.0157 9.25 9.25 12.0127 9.25 15.4167V58.5833C9.25 61.9873 12.0157 64.75 15.4167 64.75H58.5833C60.2188 64.75 61.7873 64.1003 62.9438 62.9438C64.1003 61.7873 64.75 60.2188 64.75 58.5833V31.857L58.5833 38.0237V58.5833Z";
+    -fx-pref-width: 20px;
+    -fx-pref-height: 20px;
+}
+
+.container {
+}
+
+.form {
+    -fx-background-color: #464646;
+    -fx-background-radius: 10;
+}
+
+.profile_pic {
+    -fx-background-color: #2b2b44;
+    -fx-border-radius: 100;
+    -fx-border-width: 2;
+    -fx-border-color: white;
+}
+
+.title {
+    -fx-background-radius: 2;
+    -fx-font-size: 25;
+    -fx-padding: 50;
+    -fx-background-color: dimgray;
+    -fx-text-fill: white;
+    -fx-background-insets: 40px;
+}
+
+.text_field {
+    -fx-text-fill: gray;
+    -fx-font-size: 15px;
+    -fx-padding: 15px;
+    /* background-insets sind für den horizontalen Margin zwischen den Elementen zuständig,
+     weil es in JavaFX css nativ keinen horizontalen Margin gibt.*/
+    -fx-background-insets: 5 10 5 10;
+    -fx-max-width: 400;
+}
+
+.small_text {
+    -fx-font-size: 15;
+    -fx-padding: 0 50 0 50;
+    -fx-text-fill: #b7b7b7;
+    -fx-background-insets: 0 50 0 50;
+}
+
+.submit_button {
+    -fx-padding: 50;
+    -fx-background-color: #9b9b9b;
+    -fx-text-fill: white;
+    -fx-pref-width: 250;
+    -fx-font-size: 20px;
+    -fx-alignment: center;
+    -fx-background-insets: 40;
+}
