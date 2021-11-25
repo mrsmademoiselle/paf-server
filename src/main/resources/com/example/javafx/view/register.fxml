@@ -21,7 +21,9 @@
                         <VBox alignment="BOTTOM_CENTER" prefHeight="350.0" prefWidth="480.0">
                             <children>
                                 <!-- Später FileChooser einbauen -->
-                                <Circle onMouseClicked="#uploadPicture" onMouseEntered="#hoverOverProfilePic" onMouseExited="#setDefaultProfilePic" fx:id="profilePic" styleClass="profile_pic"/>
+                                <Circle onMouseClicked="#uploadPicture" onMouseEntered="#hoverOverProfilePic"
+                                        onMouseExited="#setDefaultProfilePic" fx:id="profilePic"
+                                        styleClass="profile_pic"/>
                                 <Button styleClass="edit_profile_pic" fx:id="editProfilePic"
                                         onAction="#editProfilePic"/>
                             </children>
@@ -30,7 +32,7 @@
                         <VBox prefWidth="480.0" prefHeight="350.0" alignment="CENTER">
                             <children>
                                 <TextField fx:id="username" styleClass="text_field" promptText="Username"/>
-                                <TextField fx:id="password" styleClass="text_field" promptText="Passwort"/>
+                                <PasswordField fx:id="password" styleClass="text_field" promptText="Passwort"/>
 
                                 <VBox alignment="CENTER_RIGHT">
                                     <Label fx:id="loginLink" onMouseClicked="#sendToLogin" alignment="TOP_RIGHT"
@@ -40,7 +42,9 @@
                                 <Button fx:id="submit" onAction="#register" alignment="BOTTOM_CENTER"
                                         mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0"
                                         styleClass="submit_button" text="Registrieren"/>
-                                <VBox fx:id="successOrErrorContainer" alignment="CENTER"><Label fx:id="bannerLabel" styleClass="banner-label"></Label></VBox>
+                                <VBox fx:id="successOrErrorContainer" alignment="CENTER">
+                                    <Label fx:id="bannerLabel" styleClass="banner-label"></Label>
+                                </VBox>
                             </children>
                         </VBox>
                     </children>
