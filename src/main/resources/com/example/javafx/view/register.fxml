@@ -20,6 +20,7 @@
                         <!-- Bild-->
                         <VBox alignment="BOTTOM_CENTER" prefHeight="350.0" prefWidth="480.0">
                             <children>
+                                <!-- Später FileChooser einbauen -->
                                 <Circle onMouseClicked="#uploadPicture" onMouseEntered="#hoverOverProfilePic" onMouseExited="#setDefaultProfilePic" fx:id="profilePic" styleClass="profile_pic"/>
                                 <Button styleClass="edit_profile_pic" fx:id="editProfilePic"
                                         onAction="#editProfilePic"/>
@@ -39,6 +40,7 @@
                                 <Button fx:id="submit" onAction="#register" alignment="BOTTOM_CENTER"
                                         mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0"
                                         styleClass="submit_button" text="Registrieren"/>
+                                <VBox fx:id="successOrErrorContainer" alignment="CENTER"><Label fx:id="bannerLabel" styleClass="banner-label"></Label></VBox>
                             </children>
                         </VBox>
                     </children>
