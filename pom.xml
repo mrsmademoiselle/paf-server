@@ -42,13 +42,6 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.github.corese4rch/cvurl-io -->
-        <dependency>
-            <groupId>com.github.corese4rch</groupId>
-            <artifactId>cvurl-io</artifactId>
-            <version>1.5</version>
-        </dependency>
-
 
     </dependencies>
     <build>

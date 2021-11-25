@@ -52,10 +52,6 @@ public class UserDto {
 
     @Override
     public String toString() {
-        return "{" +
-                "'id':" + id + "," +
-                "'username':'" + username + "," +
-                "'password':'" + password
-                + "}";
+        return "{\"id\":\"" + id + "\",\"username\":\"" + username + "\",\"password\":\"" + password +"\"}";
     }
 }

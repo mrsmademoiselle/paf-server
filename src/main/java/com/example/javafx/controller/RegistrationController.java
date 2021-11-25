@@ -1,5 +1,6 @@
 package com.example.javafx.controller;
 
+import com.example.javafx.HttpConnector;
 import com.example.javafx.model.UserDto;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
@@ -100,10 +101,11 @@ public class RegistrationController {
     public void register(ActionEvent event) {
         // TODO pw hashing
         UserDto userDto = new UserDto(0L, username.getText(), password.getText());
-        sendRequest(userDto);
 
-        // durch Response setzen
-        boolean successfulRegistration = true;
+        // Send Request
+        boolean successfulRegistration = HttpConnector.post("register", userDto);
+
+        // User Notification
         fillInfoLabel(successfulRegistration);
     }
 
@@ -136,19 +138,20 @@ public class RegistrationController {
         editProfilePic.setGraphic(new ImageView(getPic("edit.png")));
     }
 
-    public void hoverOverProfilePic(){
+    public void hoverOverProfilePic() {
         Image pic = getPic("upload.png");
         profilePic.setFill(new ImagePattern(pic));
         profilePic.setRadius(100);
         profilePic.setCursor(Cursor.HAND);
     }
+
     public void setDefaultProfilePic() {
         Image pic = getPic("painting2.png");
         profilePic.setFill(new ImagePattern(pic));
         profilePic.setRadius(100);
     }
 
-    public void uploadPicture(){
+    public void uploadPicture() {
         notYetImplemented();
     }
 
@@ -164,11 +167,11 @@ public class RegistrationController {
 
     private void fillInfoLabel(boolean successfulRegistration) {
         // Später muss der erfolgreich-Fall nicht mehr behandelt werden, stattdessen eine Weiterleitung auf Startseite
-        String labelText = successfulRegistration ? "Der Benutzer wurde erfolgreich angelegt.":"Der Benutzer konnte nicht angelegt werden.";
+        String labelText = successfulRegistration ? "Der Benutzer wurde erfolgreich angelegt." : "Der Benutzer konnte nicht angelegt werden.";
         String labelBackground = successfulRegistration ? "#6dd06d" : "#d06d6d";
         String labelColor = successfulRegistration ? "#004100" : "#410000";
         bannerLabel.setText(labelText);
-        bannerLabel.setBackground(new Background(new BackgroundFill(Paint.valueOf(labelBackground),new CornerRadii(10), null)));
+        bannerLabel.setBackground(new Background(new BackgroundFill(Paint.valueOf(labelBackground), new CornerRadii(10), null)));
         bannerLabel.setTextFill(Paint.valueOf(labelColor));
     }
 
