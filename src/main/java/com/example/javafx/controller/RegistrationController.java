@@ -135,10 +135,6 @@ public class RegistrationController {
         delay.play();
     }
 
-    private void sendRequest(UserDto userDto) {
-        notYetImplemented();
-    }
-
     private void setButtonPic() {
         editProfilePic.setGraphic(new ImageView(getPic("edit.png")));
     }
