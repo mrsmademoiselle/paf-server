@@ -19,11 +19,11 @@
 }
 
 .container {
-   /* to be fixed -fx-background-color: -site-background;*/
+    /* to be fixed -fx-background-color: -site-background;*/
 }
 
 .form {
-    -fx-background-color: -first-background;
+    -fx-background-color: -side-nav;
     -fx-background-radius: 10;
 }
 
@@ -39,7 +39,7 @@
     -fx-background-radius: 2;
     -fx-font-size: 25;
     -fx-padding: 50;
-    -fx-background-color: -primary-buttons;
+    -fx-background-color: -first-background;
     -fx-text-fill: white;
     -fx-background-insets: 40px;
 }
@@ -75,7 +75,7 @@
     -fx-cursor: hand;
 }
 
-.banner-label{
+.banner-label {
     -fx-padding: 10;
     -fx-font-size: 15;
     -fx-background-insets: 30;
