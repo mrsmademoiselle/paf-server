@@ -108,7 +108,7 @@ public class RegistrationController {
             UserDto userDto = new UserDto(0L, username.getText(), password.getText());
 
             // Send Request
-            successfulRegistration = HttpConnector.post("register", userDto);
+            successfulRegistration = HttpConnector.post("user/register", userDto);
         }
         // User Notification
         fillInfoLabel(successfulRegistration);
