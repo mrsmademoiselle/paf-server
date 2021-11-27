@@ -1,7 +1,7 @@
 package com.example.javafx.controller;
 
 import com.example.javafx.HttpConnector;
-import com.example.javafx.model.UserDto;
+import com.example.javafx.model.UserAuthDto;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -105,10 +105,10 @@ public class RegistrationController {
         if (username.getText().matches("[\\w|\\d]*") &&
                 !password.getText().isBlank() && !username.getText().isBlank()) {
             // TODO pw hashing
-            UserDto userDto = new UserDto(0L, username.getText(), password.getText());
+            UserAuthDto userAuthDto = new UserAuthDto(username.getText(), password.getText());
 
             // Send Request
-            successfulRegistration = HttpConnector.post("user/register", userDto);
+            successfulRegistration = HttpConnector.post("user/register", userAuthDto);
         }
         // User Notification
         fillInfoLabel(successfulRegistration);
