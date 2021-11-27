@@ -100,12 +100,16 @@ public class RegistrationController {
     }
 
     public void register(ActionEvent event) {
-        // TODO pw hashing
-        UserDto userDto = new UserDto(0L, username.getText(), password.getText());
+        boolean successfulRegistration = false;
 
-        // Send Request
-        boolean successfulRegistration = HttpConnector.post("register", userDto);
+        if (username.getText().matches("[\\w|\\d]*") &&
+                !password.getText().isBlank() && !username.getText().isBlank()) {
+            // TODO pw hashing
+            UserDto userDto = new UserDto(0L, username.getText(), password.getText());
 
+            // Send Request
+            successfulRegistration = HttpConnector.post("register", userDto);
+        }
         // User Notification
         fillInfoLabel(successfulRegistration);
     }
