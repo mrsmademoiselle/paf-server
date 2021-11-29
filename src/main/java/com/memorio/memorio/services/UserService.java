@@ -15,13 +15,24 @@ public class UserService {
     }
 
     public boolean saveUser(String username, String password) {
-	if(userRepository.existsByUsername(username)){return false;}
+	if(this.userRepository.existsByUsername(username)){return false;}
 	try {
-	    userRepository.save(new User(username, password));
+		System.out.println(username);
+	    this.userRepository.save(new User(username, password));
 	    return true;
 	} catch(Exception e) {
 	    return false;
 	}
     }
+
+	public boolean findUser(String username, String password){
+		/**
+		 * Finde User, wenn gefunden return true
+		 */
+		if(this.userRepository.existsByUsername(username) && this.userRepository.existsByPassword(password)){
+			return true;
+		}
+		return false;
+	}
 
 }

@@ -73,7 +73,14 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
     public String loginUser(@RequestBody UserAuthDto userAuthDto){
-
+        /**
+         *
+         * Wenn der user gefunden wird, generiere token und übermittle token
+         * User finden = userpassword UND username passen
+         */
+    if (this.userService.findUser(userAuthDto.getUsername(), userAuthDto.getPassword())){
+        return "bar";
+    }
     /*
     * TODO: Return JWT Token AND Username + Userconfig to Client to persist information
     */
