@@ -15,6 +15,7 @@ public class UserService {
     }
 
     public boolean saveUser(String username, String password) {
+	if(userRepository.existsByUsername(username)){return false;}
 	try {
 	    userRepository.save(new User(username, password));
 	    return true;
