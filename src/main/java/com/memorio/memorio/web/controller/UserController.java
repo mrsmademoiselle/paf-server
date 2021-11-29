@@ -4,11 +4,19 @@ import com.memorio.memorio.entities.Match;
 import com.memorio.memorio.entities.User;
 import com.memorio.memorio.repositories.MatchRepository;
 import com.memorio.memorio.repositories.UserRepository;
+import com.memorio.memorio.services.UserService;
+import com.memorio.memorio.web.dto.UserAuthDto;
+import com.memorio.memorio.entities.User;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties.MatchingStrategy;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
@@ -19,17 +27,19 @@ import java.util.List;
  übernimmt JPA bestimmte Operationen automatisch, z.B. das committen von Changes (Persistence Context) */
 @Transactional
 // localhost:9090/user
-@RequestMapping("/quatsch")
+@RequestMapping("/user")
 public class UserController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
     UserRepository userRepository;
     MatchRepository matchRepository;
+    UserService userService;
 
     @Autowired
-    public UserController(UserRepository userRepository, MatchRepository matchRepository) {
+    public UserController(UserRepository userRepository, MatchRepository matchRepository, UserService userService) {
         this.userRepository = userRepository;
         this.matchRepository = matchRepository;
+	this.userService = userService;
     }
 
     @GetMapping("/match")
@@ -37,7 +47,7 @@ public class UserController {
         return this.matchRepository.findAll();
     }
 
-    @GetMapping("/user")
+    @GetMapping("/users")
     public List<User> getUsers() {
         return this.userRepository.findAll();
     }
@@ -50,5 +60,10 @@ public class UserController {
     @GetMapping("/admin/**")
     public String nurAdmin() {
         return "Das hier sieht man nur als Admin";
+    }
+
+    @PostMapping("/register")
+    public boolean registerUser(@RequestBody UserAuthDto userAuthDto) {
+	return this.userService.saveUser(userAuthDto.getUsername(), userAuthDto.getPassword());
     }
 }

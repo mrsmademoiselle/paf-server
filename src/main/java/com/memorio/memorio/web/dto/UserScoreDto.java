@@ -6,10 +6,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserScoreDto {
-    private UserDto user;
+    private UserAuthDto user;
     private int moves;
 
-    public UserScoreDto(UserDto user, int moves) {
+    public UserScoreDto(UserAuthDto user, int moves) {
         this.user = user;
         this.moves = moves;
     }
