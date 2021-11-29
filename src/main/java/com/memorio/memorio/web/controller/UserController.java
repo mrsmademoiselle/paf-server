@@ -28,7 +28,7 @@ import java.util.List;
  übernimmt JPA bestimmte Operationen automatisch, z.B. das committen von Changes (Persistence Context) */
 @Transactional
 // localhost:9090/user
-@CrossOrigin("http://localhost:9090")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/user")
 public class UserController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -64,8 +64,19 @@ public class UserController {
         return "Das hier sieht man nur als Admin";
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")
     public boolean registerUser(@RequestBody UserAuthDto userAuthDto) {
 	return this.userService.saveUser(userAuthDto.getUsername(), userAuthDto.getPassword());
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/login")
+    public String loginUser(@RequestBody UserAuthDto userAuthDto){
+
+    /*
+    * TODO: Return JWT Token AND Username + Userconfig to Client to persist information
+    */
+        return "Derp";
     }
 }
