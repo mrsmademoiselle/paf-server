@@ -48,6 +48,8 @@ public class UserController {
     UserRepository userRepository;
     MatchRepository matchRepository;
     UserService userService;
+    private AuthenticationManager authenticationManager;
+    private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     public UserController(UserRepository userRepository, MatchRepository matchRepository, UserService userService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
@@ -58,9 +60,6 @@ public class UserController {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    private AuthenticationManager authenticationManager;
-
-    private JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/users")
     public List<User> getUsers() {
