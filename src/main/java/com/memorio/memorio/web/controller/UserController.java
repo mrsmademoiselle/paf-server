@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties.MatchingStrategy;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
 import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.memorio.memorio.config.JwtTokenUtil;
+import com.memorio.memorio.entities.JwtRequest;
+import com.memorio.memorio.entities.JwtResponse;
 
 @RestController
 /* Transactional zeigt an, dass jede aufgerufene Methode eine abgeschlossene Transaktion abbildet. In einer Transaktion
@@ -44,6 +56,11 @@ public class UserController {
 	this.userService = userService;
     }
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
     @GetMapping("/match")
     public List<Match> getMatch() {
         return this.matchRepository.findAll();
@@ -64,26 +81,39 @@ public class UserController {
         return "Das hier sieht man nur als Admin";
     }
 
+    //Registrierung - Wenn Username bereits vorhanden gebe 400 wenn User noch nicht vorhanden 200
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")
-    public boolean registerUser(@RequestBody UserAuthDto userAuthDto) {
-	return this.userService.saveUser(userAuthDto.getUsername(), userAuthDto.getPassword());
+    public ResponseEntity<?> saveUser(@RequestBody UserAuthDto userAuthDto) throws Exception {
+        if(userService.saveUser(userAuthDto)){
+            return ResponseEntity.ok("Registrierung erfolgreich");
+        }else{
+            return new ResponseEntity<>("Registrierung fehlgeschlagen - Benutzername bereits vergeben", HttpStatus.BAD_REQUEST);        }
     }
 
+    //Login - wenn User gefunden werden kann und Zugangsdatem stimmen gebe Token sonst Exception mit 500
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
-    public String loginUser(@RequestBody UserAuthDto userAuthDto){
-        /**
-         *
-         * Wenn der user gefunden wird, generiere token und übermittle token
-         * User finden = userpassword UND username passen
-         */
-    if (this.userService.findUser(userAuthDto.getUsername(), userAuthDto.getPassword())){
-        return "bar";
+    public ResponseEntity<?> loginUser(@RequestBody JwtRequest authenticationRequest)throws Exception{
+        // Pruefen ob Token existiert
+        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        // Bauen des User-security-Objektes
+        final UserDetails userDetails = userService
+                .loadUserByUsername(authenticationRequest.getUsername());
+        //Token generieren
+        final String token = jwtTokenUtil.generateToken(userDetails);
+        //Ausgabe des Tokens
+        return ResponseEntity.ok(new JwtResponse(token));
     }
-    /*
-    * TODO: Return JWT Token AND Username + Userconfig to Client to persist information
-    */
-        return "Derp";
+
+    private void authenticate(String username, String password) throws Exception {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException e) {
+            throw new Exception("", e);
+        } catch (BadCredentialsException e) {
+            //Exception wenn der User nicht gefunden werden kann
+            throw new Exception("Falsche Zugangsdaten", e);
+        }
     }
 }

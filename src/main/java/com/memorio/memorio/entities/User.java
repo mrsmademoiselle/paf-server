@@ -30,7 +30,6 @@ public class User {
 
 	public User(String username, String password) {
 		this.username = username;
-		//TODO: password hashing things?
 		this.password = password;
 	}
 

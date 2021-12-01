@@ -1,11 +1,18 @@
 package com.memorio.memorio.services;
 import com.memorio.memorio.repositories.UserRepository;
+import com.memorio.memorio.web.dto.UserAuthDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.memorio.memorio.entities.User;
 
+import java.util.ArrayList;
+
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -14,25 +21,32 @@ public class UserService {
 	this.userRepository = userRepository;
     }
 
-    public boolean saveUser(String username, String password) {
-	if(this.userRepository.existsByUsername(username)){return false;}
-	try {
-		System.out.println(username);
-	    this.userRepository.save(new User(username, password));
-	    return true;
-	} catch(Exception e) {
-	    return false;
-	}
-    }
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
 
-	public boolean findUser(String username, String password){
-		/**
-		 * Finde User, wenn gefunden return true
-		 */
-		if(this.userRepository.existsByUsername(username) && this.userRepository.existsByPassword(password)){
-			return true;
+	public boolean saveUser(UserAuthDto user) {
+		if(this.userRepository.existsByUsername(user.getUsername())){
+			return false;
 		}
-		return false;
+		try{
+			// PW Encryption with bcypt
+			User newUser = new User(user.getUsername(),bcryptEncoder.encode(user.getPassword()));
+			userRepository.save(newUser);
+			return true;
+
+		}catch (Exception e){
+			return false;
+		}
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = userRepository.findByUsername(username);
+		if (user == null) {
+			throw new UsernameNotFoundException("Kein Benutzer mit dem Namen " + username + " gefunden");
+		}
+		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+				new ArrayList<>());
 	}
 
 }
