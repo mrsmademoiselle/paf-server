@@ -1,5 +1,6 @@
 package com.example.javafx;
 
+import com.example.javafx.controller.SceneController;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
@@ -17,7 +18,10 @@ public class MemorioApplication extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent view = FXMLLoader.load(getClass().getResource("view/register.fxml"));
+        //Parent view = FXMLLoader.load(getClass().getResource("view/register.fxml"));
+        //Parent view = FXMLLoader.load(getClass().getResource("view/login.fxml"));
+
+        SceneController sceneController = SceneController.getInstance();
 
         Rectangle2D primaryScreen = Screen.getPrimary().getVisualBounds();
 
@@ -25,12 +29,16 @@ public class MemorioApplication extends javafx.application.Application {
         double applicationWidth = primaryScreen.getWidth() < 1920 ? primaryScreen.getWidth() : 1920;
         double applicationHeight = primaryScreen.getHeight() < 1080 ? primaryScreen.getHeight() : 1080;
 
+        sceneController.setScale(applicationWidth, applicationHeight);
+        sceneController.setStage(stage);
+        sceneController.setLoginScene(getClass().getResource("view/login.fxml"));
+        sceneController.setRegisterScene(getClass().getResource("view/register.fxml"));
+
         // Fenster zentrieren
         stage.setX((primaryScreen.getWidth() - applicationWidth) / 2);
         stage.setY((primaryScreen.getHeight() - applicationHeight) / 2);
 
-        Scene scene = new Scene(view, applicationWidth, applicationHeight);
-        stage.setScene(scene);
+        sceneController.loadLogin();
         stage.show();
     }
 }

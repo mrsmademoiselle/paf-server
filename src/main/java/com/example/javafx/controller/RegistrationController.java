@@ -92,7 +92,6 @@ public class RegistrationController {
         title.setLayoutX(form.getLayoutX() + 110);
         title.setTranslateY(form.getLayoutY() / 4);
         title.toFront();
-
     }
 
     public void editProfilePic(ActionEvent event) {
@@ -115,8 +114,8 @@ public class RegistrationController {
     }
 
     public void sendToLogin() {
-        // To be done, wenn Login implementiert wird
-        notYetImplemented();
+        SceneController sceneController = SceneController.getInstance();
+        sceneController.loadLogin();
     }
 
     private void notYetImplemented() {
