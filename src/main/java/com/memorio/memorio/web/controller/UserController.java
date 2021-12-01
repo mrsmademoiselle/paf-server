@@ -50,35 +50,21 @@ public class UserController {
     UserService userService;
 
     @Autowired
-    public UserController(UserRepository userRepository, MatchRepository matchRepository, UserService userService) {
+    public UserController(UserRepository userRepository, MatchRepository matchRepository, UserService userService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
         this.matchRepository = matchRepository;
-	this.userService = userService;
+	    this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
 
-    @GetMapping("/match")
-    public List<Match> getMatch() {
-        return this.matchRepository.findAll();
-    }
+    private JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/users")
     public List<User> getUsers() {
         return this.userRepository.findAll();
-    }
-
-    @GetMapping("/allesErlaubt")
-    public String allesErlaubt() {
-        return "Das hier sieht man auch ohne Login";
-    }
-
-    @GetMapping("/admin/**")
-    public String nurAdmin() {
-        return "Das hier sieht man nur als Admin";
     }
 
     //Registrierung - Wenn Username bereits vorhanden gebe 400 wenn User noch nicht vorhanden 200
