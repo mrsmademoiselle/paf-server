@@ -31,7 +31,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        // Check for the following Header in request - this Header *needs* to be set in every Request!!
+        // Folgendes Feld wird in den Header der Requests durchsucht, dieses Feld *muss* zwingend gesetzt werden!!
         final String requestTokenHeader = request.getHeader("Authtoken");
 
         String username = null;
@@ -40,7 +40,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (requestTokenHeader != null) {
             jwtToken = requestTokenHeader;
             try {
-                // Search for a User that is connected to the token
+                // Nach dem User suchen fuer den das Token generiert wurde um eine Korrelation zwischen Token und User zu scahffen
+                // Dadurch das Benutzerinfos fuer die Tokengenerierung verwendet wurden ist das moeglich
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
                 System.out.println("Token konnte nicht gelesen werden");
@@ -48,25 +49,24 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 System.out.println("Token ist abgelaufen");
             }
         } else {
-            // If no User is recorded with the token OR there is no Token
+            // Wenn kein User fuer das Token gefunden wurde ODER es gar kein Token bislang gibt Ausgabe durch logger
             logger.warn("Kein Token gesetzt");
         }
 
-        // Once we get the token validate it
+        // Sobald ein User gefunden wurde
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = this.userService.loadUserByUsername(username);
 
-            // if token is valid configure Spring Security to manually set authentication
+            // Laden des Users und validieren
             if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                // After setting the Authentication in the context, we specify
-                // that the current user is authenticated. So it passes the
-                // Spring Security Configurations successfully.
+                // Sobald der User verifiziert wurde, es also ein passendes Token gibt
+                // Weitergabe an Spring
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }

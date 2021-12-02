@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
 			return false;
 		}
 		try{
-			// PW Encryption with bcypt
+			// User generieren
 			User newUser = new User(user.getUsername(),bcryptEncoder.encode(user.getPassword()));
 			userRepository.save(newUser);
 			return true;
@@ -41,6 +41,7 @@ public class UserService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		// Vorgegeben durch UserDetailService
 		User user = userRepository.findByUsername(username);
 		if (user == null) {
 			throw new UsernameNotFoundException("Kein Benutzer mit dem Namen " + username + " gefunden");

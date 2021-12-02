@@ -39,7 +39,6 @@ import com.memorio.memorio.entities.JwtResponse;
 /* Transactional zeigt an, dass jede aufgerufene Methode eine abgeschlossene Transaktion abbildet. In einer Transaktion
  übernimmt JPA bestimmte Operationen automatisch, z.B. das committen von Changes (Persistence Context) */
 @Transactional
-// localhost:9090/user
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/user")
 public class UserController {
@@ -59,7 +58,6 @@ public class UserController {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
     }
-
 
     @GetMapping("/users")
     public List<User> getUsers() {

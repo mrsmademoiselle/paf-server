@@ -49,17 +49,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        // Disable csrf
+        // csrf aus machen, da nicht benoetigt bzw keine anforderung
         httpSecurity.csrf().disable()
-                // disable auth for the following endpoints
+                // auth-header check fuer folgende Endpunkte deaktivieren
                 .authorizeRequests().antMatchers("/user/login", "/user/register" ).permitAll().
-                // all other requests need to be authenticated
+                // Alle Anfragen an anderen Endpunkten werden ueberprueft
                         anyRequest().authenticated().and().
-                // make sure we use stateless session, session won't be used to store user's state.
+                // Entrypoint fuer authmanagement angeben und Sessionmanagement deaktivieren
                         exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // Add a filter to validate the tokens with *every* request JUST ONCE!
+        // Filter Richtlinie - jeder Header eines Requests wird einmalig nach dem Token validiert
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }
