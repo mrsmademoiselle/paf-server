@@ -23,6 +23,8 @@ import javafx.stage.Screen;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegistrationController {
 
@@ -99,6 +101,7 @@ public class RegistrationController {
     }
 
     public void register(ActionEvent event) {
+        Map<String, String> response = new HashMap<String, String>();
         boolean successfulRegistration = false;
 
         if (username.getText().matches("[\\w|\\d]*") &&
@@ -107,10 +110,17 @@ public class RegistrationController {
             UserAuthDto userAuthDto = new UserAuthDto(username.getText(), password.getText());
 
             // Send Request
-            successfulRegistration = HttpConnector.post("user/register", userAuthDto);
+            response = HttpConnector.post("user/register", userAuthDto);
+            // get Response code
+            int responseCode = Integer.parseInt(response.get("code"));
+            // check if successfull
+            if(responseCode == 200){
+                // send to Login
+                this.sendToLogin();
+            }
         }
         // User Notification
-        fillInfoLabel(successfulRegistration);
+        //fillInfoLabel(successfulRegistration);
     }
 
     public void sendToLogin() {

@@ -16,6 +16,7 @@ public class SceneController {
 
     private URL loginScene;
     private URL registerScene;
+    private URL dashboardScene;
     private static final SceneController instance = new SceneController();
 
     private SceneController() {}
@@ -26,11 +27,12 @@ public class SceneController {
 
     public void loadLogin(){this.loadScene(this.loginScene);}
     public void loadRegistration(){this.loadScene(this.registerScene);}
+    public void loadDashboard(){this.loadScene(this.dashboardScene);}
     public void setStage(Stage stage) {
         this.stage = stage;
     }
     public void setLoginScene(URL loginScene) {this.loginScene = loginScene;}
-
+    public void setDashboardScene(URL dashboardScene) {this.dashboardScene = dashboardScene;}
     public void setRegisterScene(URL registerScene) {
         this.registerScene = registerScene;
     }

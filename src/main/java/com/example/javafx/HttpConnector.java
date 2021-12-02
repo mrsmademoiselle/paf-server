@@ -8,6 +8,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -30,8 +32,8 @@ public class HttpConnector {
         return response;
     }
 
-    public static boolean post(String urlString, Object data) {
-        boolean successfulRegistration = false;
+    public static Map<String, String> post(String urlString, Object data) {
+        Map<String, String> response = new HashMap<String, String>();
 
         try {
             // Verbindung vorbereiten
@@ -57,15 +59,21 @@ public class HttpConnector {
             // Erwarte Response -> könnten wir theoretisch für post auch über protokolle machen,
             // aber so können wir getReponse() für GET wiederverwenden. Evtl wollen wir ja später ohnehin
             // Fehlermeldungen werfen, dann geht das hierüber.
-            String response = getResponse(http);
+            String rsp = getResponse(http);
             http.disconnect();
 
-            successfulRegistration = Boolean.parseBoolean(response);
+
+            int responseCode = http.getResponseCode();
+            response.put("code", String.valueOf(responseCode));
+            response.put("msg", rsp);
+
         } catch (IOException e) {
             System.out.println("Exception! \n" + e.getMessage());
+            response.put("code", "400");
+            response.put("msg", "exception");
         }
 
-        return successfulRegistration;
+        return response;
     }
 
     private static String getResponse(HttpURLConnection http) throws IOException {

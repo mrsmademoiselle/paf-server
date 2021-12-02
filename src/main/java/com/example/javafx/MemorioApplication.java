@@ -33,6 +33,7 @@ public class MemorioApplication extends javafx.application.Application {
         sceneController.setStage(stage);
         sceneController.setLoginScene(getClass().getResource("view/login.fxml"));
         sceneController.setRegisterScene(getClass().getResource("view/register.fxml"));
+        sceneController.setDashboardScene(getClass().getResource("view/dashboard.fxml"));
 
         // Fenster zentrieren
         stage.setX((primaryScreen.getWidth() - applicationWidth) / 2);
