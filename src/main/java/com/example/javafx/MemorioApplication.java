@@ -38,6 +38,8 @@ public class MemorioApplication extends javafx.application.Application {
         // Fenster zentrieren
         stage.setX((primaryScreen.getWidth() - applicationWidth) / 2);
         stage.setY((primaryScreen.getHeight() - applicationHeight) / 2);
+        stage.setWidth(applicationWidth);
+        stage.setHeight(applicationHeight);
 
         sceneController.loadLogin();
         stage.show();

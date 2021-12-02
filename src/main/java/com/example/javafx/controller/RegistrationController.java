@@ -117,10 +117,11 @@ public class RegistrationController {
             if(responseCode == 200){
                 // send to Login
                 this.sendToLogin();
+            } else {
+                // User Notification
+                fillInfoLabel(successfulRegistration);
             }
         }
-        // User Notification
-        //fillInfoLabel(successfulRegistration);
     }
 
     public void sendToLogin() {
