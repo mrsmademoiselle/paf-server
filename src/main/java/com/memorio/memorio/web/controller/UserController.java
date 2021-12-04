@@ -1,39 +1,29 @@
 package com.memorio.memorio.web.controller;
 
-import com.memorio.memorio.entities.Match;
+import com.memorio.memorio.config.JwtTokenUtil;
+import com.memorio.memorio.entities.JwtRequest;
+import com.memorio.memorio.entities.JwtResponse;
 import com.memorio.memorio.entities.User;
 import com.memorio.memorio.repositories.MatchRepository;
 import com.memorio.memorio.repositories.UserRepository;
 import com.memorio.memorio.services.UserService;
 import com.memorio.memorio.web.dto.UserAuthDto;
-import com.memorio.memorio.entities.User;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties.MatchingStrategy;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.transaction.Transactional;
-import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
-import com.memorio.memorio.config.JwtTokenUtil;
-import com.memorio.memorio.entities.JwtRequest;
-import com.memorio.memorio.entities.JwtResponse;
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 /* Transactional zeigt an, dass jede aufgerufene Methode eine abgeschlossene Transaktion abbildet. In einer Transaktion
@@ -42,19 +32,18 @@ import com.memorio.memorio.entities.JwtResponse;
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/user")
 public class UserController {
+    private final UserRepository userRepository;
+    private final MatchRepository matchRepository;
+    private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenUtil jwtTokenUtil;
     Logger logger = LoggerFactory.getLogger(UserController.class);
-
-    UserRepository userRepository;
-    MatchRepository matchRepository;
-    UserService userService;
-    private AuthenticationManager authenticationManager;
-    private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     public UserController(UserRepository userRepository, MatchRepository matchRepository, UserService userService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
         this.matchRepository = matchRepository;
-	    this.userService = userService;
+        this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
     }
@@ -64,28 +53,40 @@ public class UserController {
         return this.userRepository.findAll();
     }
 
-    //Registrierung - Wenn Username bereits vorhanden gebe 400 wenn User noch nicht vorhanden 200
+    /**
+     * Registrierung
+     * Wenn Username bereits vorhanden gebe 400 wenn User noch nicht vorhanden 200
+     */
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")
-    public ResponseEntity<?> saveUser(@RequestBody UserAuthDto userAuthDto) throws Exception {
-        if(userService.saveUser(userAuthDto)){
-            return ResponseEntity.ok("Registrierung erfolgreich");
-        }else{
-            return new ResponseEntity<>("Registrierung fehlgeschlagen - Benutzername bereits vergeben", HttpStatus.BAD_REQUEST);        }
+    public ResponseEntity<?> saveUser(@Valid @RequestBody UserAuthDto userAuthDto, BindingResult bindingResult) throws Exception {
+
+        if (bindingResult.hasErrors()) {
+            logger.warn("{} hat das falsche Format. Fehler: {}", userAuthDto, bindingResult.getAllErrors());
+            return new ResponseEntity<>("Benutzername oder Passwort sind nicht valide.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (userService.saveUser(userAuthDto)) {
+            return ResponseEntity.ok("Die Registrierung war erfolgreich.");
+        } else {
+            return new ResponseEntity<>("Der Benutzername ist bereits vergeben", HttpStatus.BAD_REQUEST);
+        }
     }
 
-    //Login - wenn User gefunden werden kann und Zugangsdatem stimmen gebe Token sonst Exception mit 500
+    /**
+     * Login
+     * wenn User gefunden werden kann und Zugangsdatem stimmen gebe Token sonst Exception mit 500
+     */
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody JwtRequest authenticationRequest)throws Exception{
+    public ResponseEntity<?> loginUser(@RequestBody JwtRequest authenticationRequest) throws Exception {
         // Pruefen ob Token existiert
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-        // Bauen des User-security-Objektes
+
         final UserDetails userDetails = userService
                 .loadUserByUsername(authenticationRequest.getUsername());
-        //Token generieren
         final String token = jwtTokenUtil.generateToken(userDetails);
-        //Ausgabe des Tokens
+
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
@@ -95,7 +96,7 @@ public class UserController {
         } catch (DisabledException e) {
             throw new Exception("", e);
         } catch (BadCredentialsException e) {
-            //Exception wenn der User nicht gefunden werden kann
+            // Exception wenn der User nicht gefunden werden kann
             throw new Exception("Falsche Zugangsdaten", e);
         }
     }

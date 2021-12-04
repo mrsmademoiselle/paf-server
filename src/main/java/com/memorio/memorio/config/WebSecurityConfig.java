@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -21,21 +20,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final UserService userService;
+    private final JwtRequestFilter jwtRequestFilter;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+    public WebSecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, UserService userService, JwtRequestFilter jwtRequestFilter) {
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.userService = userService;
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
-
     }
 
+    // Diese Bean wird für die Erstellung des UserService-Objekts benötigt (PasswordEncoder)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -52,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // csrf aus machen, da nicht benoetigt bzw keine anforderung
         httpSecurity.csrf().disable()
                 // auth-header check fuer folgende Endpunkte deaktivieren
-                .authorizeRequests().antMatchers("/user/login", "/user/register" ).permitAll().
+                .authorizeRequests().antMatchers("/user/login", "/user/register").permitAll().
                 // Alle Anfragen an anderen Endpunkten werden ueberprueft
                         anyRequest().authenticated().and().
                 // Entrypoint fuer authmanagement angeben und Sessionmanagement deaktivieren
