@@ -80,14 +80,26 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        // Pruefen ob Token existiert
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
-        final UserDetails userDetails = userService
-                .loadUserByUsername(authenticationRequest.getUsername());
-        final String token = jwtTokenUtil.generateToken(userDetails);
-
+        final String token = getTokenForUser(authenticationRequest);
         return ResponseEntity.ok(new JwtResponse(token));
+    }
+
+    /**
+     * "Pseudo"-Endpunkt für jene Client-Seiten, welche zwar einen Login erfordern, aber keinen eigenen Request an den
+     * Server abfeuern müssen.
+     * Dient der Validierung des JWT vor Ausgabe der Seite.
+     * <p>
+     * Habs erstmal im UserController gelassen, weil es entfernt etwas damit zutun hat. Können es aber auch gerne in einen
+     * eigenen Controller auslagern.
+     * <p>
+     * Wegen unserer WebSecurityConfig wird bei allen Requests auf diesen Endpunkt automatisch das JWT validiert.
+     * Erst wenn der Benutzer tatsächlich autorisiert ist, wird die Methode aufgerufen und es wird ein 200er zurückgegeben.
+     * Ist der Benutzer nicht autorisiert (das Token nicht korrekt), wird ein 401 zurückgegeben.
+     */
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/check")
+    public ResponseEntity<?> checkIfAuthorized() throws Exception {
+        return ResponseEntity.ok("");
     }
 
     private void authenticate(String username, String password) throws Exception {
@@ -99,5 +111,15 @@ public class UserController {
             // Exception wenn der User nicht gefunden werden kann
             throw new Exception("Falsche Zugangsdaten", e);
         }
+    }
+
+    private String getTokenForUser(JwtRequest authenticationRequest) throws Exception {
+        // Pruefen ob Token existiert
+        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+
+        final UserDetails userDetails = userService
+                .loadUserByUsername(authenticationRequest.getUsername());
+        final String token = jwtTokenUtil.generateToken(userDetails);
+        return token;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -63,11 +64,12 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Vorgegeben durch UserDetailService
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
+        Optional<User> optional = userRepository.findByUsername(username);
+        
+        if (optional.isEmpty())
             throw new UsernameNotFoundException("Kein Benutzer mit dem Namen " + username + " gefunden");
-        }
+
+        User user = optional.get();
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 new ArrayList<>());
     }
