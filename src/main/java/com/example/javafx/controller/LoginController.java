@@ -1,27 +1,25 @@
 package com.example.javafx.controller;
 
 import com.example.javafx.HttpConnector;
+import com.example.javafx.json.JSONObject;
 import com.example.javafx.model.UserAuthDto;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
-import javafx.stage.Stage;
-
-import java.awt.event.ActionEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.prefs.*;
 
 public class LoginController {
+
     @FXML
     Label title;
 
@@ -36,6 +34,8 @@ public class LoginController {
 
     private static double applicationWidth;
     private static double applicationHeight;
+
+    private PreferenceController preferenceController = new PreferenceController();
 
     @FXML
     protected void initialize(){
@@ -73,8 +73,9 @@ public class LoginController {
             sceneController.loadLogin();
             return;
         } else {
-            // TODO: save token in Local Storage
-            String jsonString = response.get("msg");
+            JSONObject jo = new JSONObject(response.get("msg"));
+            String token = jo.getString("token");
+            preferenceController.setToken(token);
             sceneController.loadDashboard();
         }
 
