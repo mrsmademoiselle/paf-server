@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import javax.ws.rs.NotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 /* Transactional zeigt an, dass jede aufgerufene Methode eine abgeschlossene Transaktion abbildet. In einer Transaktion
@@ -59,7 +61,7 @@ public class UserController {
      */
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")
-    public ResponseEntity<?> saveUser(@Valid @RequestBody UserAuthDto userAuthDto, BindingResult bindingResult) throws Exception {
+    public ResponseEntity<?> register(@Valid @RequestBody UserAuthDto userAuthDto, BindingResult bindingResult) throws Exception {
 
         if (bindingResult.hasErrors()) {
             logger.warn("{} hat das falsche Format. Fehler: {}", userAuthDto, bindingResult.getAllErrors());
@@ -70,6 +72,44 @@ public class UserController {
             return ResponseEntity.ok("Die Registrierung war erfolgreich.");
         } else {
             return new ResponseEntity<>("Der Benutzername ist bereits vergeben", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // Falls im Request anderes Format, evtl MultipartFile, Blob oder einfach InputStream statt byte[]
+    // -> abzusprechen
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/image/upload")
+    public ResponseEntity<?> uploadImage(@RequestBody byte[] profilePicBytes, @RequestHeader(name = "Authtoken") String jwtToken) {
+
+        try {
+            String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+            Optional<User> userOptional = userRepository.findByUsername(username);
+            // zu dieser Exception darf es eigentlich nie kommen, aber besser haben als nicht haben
+            User user = userOptional.orElseThrow(NotFoundException::new);
+            user.setImage(profilePicBytes);
+            // User muss wegen @Transactional nicht händisch persistiert werden
+            logger.info("Profilbild wurde erfolgreich im User {} gespeichert", user.getUsername());
+
+        } catch (Exception e) {
+            logger.error("Profilbild konnte nicht gespeichert werden: {}", e.getMessage());
+            return new ResponseEntity<>("Das Profilbild konnte nicht gespeichert werden.", HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok("");
+    }
+
+    /**
+     * Für Testzwecke und zur Demonstration im Meeting am 11.12.
+     * Dafür muss ein Bild im User gesetzt sein -> vorher /image/upload anpingen
+     */
+    @GetMapping("/image/server")
+    public void saveImgToServer(@RequestHeader(name = "Authtoken") String jwtToken) {
+        try {
+            String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+            Optional<User> userOptional = userRepository.findByUsername(username);
+            User user = userOptional.orElseThrow(NotFoundException::new);
+            user.saveUserProfilePicToServer();
+        } catch (Exception e) {
+            logger.error("Profilbild konnte nicht auf dem Server gespeichert werden.");
         }
     }
 
