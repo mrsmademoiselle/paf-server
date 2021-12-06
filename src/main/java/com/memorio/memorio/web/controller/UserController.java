@@ -59,7 +59,6 @@ public class UserController {
      * Registrierung
      * Wenn Username bereits vorhanden gebe 400 wenn User noch nicht vorhanden 200
      */
-    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserAuthDto userAuthDto, BindingResult bindingResult) throws Exception {
 
@@ -77,7 +76,6 @@ public class UserController {
 
     // Falls im Request anderes Format, evtl MultipartFile, Blob oder einfach InputStream statt byte[]
     // -> abzusprechen
-    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/image/upload")
     public ResponseEntity<?> uploadImage(@RequestBody byte[] profilePicBytes, @RequestHeader(name = "Authtoken") String jwtToken) {
 
@@ -117,7 +115,6 @@ public class UserController {
      * Login
      * wenn User gefunden werden kann und Zugangsdatem stimmen gebe Token sonst Exception mit 500
      */
-    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody JwtRequest authenticationRequest) throws Exception {
         final String token = getTokenForUser(authenticationRequest);
@@ -136,7 +133,6 @@ public class UserController {
      * Erst wenn der Benutzer tatsächlich autorisiert ist, wird die Methode aufgerufen und es wird ein 200er zurückgegeben.
      * Ist der Benutzer nicht autorisiert (das Token nicht korrekt), wird ein 401 zurückgegeben.
      */
-    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/check")
     public ResponseEntity<?> checkIfAuthorized() throws Exception {
         return ResponseEntity.ok("");
