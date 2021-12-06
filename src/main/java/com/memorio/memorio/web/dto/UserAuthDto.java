@@ -1,5 +1,6 @@
 package com.memorio.memorio.web.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -7,6 +8,7 @@ import lombok.ToString;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+@EqualsAndHashCode
 @ToString
 @Getter
 @Setter

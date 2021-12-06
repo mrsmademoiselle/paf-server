@@ -1,7 +1,9 @@
 package com.memorio.memorio.entities;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Embeddable;
 import javax.persistence.OneToOne;
@@ -10,6 +12,8 @@ import javax.persistence.OneToOne;
  * Das Board repräsentiert das fertige Spielbrett im Spiel.
  * Es enthält ein Kartenset und die Anzahl der Tiles des Spielbretts.
  */
+@EqualsAndHashCode
+@ToString
 @Getter
 @Setter
 @Embeddable

@@ -1,5 +1,10 @@
 package com.memorio.memorio.entities;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +14,10 @@ import java.util.UUID;
  * Um mehrere User einladen zu können, wird ein LobbyCode generiert.
  * Später wird die Lobby zum Match konvertiert, und der LobbyCode wird zur MatchId.
  */
+@EqualsAndHashCode
+@ToString
+@Getter
+@Setter
 public class Lobby {
 
     private List<User> participant;

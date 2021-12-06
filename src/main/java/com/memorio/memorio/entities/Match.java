@@ -1,7 +1,9 @@
 package com.memorio.memorio.entities;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.List;
  * Nach Abschluss des Spiels wird das Match in der Datenbank persistiert.
  * Außerdem wird das Match in den UserProfilen aller teilnehmenden Usern gespeichert.
  */
+@EqualsAndHashCode
+@ToString
 @Getter
 @Setter
 @Entity

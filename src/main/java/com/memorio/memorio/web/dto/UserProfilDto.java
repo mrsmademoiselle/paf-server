@@ -1,11 +1,15 @@
 package com.memorio.memorio.web.dto;
 
 import com.memorio.memorio.entities.UserProfil;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
+@EqualsAndHashCode
+@ToString
 @Getter
 @Setter
 public class UserProfilDto {

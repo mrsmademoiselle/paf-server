@@ -65,8 +65,10 @@ public class UserController {
         }
 
         if (userService.saveUser(userAuthDto)) {
+            logger.info("Registrierung war erfolgreich.");
             return ResponseEntity.ok("Die Registrierung war erfolgreich.");
         } else {
+            logger.warn("Benutzername ist bereits vergeben.");
             return new ResponseEntity<>("Der Benutzername ist bereits vergeben", HttpStatus.BAD_REQUEST);
         }
     }
@@ -115,6 +117,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody JwtRequest authenticationRequest) throws Exception {
         final String token = getTokenForUser(authenticationRequest);
+        logger.info("Login erfolgreich.");
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
@@ -132,6 +135,7 @@ public class UserController {
      */
     @GetMapping("/check")
     public ResponseEntity<?> checkIfAuthorized() throws Exception {
+        logger.info("Benutzer ist autorisiert.");
         return ResponseEntity.ok("");
     }
 
@@ -139,8 +143,10 @@ public class UserController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
+            logger.error("Account ist gesperrt. Darf in unserer Anwendung nicht auftreten.");
             throw new Exception("", e);
         } catch (BadCredentialsException e) {
+            logger.error("Falsche Zugangsdaten");
             // Exception wenn der User nicht gefunden werden kann
             throw new Exception("Falsche Zugangsdaten", e);
         }

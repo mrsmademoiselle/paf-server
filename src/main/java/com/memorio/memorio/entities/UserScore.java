@@ -1,7 +1,9 @@
 package com.memorio.memorio.entities;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Embeddable;
 import javax.persistence.OneToOne;
@@ -9,6 +11,8 @@ import javax.persistence.OneToOne;
 /**
  * Das UserScore Objekt stellt zur Laufzeit einen User mit seinen Zügen dar.
  */
+@EqualsAndHashCode
+@ToString
 @Getter
 @Setter
 @Embeddable

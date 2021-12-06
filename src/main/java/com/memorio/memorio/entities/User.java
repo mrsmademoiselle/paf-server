@@ -1,7 +1,9 @@
 package com.memorio.memorio.entities;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.lang.Nullable;
 
 import javax.imageio.ImageIO;
@@ -13,6 +15,8 @@ import java.io.File;
 /**
  * Das User-Objekt repräsentiert einen User für das Spiel.
  */
+@ToString
+@EqualsAndHashCode
 @Getter
 @Setter
 @Entity(name = "user")

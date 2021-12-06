@@ -1,7 +1,9 @@
-package  com.memorio.memorio.entities;
+package com.memorio.memorio.entities;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -9,6 +11,8 @@ import javax.persistence.*;
  * Dieses Objekt repräsentiert eine einzige Memory-Karte mit deren Bild.
  */
 @Getter
+@EqualsAndHashCode
+@ToString
 @Setter
 @Entity(name = "card")
 public class Card {

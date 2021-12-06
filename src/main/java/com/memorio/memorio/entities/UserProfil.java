@@ -1,7 +1,9 @@
 package com.memorio.memorio.entities;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,9 +12,11 @@ import java.util.List;
  * Das UserProfil stellt das Profil des Nutzers dar,
  * in dem seine Statistiken angezeigt werden können.
  */
+@EqualsAndHashCode
+@ToString
 @Getter
 @Setter
-@Entity()
+@Entity
 /* statt wins/losses ein UserProfile Objekt, das eine List<Match> beinhält,
  * gesamtwins, gesamtlosses, averagewins (als Methode im Material selbst anhand der Matches
  * berechnen) */

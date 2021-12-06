@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 
+/**
+ * Hilfsklasse für ExceptionHandling bei unberechtigtem Zugriff.
+ */
 @Component
 public class JwtAuthenticationExceptionHandler implements AuthenticationEntryPoint, Serializable {
 
