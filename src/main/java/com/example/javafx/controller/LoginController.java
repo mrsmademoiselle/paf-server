@@ -1,7 +1,6 @@
 package com.example.javafx.controller;
 
 import com.example.javafx.HttpConnector;
-import com.example.javafx.json.JSONObject;
 import com.example.javafx.model.UserAuthDto;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
@@ -10,13 +9,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.prefs.*;
 
 public class LoginController {
 
@@ -38,7 +34,7 @@ public class LoginController {
     private PreferenceController preferenceController = new PreferenceController();
 
     @FXML
-    protected void initialize(){
+    protected void initialize() {
         //this.form.setAlignment(Pos.BASELINE_CENTER);
         Rectangle2D primaryScreen = Screen.getPrimary().getVisualBounds();
         applicationWidth = primaryScreen.getWidth() < 1920 ? primaryScreen.getWidth() : 1920;
@@ -52,24 +48,26 @@ public class LoginController {
         title.toFront();
     }
 
-    public void sendToRegistration(){
+    public void sendToRegistration() {
         SceneController sceneController = SceneController.getInstance();
         sceneController.loadRegistration();
     }
 
-    public void login(){
+    public void login() {
         Map<String, String> response = new HashMap<String, String>();
         String jwt = "";
         SceneController sceneController = SceneController.getInstance();
         // return if input fields empty
-        if(this.username.getText().isBlank() || this.password.getText().isBlank()){return;}
-        UserAuthDto userAuthDto = new UserAuthDto(this.username.getText(), this.password.getText()) ;
+        if (this.username.getText().isBlank() || this.password.getText().isBlank()) {
+            return;
+        }
+        UserAuthDto userAuthDto = new UserAuthDto(this.username.getText(), this.password.getText());
         // post login request
         response = HttpConnector.post("user/login", userAuthDto);
         int responseCode = Integer.parseInt(response.get("code"));
         // return if login failed
         // send to dashboard on success
-        if(responseCode != 200){
+        if (responseCode != 200) {
             sceneController.loadLogin();
             return;
         } else {
