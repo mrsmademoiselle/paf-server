@@ -1,6 +1,5 @@
 package com.memorio.memorio.entities;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,7 +11,6 @@ import java.util.List;
  * Ein CardSet ist eine Ansammlung von Cards, die benannt werden kann.
  * Dadurch können später eigene Kartensets angelegt und im Profil verändert werden.
  */
-@EqualsAndHashCode
 @ToString
 @Getter
 @Setter

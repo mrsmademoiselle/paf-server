@@ -1,11 +1,11 @@
 package com.memorio.memorio.web.controller;
 
 import com.memorio.memorio.config.jwt.JwtTokenUtil;
-import com.memorio.memorio.entities.JwtRequest;
-import com.memorio.memorio.entities.JwtResponse;
 import com.memorio.memorio.entities.User;
 import com.memorio.memorio.repositories.UserRepository;
 import com.memorio.memorio.services.UserService;
+import com.memorio.memorio.web.dto.JwtRequest;
+import com.memorio.memorio.web.dto.JwtResponse;
 import com.memorio.memorio.web.dto.UserAuthDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class UserController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
-    Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     public UserController(UserRepository userRepository, UserService userService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
@@ -57,7 +57,7 @@ public class UserController {
      * Wenn Username bereits vorhanden gebe 400 wenn User noch nicht vorhanden 200
      */
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody UserAuthDto userAuthDto, BindingResult bindingResult) throws Exception {
+    public ResponseEntity<?> register(@Valid @RequestBody UserAuthDto userAuthDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             logger.warn("{} hat das falsche Format. Fehler: {}", userAuthDto, bindingResult.getAllErrors());
@@ -134,7 +134,7 @@ public class UserController {
      * Ist der Benutzer nicht autorisiert (das Token nicht korrekt), wird ein 401 zurückgegeben.
      */
     @GetMapping("/check")
-    public ResponseEntity<?> checkIfAuthorized() throws Exception {
+    public ResponseEntity<?> checkIfAuthorized() {
         logger.info("Benutzer ist autorisiert.");
         return ResponseEntity.ok("");
     }
@@ -158,7 +158,6 @@ public class UserController {
 
         final UserDetails userDetails = userService
                 .loadUserByUsername(authenticationRequest.getUsername());
-        final String token = jwtTokenUtil.generateToken(userDetails);
-        return token;
+        return jwtTokenUtil.generateToken(userDetails);
     }
 }

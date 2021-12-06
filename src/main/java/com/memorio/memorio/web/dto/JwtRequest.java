@@ -1,7 +1,12 @@
-package com.memorio.memorio.entities;
+package com.memorio.memorio.web.dto;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
+@Getter
+@Setter
 public class JwtRequest implements Serializable {
 
     private static final long serialVersionUID = 5926468583005150707L;
@@ -9,9 +14,8 @@ public class JwtRequest implements Serializable {
     private String username;
     private String password;
 
-    // Default Constructor
-    public JwtRequest()
-    {
+    @Deprecated
+    public JwtRequest() {
 
     }
 

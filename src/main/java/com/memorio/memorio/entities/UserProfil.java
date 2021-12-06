@@ -1,6 +1,5 @@
 package com.memorio.memorio.entities;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,34 +11,35 @@ import java.util.List;
  * Das UserProfil stellt das Profil des Nutzers dar,
  * in dem seine Statistiken angezeigt werden können.
  */
-@EqualsAndHashCode
 @ToString
 @Getter
 @Setter
 @Entity
-/* statt wins/losses ein UserProfile Objekt, das eine List<Match> beinhält,
- * gesamtwins, gesamtlosses, averagewins (als Methode im Material selbst anhand der Matches
- * berechnen) */
 public class UserProfil {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    // Die könnte man auch über matchHistory filtern, anstatt sie alle als statische Werte zu speichern.
+    // Oder man macht dafür ein MatchHistory Objekt, das die List<Match> sowie die einzelnen Werte hat und
+    // bei der Objekterstellung setzt
     private int totalWins;
     private int totalLosses;
     private int totalMatches;
     // Alle abgeschlossenen Matches des UserProfils
     @OneToMany
-    private List<Match> history;
+    // Lazy Loaded field wird von toString ausgeschlossen, damit keine PerformanceProbleme auftreten
+    @ToString.Exclude
+    private List<Match> matchHistory;
 
     @Deprecated
     public UserProfil() {
     }
 
-    public UserProfil(int winsSum, int lossesSum, int matchSum, List<Match> history) {
+    public UserProfil(int winsSum, int lossesSum, int matchSum, List<Match> matchHistory) {
         this.totalWins = winsSum;
         this.totalLosses = lossesSum;
         this.totalMatches = matchSum;
-        this.history = history;
+        this.matchHistory = matchHistory;
     }
 }

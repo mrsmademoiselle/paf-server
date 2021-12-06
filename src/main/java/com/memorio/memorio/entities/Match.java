@@ -1,6 +1,5 @@
 package com.memorio.memorio.entities;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +13,6 @@ import java.util.List;
  * Nach Abschluss des Spiels wird das Match in der Datenbank persistiert.
  * Außerdem wird das Match in den UserProfilen aller teilnehmenden Usern gespeichert.
  */
-@EqualsAndHashCode
 @ToString
 @Getter
 @Setter
@@ -25,15 +23,12 @@ public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long lobbyCode;
-
     @Transient
     private User currentTurn;
-
     /* Embedded/Embeddable benutzt man, wenn man ein Objekt in einem Objekt persistieren will,
     das selbst keine Tabelle in der Datenbank hat. */
     @Embedded
     private Board board;
-
     @ElementCollection
     private List<UserScore> userScores;
 

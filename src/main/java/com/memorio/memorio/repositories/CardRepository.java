@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CardRepository extends CrudRepository<Card, Long>  {
+public interface CardRepository extends CrudRepository<Card, Long> {
+    @Override
     List<Card> findAll();
 }
