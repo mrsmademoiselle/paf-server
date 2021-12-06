@@ -1,10 +1,9 @@
 package com.memorio.memorio.web.controller;
 
-import com.memorio.memorio.config.JwtTokenUtil;
+import com.memorio.memorio.config.jwt.JwtTokenUtil;
 import com.memorio.memorio.entities.JwtRequest;
 import com.memorio.memorio.entities.JwtResponse;
 import com.memorio.memorio.entities.User;
-import com.memorio.memorio.repositories.MatchRepository;
 import com.memorio.memorio.repositories.UserRepository;
 import com.memorio.memorio.services.UserService;
 import com.memorio.memorio.web.dto.UserAuthDto;
@@ -35,16 +34,14 @@ import java.util.Optional;
 @RequestMapping("/user")
 public class UserController {
     private final UserRepository userRepository;
-    private final MatchRepository matchRepository;
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    public UserController(UserRepository userRepository, MatchRepository matchRepository, UserService userService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
+    public UserController(UserRepository userRepository, UserService userService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
-        this.matchRepository = matchRepository;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;

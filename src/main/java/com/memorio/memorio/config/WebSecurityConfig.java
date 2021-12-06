@@ -1,5 +1,7 @@
 package com.memorio.memorio.config;
 
+import com.memorio.memorio.config.jwt.JwtAuthenticationExceptionHandler;
+import com.memorio.memorio.config.jwt.JwtRequestFilter;
 import com.memorio.memorio.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,13 +22,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAuthenticationExceptionHandler jwtAuthenticationExceptionHandler;
     private final UserService userService;
     private final JwtRequestFilter jwtRequestFilter;
 
     @Autowired
-    public WebSecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, UserService userService, JwtRequestFilter jwtRequestFilter) {
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+    public WebSecurityConfig(JwtAuthenticationExceptionHandler jwtAuthenticationExceptionHandler, UserService userService, JwtRequestFilter jwtRequestFilter) {
+        this.jwtAuthenticationExceptionHandler = jwtAuthenticationExceptionHandler;
         this.userService = userService;
         this.jwtRequestFilter = jwtRequestFilter;
     }
@@ -57,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Alle Anfragen an anderen Endpunkten werden ueberprueft
                         anyRequest().authenticated().and().
                 // Entrypoint fuer authmanagement angeben und Sessionmanagement deaktivieren
-                        exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+                        exceptionHandling().authenticationEntryPoint(jwtAuthenticationExceptionHandler).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Filter Richtlinie - jeder Header eines Requests wird einmalig nach dem Token validiert

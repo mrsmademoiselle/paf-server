@@ -1,13 +1,7 @@
-package com.memorio.memorio.config;
-
-import java.io.IOException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+package com.memorio.memorio.config.jwt;
 
 import com.memorio.memorio.services.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,8 +10,15 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import io.jsonwebtoken.ExpiredJwtException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
+/**
+ * Filterklasse, die HttpRequest durchkämmt und auf ein valides Token prüft.
+ */
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
@@ -44,9 +45,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 // Dadurch das Benutzerinfos fuer die Tokengenerierung verwendet wurden ist das moeglich
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
-                System.out.println("Token konnte nicht gelesen werden");
+                logger.error("Token konnte nicht gelesen werden: " + e.getMessage());
             } catch (ExpiredJwtException e) {
-                System.out.println("Token ist abgelaufen");
+                logger.error("Token ist abgelaufen: " + e.getMessage());
             }
         } else {
             // Wenn kein User fuer das Token gefunden wurde ODER es gar kein Token bislang gibt Ausgabe durch logger
@@ -55,12 +56,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // Sobald ein User gefunden wurde
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
+            logger.info("User gefunden: " + username);
             UserDetails userDetails = this.userService.loadUserByUsername(username);
 
             // Laden des Users und validieren
             if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
-
+                logger.info("User " + username + " wurde verifiziert");
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
