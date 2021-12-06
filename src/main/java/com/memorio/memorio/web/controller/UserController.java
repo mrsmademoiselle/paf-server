@@ -47,7 +47,7 @@ public class UserController {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/all")
     public List<User> getUsers() {
         return this.userRepository.findAll();
     }
