@@ -30,7 +30,6 @@ import java.util.Optional;
 /* Transactional zeigt an, dass jede aufgerufene Methode eine abgeschlossene Transaktion abbildet. In einer Transaktion
  übernimmt JPA bestimmte Operationen automatisch, z.B. das committen von Changes (Persistence Context) */
 @Transactional
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/user")
 public class UserController {
     private final UserRepository userRepository;
