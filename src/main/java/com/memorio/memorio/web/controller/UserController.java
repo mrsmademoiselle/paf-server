@@ -75,7 +75,7 @@ public class UserController {
     // Falls im Request anderes Format, evtl MultipartFile, Blob oder einfach InputStream statt byte[]
     // -> abzusprechen
     @PostMapping("/image/upload")
-    public ResponseEntity<?> uploadImage(@RequestBody byte[] profilePicBytes, @RequestHeader(name = "Authtoken") String jwtToken) {
+    public ResponseEntity<?> uploadImage(@RequestBody byte[] profilePicBytes, @RequestHeader(name = "Authorization") String jwtToken) {
 
         try {
             String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
@@ -98,7 +98,7 @@ public class UserController {
      * Dafür muss ein Bild im User gesetzt sein -> vorher /image/upload anpingen
      */
     @GetMapping("/image/server")
-    public void saveImgToServer(@RequestHeader(name = "Authtoken") String jwtToken) {
+    public void saveImgToServer(@RequestHeader(name = "Authorization") String jwtToken) {
         try {
             String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             Optional<User> userOptional = userRepository.findByUsername(username);

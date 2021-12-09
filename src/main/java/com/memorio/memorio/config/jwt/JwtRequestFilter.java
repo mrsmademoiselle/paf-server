@@ -37,7 +37,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         // Folgendes Feld wird in den Header der Requests durchsucht, dieses Feld *muss* zwingend gesetzt werden!!
-        final String requestTokenHeader = request.getHeader("Authtoken");
+        final String requestTokenHeader = request.getHeader("Authorization");
 
         String username = null;
         String jwtToken = null;
