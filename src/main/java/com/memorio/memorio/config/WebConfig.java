@@ -15,8 +15,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         // für welche Controller-Pfade soll corsmapping gelten
-        registry.addMapping("/user/**")
-                .allowedOrigins("http://localhost:3000/");
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000");
         // hier sind noch weitere Konfigurationen möglich, z.B. .allowedMethods und .allowedHeaders,
         // die wir zum derzeitigen Zeitpunkt allerdings noch nicht brauchen
     }

@@ -54,6 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         // csrf aus machen, da nicht benoetigt bzw keine anforderung
         httpSecurity.csrf().disable()
+	    	.cors().and()
                 // auth-header check fuer folgende Endpunkte deaktivieren
                 .authorizeRequests().antMatchers("/user/login", "/user/register").permitAll().
                 // Alle Anfragen an anderen Endpunkten werden ueberprueft
