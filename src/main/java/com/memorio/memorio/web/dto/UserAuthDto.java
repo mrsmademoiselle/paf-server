@@ -20,6 +20,11 @@ public class UserAuthDto {
     @NotBlank
     private String password;
 
+    @Deprecated
+    public UserAuthDto() {
+
+    }
+
     public UserAuthDto(String username, String password) {
         this.username = username;
         this.password = password;
