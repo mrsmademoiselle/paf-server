@@ -42,6 +42,8 @@ public class SceneController {
         this.stage = stage;
     }
 
+    public Stage loadStage(){return this.stage;}
+
     public void setLoginScene(URL loginScene) {
         this.loginScene = loginScene;
     }

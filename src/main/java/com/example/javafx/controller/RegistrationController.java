@@ -68,6 +68,7 @@ public class RegistrationController {
 
     private static double applicationWidth;
     private static double applicationHeight;
+    SceneController sceneController = SceneController.getInstance();
 
 
     @FXML
@@ -80,6 +81,22 @@ public class RegistrationController {
         // Werte haben keine Bedeutung, hat nur bei mir gepasst
         editProfilePic.setTranslateY(editProfilePic.getLayoutY() - 25);
         editProfilePic.setTranslateX(editProfilePic.getLayoutX() + 85);
+
+        // Livevalidierung
+        username.textProperty().addListener((obs, oldInput, newInput) -> {
+            if (!username.getText().matches("[\\w|\\d]*")){
+                username.setStyle("-fx-border-color:#d95252;"+
+                        "-fx-border-width: 10;"
+                );
+                //TODO: make things prettier
+                setFeedback();
+
+            }else{
+                clearInfoLabel();
+                username.setStyle("");
+            }
+        });
+
     }
 
     private void setFormLayout() {
@@ -125,7 +142,6 @@ public class RegistrationController {
     }
 
     public void sendToLogin() {
-        SceneController sceneController = SceneController.getInstance();
         sceneController.loadLogin();
     }
 
@@ -184,6 +200,20 @@ public class RegistrationController {
         bannerLabel.setText(labelText);
         bannerLabel.setBackground(new Background(new BackgroundFill(Paint.valueOf(labelBackground), new CornerRadii(10), null)));
         bannerLabel.setTextFill(Paint.valueOf(labelColor));
+        bannerLabel.setVisible(true);
+    }
+
+    private void setFeedback(){
+        // TODO: Spaeter modularisieren erstmal nur fuer livefeedback beim tippen
+        bannerLabel.setText("Es sind nur Buchstaben und Zahlen erlaubt!");
+        bannerLabel.setBackground(new Background(new BackgroundFill(Paint.valueOf("#d06d6d"), new CornerRadii(10), null)));
+        bannerLabel.setTextFill(Paint.valueOf("#410000"));
+    }
+
+    private void clearInfoLabel(){
+        bannerLabel.setText("");
+        bannerLabel.setStyle("");
+        bannerLabel.setVisible(false);
     }
 
 }
