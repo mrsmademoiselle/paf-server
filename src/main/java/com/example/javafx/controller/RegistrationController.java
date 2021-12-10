@@ -89,11 +89,8 @@ public class RegistrationController {
                 username.setStyle("-fx-border-color:#d95252;"+
                         "-fx-border-width: 10;"
                 );
-                //TODO: make things prettier
-                setFeedback();
-
+                bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
             }else{
-                clearInfoLabel();
                 username.setStyle("");
             }
         });
@@ -130,13 +127,11 @@ public class RegistrationController {
                 if (successfullyUploaded ) {
                     sceneController.loadDashboard();
                 } else {
-                    fillInfoLabel(false);
                     bannerController.setText("Es gab einen Serverfehler beim verarbeiten des Bildes", false);
                 }
             } else {
                 // User Notification
                 bannerController.setText("Es gab ein Problem mit dem Bild!", false);
-                fillInfoLabel(false);
             }
         }else{
             bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
@@ -198,31 +193,6 @@ public class RegistrationController {
             return new Image(imageFile.toURI().toString());
         }
         return null;
-    }
-
-    private void fillInfoLabel(boolean successfulRegistration) {
-        // Später muss der erfolgreich-Fall nicht mehr behandelt werden, stattdessen eine Weiterleitung auf Startseite
-        String labelText = successfulRegistration ? "Der Benutzer wurde erfolgreich angelegt." : "Der Benutzer konnte nicht angelegt werden.";
-        String labelBackground = successfulRegistration ? "#6dd06d" : "#d06d6d";
-        String labelColor = successfulRegistration ? "#004100" : "#410000";
-        bannerLabel.setText(labelText);
-        bannerLabel.setBackground(new Background(new BackgroundFill(Paint.valueOf(labelBackground), new CornerRadii(10), null)));
-        bannerLabel.setTextFill(Paint.valueOf(labelColor));
-        bannerLabel.setVisible(true);
-    }
-
-    private void setFeedback(){
-        // TODO: Spaeter modularisieren erstmal nur fuer livefeedback beim tippen
-        bannerLabel.setText("Es sind nur Buchstaben und Zahlen erlaubt!");
-        bannerLabel.setBackground(new Background(new BackgroundFill(Paint.valueOf("#d06d6d"), new CornerRadii(10), null)));
-        bannerLabel.setTextFill(Paint.valueOf("#410000"));
-        bannerLabel.setVisible(true);
-    }
-
-    private void clearInfoLabel(){
-        bannerLabel.setText("");
-        bannerLabel.setStyle("");
-        bannerLabel.setVisible(false);
     }
 
 }
