@@ -1,15 +1,30 @@
 package com.example.javafx.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.text.Text;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.TextAlignment;
+
+import java.util.Timer;
 
 public class BannerController {
 
     @FXML
-    Text text;
+    Label text;
 
-    public BannerController(String text){
-        this.text.setText(text);
+    @FXML
+    AnchorPane banner;
+
+    @FXML
+    StackPane stackP;
+
+    public BannerController(){
     }
 
     @FXML

@@ -24,6 +24,9 @@ public class LoginController {
     @FXML
     PasswordField password;
 
+    @FXML
+    BannerController bannerController;
+
     private static double applicationWidth;
     private static double applicationHeight;
 
@@ -50,16 +53,17 @@ public class LoginController {
         SceneController sceneController = SceneController.getInstance();
         // return if input fields empty
         if (this.username.getText().isBlank() || this.password.getText().isBlank()) {
-            return;
+            bannerController.setText("Username und Passwort dürfen nicht leer sein.", false);
         }
+
         UserAuthDto userAuthDto = new UserAuthDto(this.username.getText(), this.password.getText());
         // post login request
 
         boolean isOk = HttpConnector.post("user/login", userAuthDto);
         if (isOk){
             sceneController.loadDashboard();
-        } else {
-            sceneController.loadLogin();
+        }else {
+            bannerController.setText("User kann nicht eingeloggt werden", false);
         }
 
     }

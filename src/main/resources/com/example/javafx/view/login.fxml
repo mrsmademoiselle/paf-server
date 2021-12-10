@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <VBox xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/main.css, @../css/login.css" alignment="CENTER"
       fx:controller="com.example.javafx.controller.LoginController" fillWidth="true">
     <children>
+
+        <fx:include fx:id="banner" source="banner.fxml"/>
 
         <AnchorPane fx:id="page" styleClass="container" VBox.vgrow="ALWAYS">
             <children>

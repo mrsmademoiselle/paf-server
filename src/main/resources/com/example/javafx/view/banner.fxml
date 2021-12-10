@@ -3,14 +3,15 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.text.Text?>
-<AnchorPane xmlns="http://javafx.com/javafx"
+<?import javafx.scene.control.Label?>
+<AnchorPane xmlns="http://javafx.com/javafx" fx:id="banner"
             xmlns:fx="http://javafx.com/fxml" styleClass="banner"
             fx:controller="com.example.javafx.controller.BannerController"
-            prefHeight="200.0" stylesheets="@../css/banner.css"
+            prefHeight="50.0" stylesheets="@../css/banner.css"
             prefWidth="1080.0">
     <children>
-        <HBox>
-            <Text fx:id="text"/>
-        </HBox>
+        <StackPane prefWidth="1760.0" fx:id="stackP">
+            <Label styleClass="text" fx:id="text"/>
+        </StackPane>
     </children>
 </AnchorPane>
