@@ -31,6 +31,7 @@ public class MemorioApplication extends javafx.application.Application {
 
         sceneController.setScale(applicationWidth, applicationHeight);
         sceneController.setStage(stage);
+
         //TODO: Move into scene conntroller
         sceneController.setLoginScene(getClass().getResource("view/login.fxml"));
         sceneController.setRegisterScene(getClass().getResource("view/register.fxml"));
