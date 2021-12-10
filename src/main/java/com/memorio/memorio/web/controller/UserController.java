@@ -4,7 +4,6 @@ import com.memorio.memorio.config.jwt.JwtTokenUtil;
 import com.memorio.memorio.entities.User;
 import com.memorio.memorio.repositories.UserRepository;
 import com.memorio.memorio.services.UserService;
-import com.memorio.memorio.web.dto.JwtRequest;
 import com.memorio.memorio.web.dto.JwtResponse;
 import com.memorio.memorio.web.dto.UserAuthDto;
 import org.slf4j.Logger;
@@ -56,7 +55,7 @@ public class UserController {
      * Wenn Username bereits vorhanden gebe 400 wenn User noch nicht vorhanden 200
      */
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody UserAuthDto userAuthDto, BindingResult bindingResult) {
+    public ResponseEntity<?> register(@Valid @RequestBody UserAuthDto userAuthDto, BindingResult bindingResult) throws Exception {
 
         if (bindingResult.hasErrors()) {
             logger.warn("{} hat das falsche Format. Fehler: {}", userAuthDto, bindingResult.getAllErrors());
@@ -65,11 +64,23 @@ public class UserController {
 
         if (userService.saveUser(userAuthDto)) {
             logger.info("Registrierung war erfolgreich.");
-            return ResponseEntity.ok("Die Registrierung war erfolgreich.");
+
+            return loginUser(userAuthDto);
         } else {
             logger.warn("Benutzername ist bereits vergeben.");
             return new ResponseEntity<>("Der Benutzername ist bereits vergeben", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    /**
+     * Login
+     * wenn User gefunden werden kann und Zugangsdatem stimmen gebe Token sonst Exception mit 500
+     */
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@Valid @RequestBody UserAuthDto userAuthDto) throws Exception {
+        final String token = getTokenForUser(userAuthDto);
+        logger.info("Login erfolgreich.");
+        return ResponseEntity.ok(new JwtResponse(token));
     }
 
     // Falls im Request anderes Format, evtl MultipartFile, Blob oder einfach InputStream statt byte[]
@@ -85,7 +96,6 @@ public class UserController {
             user.setImage(profilePicBytes);
             // User muss wegen @Transactional nicht händisch persistiert werden
             logger.info("Profilbild wurde erfolgreich im User {} gespeichert", user.getUsername());
-
         } catch (Exception e) {
             logger.error("Profilbild konnte nicht gespeichert werden: {}", e.getMessage());
             return new ResponseEntity<>("Das Profilbild konnte nicht gespeichert werden.", HttpStatus.BAD_REQUEST);
@@ -107,17 +117,6 @@ public class UserController {
         } catch (Exception e) {
             logger.error("Profilbild konnte nicht auf dem Server gespeichert werden.");
         }
-    }
-
-    /**
-     * Login
-     * wenn User gefunden werden kann und Zugangsdatem stimmen gebe Token sonst Exception mit 500
-     */
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        final String token = getTokenForUser(authenticationRequest);
-        logger.info("Login erfolgreich.");
-        return ResponseEntity.ok(new JwtResponse(token));
     }
 
     /**
@@ -151,12 +150,11 @@ public class UserController {
         }
     }
 
-    private String getTokenForUser(JwtRequest authenticationRequest) throws Exception {
+    private String getTokenForUser(UserAuthDto dto) throws Exception {
         // Pruefen ob Token existiert
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        authenticate(dto.getUsername(), dto.getPassword());
+        UserDetails userDetails = userService.loadUserByUsername(dto.getUsername());
 
-        final UserDetails userDetails = userService
-                .loadUserByUsername(authenticationRequest.getUsername());
         return jwtTokenUtil.generateToken(userDetails);
     }
 }
