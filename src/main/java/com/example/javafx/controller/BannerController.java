@@ -30,7 +30,6 @@ public class BannerController {
 
         text.setVisible(true);
         banner.setVisible(true);
-        //TODO: uberallein einbauen
 
         // nach 5 Sekunden deaktivieren des Banners - gekapselt in eigenem Thread
         new java.util.Timer().schedule(
