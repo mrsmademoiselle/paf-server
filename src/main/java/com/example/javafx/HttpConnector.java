@@ -5,19 +5,9 @@ import com.example.javafx.model.UserAuthDto;
 import coresearch.cvurl.io.constant.HttpStatus;
 import coresearch.cvurl.io.model.Response;
 import coresearch.cvurl.io.request.CVurl;
+import org.json.JSONObject;
 
-import javax.xml.transform.Result;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
-
 
 
 /**
@@ -29,31 +19,23 @@ public class HttpConnector {
     private static final String PREFIX = "http://localhost:9090/";
 
     public static boolean checkUserAUth(){
-    Response<String> response = HttpConnector.getCvurl("user/check");
+    Response<String> response = HttpConnector.get("user/check");
 
     // TODO evtl in 401 umändern falls Serverprobleme auftreten
-    boolean validToken = response.status() == HttpStatus.OK;
-    System.out.println(response.status());
+    return response.status() == HttpStatus.OK;
+    }
 
-    return validToken;
-}
     //cVurl get und post
-    public static Response<String> getCvurl(String urlString){
+    public static Response<String> get(String urlString){
         CVurl cVurl = new CVurl();
         PreferenceController preferenceController = PreferenceController.getInstance();
         // Rausziehen des Tokens
         String token = preferenceController.getToken();
-
-        System.out.println(token);
-
-        preferenceController.setToken("");
-
-        System.out.println(token);
-
         // GET Request
         Response<String> response = cVurl.get(PREFIX + urlString)
                 // TODO map später auslagern, content-type evtl anpassen
-                .headers(Map.of("Content-Type","application/x-www-form-urlencoded",
+                .headers(Map.of(
+                        "Content-Type","application/x-www-form-urlencoded",
                         "Authorization",token))
                 .asString()
                 .orElseThrow(RuntimeException::new);
@@ -62,7 +44,7 @@ public class HttpConnector {
         if (response.status() == HttpStatus.UNAUTHORIZED){
             preferenceController.clearToken();
         }
-        System.out.println(response);
+
         return response;
     }
 
@@ -75,15 +57,29 @@ public class HttpConnector {
 
     public static boolean post(String url, UserAuthDto userAuthDto) {
         CVurl cVurl = new CVurl();
+        PreferenceController preferenceController = PreferenceController.getInstance();
+        String existingJwt = preferenceController.getToken();
 
-        //POST
-        Result result = cVurl.post(PREFIX + url)
-                .queryParams(params)
-                .asObject(Result.class);
+        // POST
+        // Wir uebergen das Token mit, auch wenn es erstmal leer ist, der Server macht damit nichts
+        // Da der Endpunkt ohnehin gewhitelistet ist
+        Response<String> result = cVurl.post(PREFIX + url)
+                .headers(Map.of(
+                        "Content-Type","application/json",
+                        "Authorization", existingJwt))
+                .body(userAuthDto)
+                .asString().orElseThrow(RuntimeException::new);
 
-        System.out.println("CVurl POST: " + result);
+        boolean isOk = result.status() == HttpStatus.OK;
 
-        return "";
+        // token speichern, wenn User erfolgreich angelegt werden konnte
+        if (isOk){
+            JSONObject jsonObject = new JSONObject(result.getBody());
+            String responseJWt = jsonObject.getString("jwttoken");
+            preferenceController.setToken(responseJWt);
+        }
+
+        return isOk;
     }
 
 }

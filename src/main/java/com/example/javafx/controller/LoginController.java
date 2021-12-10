@@ -27,11 +27,8 @@ public class LoginController {
     private static double applicationWidth;
     private static double applicationHeight;
 
-    PreferenceController preferenceController =  PreferenceController.getInstance();
-
     @FXML
     protected void initialize() {
-        //this.form.setAlignment(Pos.BASELINE_CENTER);
         Rectangle2D primaryScreen = Screen.getPrimary().getVisualBounds();
         applicationWidth = primaryScreen.getWidth() < 1920 ? primaryScreen.getWidth() : 1920;
         applicationHeight = primaryScreen.getHeight() < 1080 ? primaryScreen.getHeight() : 1080;
@@ -50,8 +47,6 @@ public class LoginController {
     }
 
     public void login() {
-        Map<String, String> response = new HashMap<String, String>();
-        String jwt = "";
         SceneController sceneController = SceneController.getInstance();
         // return if input fields empty
         if (this.username.getText().isBlank() || this.password.getText().isBlank()) {
@@ -59,15 +54,11 @@ public class LoginController {
         }
         UserAuthDto userAuthDto = new UserAuthDto(this.username.getText(), this.password.getText());
         // post login request
-        response = HttpConnector.post("user/login", userAuthDto);
-        int responseCode = Integer.parseInt(response.get("code"));
-        // return if login failed
-        // send to dashboard on success
-        if (responseCode != 200) {
-            System.out.println("LoginController: Response Code 200");
 
-            sceneController.loadLogin();
-            return;
+        boolean isOk = HttpConnector.post("user/login", userAuthDto);
+
+        if (isOk){
+            sceneController.loadDashboard();
         } else {
             sceneController.loadLogin();
         }
