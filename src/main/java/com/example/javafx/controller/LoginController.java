@@ -56,7 +56,6 @@ public class LoginController {
         // post login request
 
         boolean isOk = HttpConnector.post("user/login", userAuthDto);
-
         if (isOk){
             sceneController.loadDashboard();
         } else {

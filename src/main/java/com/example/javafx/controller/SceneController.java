@@ -58,17 +58,6 @@ public class SceneController {
         this.dashboardScene = dashboardScene;
     }
 
-    public void loadView2(URL path) throws Exception {
-        Node view = FXMLLoader.load(path);
-
-        // View in ein Layout packen und
-        LayoutController controller = LayoutController.getInstance();
-        controller.setView(view);
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/layout.fxml"));
-        loader.setController(controller);
-    }
-
     public void setRegisterScene(URL registerScene) {
         this.registerScene = registerScene;
     }
