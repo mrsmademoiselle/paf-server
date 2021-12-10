@@ -8,10 +8,14 @@ public class PreferenceController {
 
     private PreferenceController(){
         this.prefs = Preferences.userNodeForPackage(this.getClass());
+        setToken("");
     }
 
-    public static PreferenceController getInstance(){
-        return instance != null ? instance : new PreferenceController();
+    public static PreferenceController getInstance() {
+        if (instance == null) {
+            instance = new PreferenceController();
+        }
+        return instance;
     }
 
     public void setToken(String token) {
@@ -19,7 +23,7 @@ public class PreferenceController {
     }
 
     public void clearToken(){
-        this.prefs.put("token", null);
+        this.prefs.put("token", "");
     }
 
     public String getToken() {

@@ -42,6 +42,7 @@ public class MemorioApplication extends javafx.application.Application {
         stage.setWidth(applicationWidth);
         stage.setHeight(applicationHeight);
 
+        System.out.println("MemorioApplication: loadLogin");
         sceneController.loadLogin();
         stage.show();
     }

@@ -29,6 +29,15 @@ public class HttpConnector {
     private static final String PREFIX = "http://localhost:9090/";
     private static PreferenceController preferenceController = PreferenceController.getInstance();
 
+    public static boolean checkUserAUth(){
+    Response<String> response = HttpConnector.getCvurl("user/check");
+
+    // TODO evtl in 401 umändern falls Serverprobleme auftreten
+    boolean validToken = response.status() == HttpStatus.OK;
+    System.out.println(response.status());
+
+    return validToken;
+}
     //cVurl get und post
     public static Response<String> getCvurl(String urlString){
         CVurl cVurl = new CVurl();

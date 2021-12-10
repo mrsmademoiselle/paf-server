@@ -68,6 +68,8 @@ public class LoginController {
         // return if login failed
         // send to dashboard on success
         if (responseCode != 200) {
+            System.out.println("LoginController: Response Code 200");
+
             sceneController.loadLogin();
             return;
         } else {

@@ -17,6 +17,7 @@ public class SceneController {
     private double APPLICATION_WIDTH;
     private double APPLICATION_HEIGHT;
 
+    // check Auth hier einbauen und auf /register /login prüfen
     private URL loginScene;
     private URL registerScene;
     private URL dashboardScene;
@@ -64,7 +65,7 @@ public class SceneController {
         this.APPLICATION_WIDTH = APPLICATION_WIDTH;
     }
 
-    public void loadScene(URL path) {
+    public void loadScene(URL requestedScene) {
         Parent view = null;
         try {
             System.out.println("in loadScene für " + requestedScene);
@@ -80,7 +81,31 @@ public class SceneController {
                 loadView(scene);
             }
         } catch (IOException e) {
+            System.out.println("Exception!");
             e.printStackTrace();
+        }
+    }
+
+    private void loadView(URL path) throws IOException {
+        Parent view;
+        view = FXMLLoader.load(path);
+
+        Scene scene = new Scene(view, this.APPLICATION_WIDTH, this.APPLICATION_HEIGHT);
+
+        stage.setScene(scene);
+        System.out.println("scene gesetzt: "+ getSceneNameFromPath(path));
+    }
+
+    // TODO kann wahrscheinlich weg
+    private String getSceneNameFromPath(URL pathUrl){
+        String path = pathUrl.getPath();
+
+        try {
+            String[] pathSegments = path.substring(path.lastIndexOf("/") + 1).split("\\.");
+
+            return pathSegments[0];
+        } catch(Exception e) {
+            throw new RuntimeException("SceneController: Es gab einen Fehler beim Parsen der URL.");
         }
     }
 }
