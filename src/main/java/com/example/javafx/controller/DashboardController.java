@@ -10,8 +10,5 @@ public class DashboardController {
 
     @FXML
     protected void initialize(){
-        preferenceController = PreferenceController.getInstance();
-        String token = preferenceController.getToken();
-        System.out.println(token);
     }
 }

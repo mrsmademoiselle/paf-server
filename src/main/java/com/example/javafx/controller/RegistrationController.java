@@ -124,10 +124,15 @@ public class RegistrationController {
             // Send Request
             boolean isOk = HttpConnector.post("user/register", userAuthDto);
 
-            if(isOk){
-                // send to Login
-                sceneController.loadDashboard();
-
+            // Bild hochladen
+            if(isOk && (imageBytes != null && imageBytes.length > 0)){
+                // send to Dashboard
+                boolean successfullyUploaded = HttpConnector.post("user/image/upload", imageBytes);
+                if (successfullyUploaded ) {
+                    sceneController.loadDashboard();
+                } else {
+                    fillInfoLabel(false);
+                }
             } else {
                 // User Notification
                 fillInfoLabel(isOk);
