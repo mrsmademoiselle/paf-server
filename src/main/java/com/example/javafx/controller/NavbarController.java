@@ -18,7 +18,7 @@ public class NavbarController {
     @FXML
     protected void initialize() {
         setLogoPic();
-        checkAuth();
+        //checkAuth();
     }
 
     private void setLogoPic() {
@@ -35,15 +35,6 @@ public class NavbarController {
             return new Image(imageFile.toURI().toString());
         }
         return null;
-    }
-
-    private void checkAuth(){
-        Response<String> response = HttpConnector.getCvurl("/user/check");
-        // Responsecode pruefen
-        if (response.status() != 200){
-            SceneController sceneController = SceneController.getInstance();
-            sceneController.loadLogin();
-        }
     }
 
 }

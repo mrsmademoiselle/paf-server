@@ -71,7 +71,9 @@ public class LoginController {
             sceneController.loadLogin();
             return;
         } else {
-            String token = response.get("msg");
+            JSONObject jo = new JSONObject(response.get("msg"));
+            String token = jo.getString("jwttoken");
+            System.out.println("Token beim login: " + token);
             preferenceController.setToken(token);
             sceneController.loadDashboard();
         }

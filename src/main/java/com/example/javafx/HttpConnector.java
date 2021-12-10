@@ -35,6 +35,12 @@ public class HttpConnector {
         // Rausziehen des Tokens
         String token = preferenceController.getToken();
 
+        System.out.println(token);
+
+        preferenceController.setToken("");
+
+        System.out.println(token);
+
         // GET Request
         Response<String> response = cVurl.get(PREFIX + urlString)
                 // TODO map später auslagern, content-type evtl anpassen
@@ -47,7 +53,7 @@ public class HttpConnector {
         if (response.status() == HttpStatus.UNAUTHORIZED){
             preferenceController.clearToken();
         }
-
+        System.out.println(response);
         return response;
     }
 

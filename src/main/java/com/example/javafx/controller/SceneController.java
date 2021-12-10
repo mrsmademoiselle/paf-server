@@ -1,5 +1,8 @@
 package com.example.javafx.controller;
 
+import com.example.javafx.HttpConnector;
+import coresearch.cvurl.io.constant.HttpStatus;
+import coresearch.cvurl.io.model.Response;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -64,9 +67,18 @@ public class SceneController {
     public void loadScene(URL path) {
         Parent view = null;
         try {
-            view = FXMLLoader.load(path);
-            Scene scene = new Scene(view, this.APPLICATION_WIDTH, this.APPLICATION_HEIGHT);
-            stage.setScene(scene);
+            System.out.println("in loadScene für " + requestedScene);
+
+            if (requestedScene.getPath().contains("/login.fxml") || requestedScene.getPath().contains("/register.fxml") ) {
+                loadView(requestedScene);
+            } else {
+                // sende authrequest
+                // checke request fuer http code
+                boolean isAuthenticated = HttpConnector.checkUserAUth();
+                URL scene = isAuthenticated ? requestedScene : loginScene;
+
+                loadView(scene);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package com.example.javafx.controller;
 import java.util.prefs.*;
 
 public class PreferenceController {
+
     private Preferences prefs;
     private static PreferenceController instance;
 
@@ -22,6 +23,6 @@ public class PreferenceController {
     }
 
     public String getToken() {
-        return this.prefs.get("token", "");
+        return this.prefs.get("token", "Ich feuer gerade");
     }
 }
