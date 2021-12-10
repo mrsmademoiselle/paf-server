@@ -31,7 +31,7 @@ public class LoginController {
     private static double applicationWidth;
     private static double applicationHeight;
 
-    private PreferenceController preferenceController = new PreferenceController();
+    PreferenceController preferenceController =  PreferenceController.getInstance();
 
     @FXML
     protected void initialize() {
@@ -71,8 +71,7 @@ public class LoginController {
             sceneController.loadLogin();
             return;
         } else {
-            JSONObject jo = new JSONObject(response.get("msg"));
-            String token = jo.getString("token");
+            String token = response.get("msg");
             preferenceController.setToken(token);
             sceneController.loadDashboard();
         }

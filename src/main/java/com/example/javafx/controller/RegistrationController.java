@@ -208,6 +208,7 @@ public class RegistrationController {
         bannerLabel.setText("Es sind nur Buchstaben und Zahlen erlaubt!");
         bannerLabel.setBackground(new Background(new BackgroundFill(Paint.valueOf("#d06d6d"), new CornerRadii(10), null)));
         bannerLabel.setTextFill(Paint.valueOf("#410000"));
+        bannerLabel.setVisible(true);
     }
 
     private void clearInfoLabel(){

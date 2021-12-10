@@ -1,10 +1,14 @@
 package com.example.javafx.controller;
 
+import com.example.javafx.HttpConnector;
+import coresearch.cvurl.io.model.Response;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NavbarController {
 
@@ -14,6 +18,7 @@ public class NavbarController {
     @FXML
     protected void initialize() {
         setLogoPic();
+        checkAuth();
     }
 
     private void setLogoPic() {
@@ -30,6 +35,15 @@ public class NavbarController {
             return new Image(imageFile.toURI().toString());
         }
         return null;
+    }
+
+    private void checkAuth(){
+        Response<String> response = HttpConnector.getCvurl("/user/check");
+        // Responsecode pruefen
+        if (response.status() != 200){
+            SceneController sceneController = SceneController.getInstance();
+            sceneController.loadLogin();
+        }
     }
 
 }

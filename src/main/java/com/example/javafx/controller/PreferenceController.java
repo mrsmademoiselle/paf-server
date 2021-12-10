@@ -13,7 +13,7 @@ public class PreferenceController {
     }
 
     public void clearToken(){
-        this.prefs.put("token", "");
+        this.prefs.put("token", null);
     }
 
     public String getToken() {

@@ -6,8 +6,6 @@
 <VBox xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/register.css" alignment="CENTER"
       prefHeight="1920.0" prefWidth="1080.0" fx:controller="com.example.javafx.controller.RegistrationController">
     <children>
-        <!-- Navbar -->
-        <fx:include fx:id="navbar" source="navbar.fxml"/>
 
         <!-- Fensterinhalt -->
         <AnchorPane fx:id="page" styleClass="container" VBox.vgrow="ALWAYS">

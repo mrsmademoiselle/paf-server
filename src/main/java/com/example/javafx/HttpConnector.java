@@ -1,5 +1,11 @@
 package com.example.javafx;
 
+import com.example.javafx.controller.PreferenceController;
+import coresearch.cvurl.io.constant.HttpStatus;
+import coresearch.cvurl.io.model.Response;
+import coresearch.cvurl.io.request.CVurl;
+
+import javax.xml.transform.Result;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
+
 /**
  * Weil das Einbinden von Libraries nicht geklappt habe, hab ich mir jetzt einen eigenen Connector geschrieben...
  * Dieser kann für Post und Get Requests verwendet oder später erweitert werden.
@@ -19,6 +27,44 @@ import java.util.stream.Collectors;
 public class HttpConnector {
 
     private static final String PREFIX = "http://localhost:9090/";
+    private static PreferenceController preferenceController = PreferenceController.getInstance();
+
+    //cVurl get und post
+    public static Response<String> getCvurl(String urlString){
+        CVurl cVurl = new CVurl();
+        // Rausziehen des Tokens
+        String token = preferenceController.getToken();
+
+        // GET Request
+        Response<String> response = cVurl.get(PREFIX + urlString)
+                // TODO map später auslagern, content-type evtl anpassen
+                .headers(Map.of("Content-Type","application/x-www-form-urlencoded",
+                        "Authorization",token))
+                .asString()
+                .orElseThrow(RuntimeException::new);
+
+        // Responsestatus pruefen und ggf. Token entfernen
+        if (response.status() == HttpStatus.UNAUTHORIZED){
+            preferenceController.clearToken();
+        }
+
+        return response;
+    }
+
+    public static String postCvurl(String url, Map<String, String> params) {
+        CVurl cVurl = new CVurl();
+
+        //POST
+        Result result = cVurl.post(PREFIX + url)
+                .queryParams(params)
+                .asObject(Result.class);
+
+        System.out.println("CVurl POST: " + result);
+
+        return "";
+    }
+
+// ----------------------------------------------------- alt
 
     public static String get(String urlString) {
         String response = "";
@@ -91,4 +137,6 @@ public class HttpConnector {
         http.setRequestMethod(method);
         return http;
     }
+
+
 }

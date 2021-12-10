@@ -4,6 +4,7 @@ module com.example.javafx {
     requires java.desktop;
     requires java.prefs;
     requires json;
+    requires coresearch.cvurl.io;
 
     opens com.example.javafx to javafx.fxml;
     exports com.example.javafx;

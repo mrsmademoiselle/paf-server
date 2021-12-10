@@ -8,8 +8,6 @@
 <VBox xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/main.css, @../css/login.css" alignment="CENTER"
       fx:controller="com.example.javafx.controller.LoginController" fillWidth="true">
     <children>
-        <!-- Navbar -->
-        <fx:include fx:id="navbar" source="navbar.fxml"/>
 
         <AnchorPane fx:id="page" styleClass="container" VBox.vgrow="ALWAYS">
             <children>
