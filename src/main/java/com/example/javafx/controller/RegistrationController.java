@@ -62,6 +62,9 @@ public class RegistrationController {
     @FXML
     Label bannerLabel;
 
+    @FXML
+    BannerController bannerController;
+
     private byte[] imageBytes;
 
     private static double applicationWidth;
@@ -128,11 +131,16 @@ public class RegistrationController {
                     sceneController.loadDashboard();
                 } else {
                     fillInfoLabel(false);
+                    bannerController.setText("Es gab einen Serverfehler beim verarbeiten des Bildes", false);
                 }
             } else {
                 // User Notification
+                bannerController.setText("Es gab ein Problem mit dem Bild!", false);
                 fillInfoLabel(false);
             }
+        }else{
+            bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
+
         }
     }
 
@@ -172,12 +180,12 @@ public class RegistrationController {
         File selectedFile = fileChooser.showOpenDialog(page.getScene().getWindow());
 
         if (selectedFile != null) {
-            // Bild visuell setzen
+            // Bild als Vorschau setzten
             Image image = new Image(selectedFile.toURI().toString());
             ImagePattern imagePattern = new ImagePattern(image);
             profilePic.setFill(imagePattern);
 
-            // file -> bytes
+            // transformieren des Bildes in Byte
             imageBytes = Files.readAllBytes(selectedFile.toPath());
         }
     }

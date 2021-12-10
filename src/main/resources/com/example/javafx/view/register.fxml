@@ -7,6 +7,8 @@
       prefHeight="1920.0" prefWidth="1080.0" fx:controller="com.example.javafx.controller.RegistrationController">
     <children>
 
+        <fx:include fx:id="banner" source="banner.fxml"/>
+
         <!-- Fensterinhalt -->
         <AnchorPane fx:id="page" styleClass="container" VBox.vgrow="ALWAYS">
             <children>
