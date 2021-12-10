@@ -55,7 +55,7 @@ public class HttpConnector {
         return postCvurl(url,);
     }*/
 
-    public static boolean post(String url, UserAuthDto userAuthDto) {
+    public static boolean post(String url, Object object) {
         CVurl cVurl = new CVurl();
         PreferenceController preferenceController = PreferenceController.getInstance();
         String existingJwt = preferenceController.getToken();
@@ -67,13 +67,13 @@ public class HttpConnector {
                 .headers(Map.of(
                         "Content-Type","application/json",
                         "Authorization", existingJwt))
-                .body(userAuthDto)
+                .body(object)
                 .asString().orElseThrow(RuntimeException::new);
 
         boolean isOk = result.status() == HttpStatus.OK;
 
         // token speichern, wenn User erfolgreich angelegt werden konnte
-        if (isOk){
+        if (isOk && !result.getBody().isEmpty()){
             JSONObject jsonObject = new JSONObject(result.getBody());
             String responseJWt = jsonObject.getString("jwttoken");
             preferenceController.setToken(responseJWt);

@@ -20,10 +20,10 @@
                             <children>
                                 <!-- Später FileChooser einbauen -->
                                 <Circle onMouseClicked="#uploadPicture" onMouseEntered="#hoverOverProfilePic"
-                                        onMouseExited="#setDefaultProfilePic" fx:id="profilePic"
+                                        onMouseExited="#setProfilePic" fx:id="profilePic"
                                         styleClass="profile_pic"/>
                                 <Button styleClass="edit_profile_pic" fx:id="editProfilePic"
-                                        onAction="#editProfilePic"/>
+                                        onAction="#uploadPicture"/>
                             </children>
                         </VBox>
                         <!-- Input-Teil -->

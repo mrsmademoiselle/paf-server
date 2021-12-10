@@ -3,8 +3,8 @@ package com.example.javafx.model;
 import java.util.Objects;
 
 public class UserAuthDto {
-    public String username;
-    public String password;
+    private String username;
+    private String password;
 
     public UserAuthDto(String username, String password) {
         this.username = username;

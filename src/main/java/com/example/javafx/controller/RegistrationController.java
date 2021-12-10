@@ -2,7 +2,6 @@ package com.example.javafx.controller;
 
 import com.example.javafx.HttpConnector;
 import com.example.javafx.model.UserAuthDto;
-import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
@@ -14,15 +13,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.stage.Popup;
+import javafx.stage.FileChooser;
 import javafx.stage.Screen;
-import javafx.util.Duration;
 
-import java.io.File;
+import java.io.*;
+import java.nio.file.Files;
 
 public class RegistrationController {
 
@@ -64,6 +62,8 @@ public class RegistrationController {
     @FXML
     Label bannerLabel;
 
+    private byte[] imageBytes;
+
     private static double applicationWidth;
     private static double applicationHeight;
     SceneController sceneController = SceneController.getInstance();
@@ -71,7 +71,7 @@ public class RegistrationController {
 
     @FXML
     protected void initialize() {
-        setDefaultProfilePic();
+        setProfilePic();
         setButtonPic();
 
         // TODO: Werte müssen responsive gemacht werden (?)
@@ -111,17 +111,13 @@ public class RegistrationController {
         title.toFront();
     }
 
-    public void editProfilePic(ActionEvent event) {
-        notYetImplemented();
-    }
-
     public void register(ActionEvent event) {
         if (username.getText().matches("[\\w|\\d]*") &&
                 !password.getText().isBlank() && !username.getText().isBlank()) {
 
             UserAuthDto userAuthDto = new UserAuthDto(username.getText(), password.getText());
 
-            // Send Request
+            // Userdaten registrieren
             boolean isOk = HttpConnector.post("user/register", userAuthDto);
 
             // Bild hochladen
@@ -135,29 +131,13 @@ public class RegistrationController {
                 }
             } else {
                 // User Notification
-                fillInfoLabel(isOk);
+                fillInfoLabel(false);
             }
         }
     }
 
     public void sendToLogin() {
         sceneController.loadLogin();
-    }
-
-    private void notYetImplemented() {
-        Popup popup = new Popup();
-        Label e1 = new Label("Das ist noch nicht implementiert.");
-        e1.setTextFill(Color.WHITE);
-        e1.setBackground(new Background(new BackgroundFill(Paint.valueOf("#FF0000"), null, null)));
-        popup.getContent().add(e1);
-
-        // nach 3 Sekunden ausblenden
-        PauseTransition delay = new PauseTransition(Duration.seconds(3));
-        delay.setOnFinished(e -> popup.hide());
-
-        popup.centerOnScreen();
-        popup.show(page.getScene().getWindow());
-        delay.play();
     }
 
     private void setButtonPic() {
@@ -171,14 +151,35 @@ public class RegistrationController {
         profilePic.setCursor(Cursor.HAND);
     }
 
-    public void setDefaultProfilePic() {
-        Image pic = getPic("painting2.png");
-        profilePic.setFill(new ImagePattern(pic));
-        profilePic.setRadius(100);
+    public void setProfilePic() {
+        if (imageBytes == null || imageBytes.length == 0){
+            Image pic = getPic("painting2.png");
+            profilePic.setFill(new ImagePattern(pic));
+            profilePic.setRadius(100);
+        } else {
+            Image img = new Image(new ByteArrayInputStream(imageBytes));
+            ImagePattern imagePattern = new ImagePattern(img);
+            profilePic.setFill(imagePattern);
+        }
     }
 
-    public void uploadPicture() {
-        notYetImplemented();
+    public void uploadPicture() throws IOException {
+        // File Chooser für Bildauswahl
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Profilbild hochladen");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+        File selectedFile = fileChooser.showOpenDialog(page.getScene().getWindow());
+
+        if (selectedFile != null) {
+            // Bild visuell setzen
+            Image image = new Image(selectedFile.toURI().toString());
+            ImagePattern imagePattern = new ImagePattern(image);
+            profilePic.setFill(imagePattern);
+
+            // file -> bytes
+            imageBytes = Files.readAllBytes(selectedFile.toPath());
+        }
     }
 
     private Image getPic(String fileName) {

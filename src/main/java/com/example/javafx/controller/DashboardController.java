@@ -6,8 +6,6 @@ import javafx.stage.Screen;
 
 public class DashboardController {
 
-    private PreferenceController preferenceController;
-
     @FXML
     protected void initialize(){
     }
