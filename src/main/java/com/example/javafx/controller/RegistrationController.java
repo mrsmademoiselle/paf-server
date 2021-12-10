@@ -123,7 +123,7 @@ public class RegistrationController {
 
         if (username.getText().matches("[\\w|\\d]*") &&
                 !password.getText().isBlank() && !username.getText().isBlank()) {
-            // TODO pw hashing
+
             UserAuthDto userAuthDto = new UserAuthDto(username.getText(), password.getText());
 
             // Send Request

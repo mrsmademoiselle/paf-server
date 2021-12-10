@@ -68,7 +68,6 @@ public class SceneController {
     public void loadScene(URL requestedScene) {
         Parent view = null;
         try {
-            System.out.println("in loadScene für " + requestedScene);
 
             if (requestedScene.getPath().contains("/login.fxml") || requestedScene.getPath().contains("/register.fxml") ) {
                 loadView(requestedScene);
@@ -93,19 +92,6 @@ public class SceneController {
         Scene scene = new Scene(view, this.APPLICATION_WIDTH, this.APPLICATION_HEIGHT);
 
         stage.setScene(scene);
-        System.out.println("scene gesetzt: "+ getSceneNameFromPath(path));
     }
 
-    // TODO kann wahrscheinlich weg
-    private String getSceneNameFromPath(URL pathUrl){
-        String path = pathUrl.getPath();
-
-        try {
-            String[] pathSegments = path.substring(path.lastIndexOf("/") + 1).split("\\.");
-
-            return pathSegments[0];
-        } catch(Exception e) {
-            throw new RuntimeException("SceneController: Es gab einen Fehler beim Parsen der URL.");
-        }
-    }
 }

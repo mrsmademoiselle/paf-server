@@ -9,10 +9,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class LoginController {
 
@@ -73,11 +69,7 @@ public class LoginController {
             sceneController.loadLogin();
             return;
         } else {
-            JSONObject jo = new JSONObject(response.get("msg"));
-            String token = jo.getString("jwttoken");
-            System.out.println("Token beim login: " + token);
-            preferenceController.setToken(token);
-            sceneController.loadDashboard();
+            sceneController.loadLogin();
         }
 
     }
