@@ -6,10 +6,11 @@ import javafx.stage.Screen;
 
 public class DashboardController {
 
-    private PreferenceController preferenceController = new PreferenceController();
+    private PreferenceController preferenceController;
 
     @FXML
     protected void initialize(){
+        preferenceController = PreferenceController.getInstance();
         String token = preferenceController.getToken();
         System.out.println(token);
     }

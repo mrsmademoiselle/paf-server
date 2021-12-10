@@ -3,9 +3,14 @@ import java.util.prefs.*;
 
 public class PreferenceController {
     private Preferences prefs;
+    private static PreferenceController instance;
 
-    public PreferenceController(){
+    private PreferenceController(){
         this.prefs = Preferences.userNodeForPackage(this.getClass());
+    }
+
+    public static PreferenceController getInstance(){
+        return instance != null ? instance : new PreferenceController();
     }
 
     public void setToken(String token) {
