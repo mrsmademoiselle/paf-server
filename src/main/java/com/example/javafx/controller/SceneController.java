@@ -4,10 +4,12 @@ import com.example.javafx.HttpConnector;
 import coresearch.cvurl.io.constant.HttpStatus;
 import coresearch.cvurl.io.model.Response;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 
@@ -54,6 +56,17 @@ public class SceneController {
 
     public void setDashboardScene(URL dashboardScene) {
         this.dashboardScene = dashboardScene;
+    }
+
+    public void loadView2(URL path) throws Exception {
+        Node view = FXMLLoader.load(path);
+
+        // View in ein Layout packen und
+        LayoutController controller = LayoutController.getInstance();
+        controller.setView(view);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/layout.fxml"));
+        loader.setController(controller);
     }
 
     public void setRegisterScene(URL registerScene) {

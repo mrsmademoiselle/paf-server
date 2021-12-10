@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml" styleClass="banner"
+            fx:controller="com.example.javafx.controller.BannerController"
+            prefHeight="200.0" stylesheets="@../css/banner.css"
+            prefWidth="1080.0">
+    <children>
+        <HBox>
+            <Text fx:id="text"/>
+        </HBox>
+    </children>
+</AnchorPane>
