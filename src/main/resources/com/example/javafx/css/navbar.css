@@ -6,3 +6,13 @@
 .navbar {
     -fx-background-color: -navbar;
 }
+
+
+.logoutButton {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-pref-height: 20px;
+    -fx-pref-width: 200px;
+    /* geht noch nicht */
+    -fx-cursor: hand;
+}

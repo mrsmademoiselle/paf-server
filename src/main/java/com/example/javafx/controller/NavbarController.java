@@ -1,8 +1,10 @@
 package com.example.javafx.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import java.io.File;
 
@@ -12,9 +14,14 @@ public class NavbarController {
     ImageView logo;
 
     @FXML
+    Button logoutButton;
+
+    @FXML
     protected void initialize() {
+        // TODO der kack geht noch nicht
+        // ImageView value = new ImageView(getPic("logout.svg"));
+        // logoutButton.setGraphic(value);
         setLogoPic();
-        //checkAuth();
     }
 
     private void setLogoPic() {
@@ -33,4 +40,6 @@ public class NavbarController {
         return null;
     }
 
+    public void logout(MouseEvent mouseEvent) {
+    }
 }

@@ -186,7 +186,7 @@ public class RegistrationController {
     }
 
     private void setButtonPic() {
-        editProfilePic.setGraphic(new ImageView(getPic("edit.png")));
+        editProfilePic.setGraphic(new ImageView(getPic("edit.svg")));
     }
 
     private Image getPic(String fileName) {

@@ -34,6 +34,9 @@ public class AccountDataController {
     @FXML
     BannerController bannerController;
 
+    @FXML
+    NavbarController navbarController;
+
     byte[] imageBytes;
     UserService userService = new UserService();
 

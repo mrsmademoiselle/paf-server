@@ -7,6 +7,8 @@
             xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/account_data.css"
             fx:controller="com.example.javafx.controller.AccountDataController"
             prefHeight="400.0" prefWidth="600.0">
+    <fx:include fx:id="navbar" source="navbar.fxml"/>
+
     <fx:include fx:id="banner" source="banner.fxml"/>
 
     <StackPane prefWidth="1760.0" prefHeight="800" layoutX="100">
