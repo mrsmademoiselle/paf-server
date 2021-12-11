@@ -12,14 +12,16 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 
 public class RegistrationController {
@@ -85,12 +87,12 @@ public class RegistrationController {
 
         // Livevalidierung
         username.textProperty().addListener((obs, oldInput, newInput) -> {
-            if (!username.getText().matches("[\\w|\\d]*")){
-                username.setStyle("-fx-border-color:#d95252;"+
+            if (!username.getText().matches("[\\w|\\d]*")) {
+                username.setStyle("-fx-border-color:#d95252;" +
                         "-fx-border-width: 10;"
                 );
                 bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
-            }else{
+            } else {
                 username.setStyle("");
             }
         });
@@ -121,11 +123,12 @@ public class RegistrationController {
             boolean isOk = HttpConnector.post("user/register", userAuthDto);
 
             // Bild hochladen
-            if(isOk && (imageBytes != null && imageBytes.length > 0)){
+            if (isOk && (imageBytes != null && imageBytes.length > 0)) {
                 // send to Dashboard
                 boolean successfullyUploaded = HttpConnector.post("user/image/upload", imageBytes);
-                if (successfullyUploaded ) {
-                    sceneController.loadDashboard();
+                if (successfullyUploaded) {
+                    sceneController.loadAccountData();
+                    // sceneController.loadDashboard();
                 } else {
                     bannerController.setText("Es gab einen Serverfehler beim verarbeiten des Bildes", false);
                 }
@@ -133,7 +136,7 @@ public class RegistrationController {
                 // User Notification
                 bannerController.setText("Es gab ein Problem mit dem Bild!", false);
             }
-        }else{
+        } else {
             bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
 
         }
@@ -155,7 +158,7 @@ public class RegistrationController {
     }
 
     public void setProfilePic() {
-        if (imageBytes == null || imageBytes.length == 0){
+        if (imageBytes == null || imageBytes.length == 0) {
             Image pic = getPic("painting2.png");
             profilePic.setFill(new ImagePattern(pic));
             profilePic.setRadius(100);

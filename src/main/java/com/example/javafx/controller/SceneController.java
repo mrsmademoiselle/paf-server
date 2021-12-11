@@ -19,6 +19,7 @@ public class SceneController {
     private URL loginScene;
     private URL registerScene;
     private URL dashboardScene;
+    private URL accountDataScene;
     private URL generalCSS;
     private static final SceneController instance = new SceneController();
 
@@ -41,8 +42,16 @@ public class SceneController {
         this.loadScene(this.dashboardScene);
     }
 
+    public void loadAccountData() {
+        this.loadScene(this.accountDataScene);
+    }
+
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public void setAccountDataScene(URL stage) {
+        this.accountDataScene = stage;
     }
 
     public Stage loadStage() {
