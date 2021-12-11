@@ -1,6 +1,5 @@
 package com.example.javafx.service;
 
-import com.example.javafx.model.UserAuthDto;
 import com.example.javafx.model.UserDto;
 import com.example.javafx.service.helper.HttpConnector;
 import com.example.javafx.service.helper.SceneManager;
@@ -16,7 +15,7 @@ public class UserService {
     }
 
     public boolean registerUserData(String username, String password) {
-        UserAuthDto userAuthDto = new UserAuthDto(username, password);
+        UserDto userAuthDto = new UserDto(username, password, new byte[]{});
         return HttpConnector.post("user/register", userAuthDto);
     }
 
@@ -29,7 +28,7 @@ public class UserService {
     }
 
     public void loginUser(String username, String password) {
-        UserAuthDto userAuthDto = new UserAuthDto(username, password);
+        UserDto userAuthDto = new UserDto(username, password, new byte[]{});
 
         boolean isOk = HttpConnector.post("user/login", userAuthDto);
         if (isOk) {
