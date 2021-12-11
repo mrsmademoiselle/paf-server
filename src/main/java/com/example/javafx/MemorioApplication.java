@@ -1,10 +1,7 @@
 package com.example.javafx;
 
 import com.example.javafx.controller.SceneController;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -36,6 +33,8 @@ public class MemorioApplication extends javafx.application.Application {
         sceneController.setLoginScene(getClass().getResource("view/login.fxml"));
         sceneController.setRegisterScene(getClass().getResource("view/register.fxml"));
         sceneController.setDashboardScene(getClass().getResource("view/dashboard.fxml"));
+        sceneController.setGeneralCSS(getClass().getResource("css/general.css"));
+
 
         // Fenster zentrieren
         stage.setX((primaryScreen.getWidth() - applicationWidth) / 2);

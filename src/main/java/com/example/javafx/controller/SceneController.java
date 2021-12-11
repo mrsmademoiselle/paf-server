@@ -1,15 +1,11 @@
 package com.example.javafx.controller;
 
 import com.example.javafx.HttpConnector;
-import coresearch.cvurl.io.constant.HttpStatus;
-import coresearch.cvurl.io.model.Response;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 
@@ -23,6 +19,7 @@ public class SceneController {
     private URL loginScene;
     private URL registerScene;
     private URL dashboardScene;
+    private URL generalCSS;
     private static final SceneController instance = new SceneController();
 
     private SceneController() {
@@ -48,7 +45,9 @@ public class SceneController {
         this.stage = stage;
     }
 
-    public Stage loadStage(){return this.stage;}
+    public Stage loadStage() {
+        return this.stage;
+    }
 
     public void setLoginScene(URL loginScene) {
         this.loginScene = loginScene;
@@ -62,16 +61,19 @@ public class SceneController {
         this.registerScene = registerScene;
     }
 
+    public void setGeneralCSS(URL resource) {
+        this.generalCSS = resource;
+    }
+
     public void setScale(double APPLICATION_HEIGHT, double APPLICATION_WIDTH) {
         this.APPLICATION_HEIGHT = APPLICATION_HEIGHT;
         this.APPLICATION_WIDTH = APPLICATION_WIDTH;
     }
 
     public void loadScene(URL requestedScene) {
-        Parent view = null;
         try {
 
-            if (requestedScene.getPath().contains("/login.fxml") || requestedScene.getPath().contains("/register.fxml") ) {
+            if (requestedScene.getPath().contains("/login.fxml") || requestedScene.getPath().contains("/register.fxml")) {
                 loadView(requestedScene);
             } else {
                 // sende authrequest
@@ -92,7 +94,7 @@ public class SceneController {
         view = FXMLLoader.load(path);
 
         Scene scene = new Scene(view, this.APPLICATION_WIDTH, this.APPLICATION_HEIGHT);
-
+        scene.getStylesheets().add(generalCSS.toExternalForm());
         stage.setScene(scene);
     }
 

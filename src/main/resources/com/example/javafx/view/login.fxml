@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/main.css, @../css/login.css" alignment="CENTER"
+<VBox xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/login.css" alignment="CENTER"
       fx:controller="com.example.javafx.controller.LoginController" fillWidth="true">
     <children>
 
@@ -10,14 +10,14 @@
 
         <AnchorPane fx:id="page" styleClass="container" VBox.vgrow="ALWAYS">
             <children>
-                <Label  fx:id="title" prefHeight="18.0" prefWidth="258.0" styleClass="title" text="Login"
-                        alignment="TOP_CENTER" textAlignment="CENTER"/>
+                <Label fx:id="title" prefHeight="18.0" prefWidth="258.0" styleClass="title" text="Login"
+                       alignment="TOP_CENTER" textAlignment="CENTER"/>
 
                 <!-- Formular -->
-                <VBox alignment="CENTER" prefHeight="596.0" prefWidth="480.0"  styleClass="form" fx:id="form">
+                <VBox alignment="CENTER" prefHeight="350.0" prefWidth="480.0" styleClass="form" fx:id="form">
                     <children>
                         <!-- Input-Teil -->
-                        <VBox prefWidth="480.0" prefHeight="350.0" alignment="CENTER">
+                        <VBox prefWidth="480.0" prefHeight="200.0" alignment="CENTER">
                             <children>
                                 <TextField fx:id="username" styleClass="text_field" promptText="Username"/>
                                 <PasswordField fx:id="password" styleClass="text_field" promptText="Passwort"/>

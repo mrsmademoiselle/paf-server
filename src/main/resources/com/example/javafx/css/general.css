@@ -1,0 +1,21 @@
+/* muss an oberster Stelle stehen */
+@font-face {
+    /* font-family definiert den Namen der Font in der css */
+    font-family: 'Wendy One';
+    src: url('../fonts/WendyOne-Regular.ttf');
+}
+
+.root {
+    -navbar: #EEEEA6;
+    -side-nav: #632B30;
+    -primary-buttons: #2274A5;
+
+    /* color stacking for backgrounds*/
+    -site-background: #FFF4D6;
+    -first-background: #E6AF2E;
+    -second-background: #E7EB90;
+    -third-background: #FDFDFD;
+
+    /* wir binden wendy one hier für alle Elemente ein */
+    -fx-font-family: 'Wendy One';
+}
