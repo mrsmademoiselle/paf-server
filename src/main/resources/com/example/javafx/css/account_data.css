@@ -1,6 +1,6 @@
 .title {
     -fx-text-fill: black;
-    font-style: bold;
+    -fx-font-style: bold;
     -fx-font-size: 30px;
     -fx-min-width: 100%;
 }

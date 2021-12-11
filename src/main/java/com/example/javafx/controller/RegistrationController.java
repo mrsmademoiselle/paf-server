@@ -162,7 +162,7 @@ public class RegistrationController {
         username.textProperty().addListener((obs, oldInput, newInput) -> {
             if (!username.getText().matches("[\\w|\\d]*")) {
                 username.setStyle("-fx-border-color:#d95252;" +
-                        "-fx-border-width: 10;"
+                        "-fx-border-width: 3;"
                 );
                 bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
             } else {

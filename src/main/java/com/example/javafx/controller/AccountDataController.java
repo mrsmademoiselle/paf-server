@@ -43,6 +43,7 @@ public class AccountDataController {
         usernameTextfield.setText(userDto.getUsername());
         // TODO tatsächliches Bild vom Server nehmen
         setProfilePic();
+        activateInputListener();
     }
 
     public void setProfilePic() {
@@ -61,8 +62,8 @@ public class AccountDataController {
         String username = usernameTextfield.getText();
         String password = passwordTextfield.getText();
 
-        if (!username.matches("[\\w|\\d]*") || username.isBlank() || password.isBlank()) {
-            bannerController.setText("Der Username darf nur aus Buchstaben und Zahlen bestehen.", false);
+        if (!username.matches("\\w*") || username.isBlank()) {
+            bannerController.setText("Das Username oder Passwortformat wird nicht akzeptiert.", false);
             return;
         }
         boolean successful = userService.updateUserInfo(username, password, imageBytes);
@@ -103,6 +104,20 @@ public class AccountDataController {
             return new Image(imageFile.toURI().toString());
         }
         return null;
+    }
+
+    private void activateInputListener() {
+        // Livevalidierung
+        usernameTextfield.textProperty().addListener((obs, oldInput, newInput) -> {
+            if (!usernameTextfield.getText().matches("[\\w|\\d]*")) {
+                usernameTextfield.setStyle("-fx-border-color:#d95252;" +
+                        "-fx-border-width: 3;"
+                );
+                bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
+            } else {
+                usernameTextfield.setStyle("");
+            }
+        });
     }
 
 }

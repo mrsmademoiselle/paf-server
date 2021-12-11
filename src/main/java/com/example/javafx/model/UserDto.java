@@ -10,8 +10,14 @@ public class UserDto {
     public UserDto() {
     }
 
+    public UserDto(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     public UserDto(String username, String password, byte[] profilePic) {
         this.username = username;
+        this.password = password;
         this.profilePic = profilePic;
     }
 

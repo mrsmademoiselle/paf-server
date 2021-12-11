@@ -10,6 +10,7 @@ public class UserService {
 
     public UserDto getUserInfo() {
         JSONObject jsonObject = new JSONObject(HttpConnector.get("user/username").getBody());
+        // TODO Bild parsen
         // UserDto userDto = new UserDto(jsonObject.getString("username"), jsonObject.getString("image").getBytes(StandardCharsets.UTF_8));
         return new UserDto("nevergonnagiveyouup", "", new byte[]{});
     }
