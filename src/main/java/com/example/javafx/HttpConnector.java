@@ -1,7 +1,6 @@
 package com.example.javafx;
 
-import com.example.javafx.controller.PreferenceController;
-import com.example.javafx.model.UserAuthDto;
+import com.example.javafx.controller.TokenController;
 import coresearch.cvurl.io.constant.HttpStatus;
 import coresearch.cvurl.io.model.Response;
 import coresearch.cvurl.io.request.CVurl;
@@ -28,9 +27,9 @@ public class HttpConnector {
     //cVurl get und post
     public static Response<String> get(String urlString){
         CVurl cVurl = new CVurl();
-        PreferenceController preferenceController = PreferenceController.getInstance();
+        TokenController tokenController = TokenController.getInstance();
         // Rausziehen des Tokens
-        String token = preferenceController.getToken();
+        String token = tokenController.getToken();
         // GET Request
         Response<String> response = cVurl.get(PREFIX + urlString)
                 // TODO map später auslagern, content-type evtl anpassen
@@ -42,7 +41,7 @@ public class HttpConnector {
 
         // Responsestatus pruefen und ggf. Token entfernen
         if (response.status() == HttpStatus.UNAUTHORIZED){
-            preferenceController.clearToken();
+            tokenController.clearToken();
         }
 
         return response;
@@ -57,8 +56,8 @@ public class HttpConnector {
 
     public static boolean post(String url, Object object) {
         CVurl cVurl = new CVurl();
-        PreferenceController preferenceController = PreferenceController.getInstance();
-        String existingJwt = preferenceController.getToken();
+        TokenController tokenController = TokenController.getInstance();
+        String existingJwt = tokenController.getToken();
 
         // POST
         // Wir uebergen das Token mit, auch wenn es erstmal leer ist, der Server macht damit nichts
@@ -72,11 +71,11 @@ public class HttpConnector {
 
         boolean isOk = result.status() == HttpStatus.OK;
 
-        // token speichern, wenn User erfolgreich angelegt werden konnte
+        // token speichern, wenn User erfolgreich angelegt werden konnte - wird fuer Bildupload benoetigt
         if (isOk && !result.getBody().isEmpty()){
             JSONObject jsonObject = new JSONObject(result.getBody());
             String responseJWt = jsonObject.getString("jwttoken");
-            preferenceController.setToken(responseJWt);
+            tokenController.setToken(responseJWt);
         }
 
         return isOk;

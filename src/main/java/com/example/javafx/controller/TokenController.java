@@ -1,19 +1,19 @@
 package com.example.javafx.controller;
 import java.util.prefs.*;
 
-public class PreferenceController {
+public class TokenController {
 
     private Preferences prefs;
-    private static PreferenceController instance;
+    private static TokenController instance;
 
-    private PreferenceController(){
+    private TokenController(){
         this.prefs = Preferences.userNodeForPackage(this.getClass());
         setToken("");
     }
 
-    public static PreferenceController getInstance() {
+    public static TokenController getInstance() {
         if (instance == null) {
-            instance = new PreferenceController();
+            instance = new TokenController();
         }
         return instance;
     }
