@@ -1,9 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
 <AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+            xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/account_data.css"
             fx:controller="com.example.javafx.controller.AccountDataController"
             prefHeight="400.0" prefWidth="600.0">
+    <fx:include fx:id="banner" source="banner.fxml"/>
+
+    <StackPane prefWidth="1760.0" prefHeight="800" layoutX="100">
+        <VBox alignment="CENTER">
+            <HBox styleClass="title_box" alignment="TOP_LEFT">
+                <Label styleClass="title">Profil aktualisieren</Label>
+            </HBox>
+            <HBox>
+                <VBox prefWidth="830.0" alignment="CENTER_LEFT">
+                    <Circle fx:id="profilePic" styleClass="profile_pic"/>
+                </VBox>
+                <VBox prefWidth="830.0" alignment="CENTER">
+                    <Button styleClass="button">Bild hochladen</Button>
+                    <Button styleClass="button">Bild entfernen</Button>
+                </VBox>
+            </HBox>
+            <Separator/>
+            <HBox>
+                <VBox prefWidth="830.0" alignment="CENTER_LEFT">
+                    <VBox styleClass="vbox_group">
+                        <Label styleClass="textfield-label">Username</Label>
+                        <TextField fx:id="usernameTextfield" styleClass="text_field"/>
+                    </VBox>
+                    <VBox styleClass="vbox_group">
+                        <Label styleClass="textfield-label">Passwort</Label>
+                        <PasswordField fx:id="passwordTextfield" styleClass="text_field"
+                                       promptText="*****"/>
+                    </VBox>
+                </VBox>
+                <VBox prefWidth="830.0" alignment="BOTTOM_CENTER">
+                    <Button styleClass="button">Speichern</Button>
+                </VBox>
+            </HBox>
+        </VBox>
+    </StackPane>
 
 </AnchorPane>

@@ -1,0 +1,42 @@
+.title {
+    -fx-text-fill: black;
+    font-style: bold;
+    -fx-font-size: 30px;
+    -fx-min-width: 100%;
+}
+
+.title_box {
+    -fx-min-width: 100%;
+    -fx-border-color: black;
+    -fx-border-width: 0 0 2 0;
+}
+
+.textfield-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: gray;
+    -fx-padding: 0 0 0 15;
+}
+
+.vbox_group {
+    -fx-padding: 10 0 10 0;
+    -fx-background-insets: 20 0 20 0;
+}
+
+.profile_pic {
+    -fx-background-color: -primary-buttons;
+    -fx-border-radius: 100;
+    -fx-stroke-width: 5;
+    -fx-border-color: -primary-buttons;
+    -fx-stroke: white;
+}
+
+.button {
+    -fx-padding: 20;
+    -fx-background-color: -primary-buttons;
+    -fx-text-fill: white;
+    -fx-pref-width: 250px;
+    -fx-font-size: 20px;
+    -fx-background-insets: 10;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+}

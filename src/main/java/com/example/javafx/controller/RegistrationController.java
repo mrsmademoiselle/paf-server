@@ -134,7 +134,8 @@ public class RegistrationController {
                 }
             } else {
                 // User Notification
-                bannerController.setText("Es gab ein Problem mit dem Bild!", false);
+                sceneController.loadAccountData();
+                bannerController.setText("Es konnte kein Bild hochgeladen werden.", false);
             }
         } else {
             bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);

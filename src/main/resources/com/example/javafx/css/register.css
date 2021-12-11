@@ -33,17 +33,6 @@
     -fx-background-insets: 40px;
 }
 
-.text_field {
-    -fx-text-fill: -primary-buttons;
-    -fx-font-size: 15px;
-    -fx-padding: 15px;
-    -fx-background-color: -third-background;
-    /* background-insets sind für den horizontalen Margin zwischen den Elementen zuständig,
-     weil es in JavaFX css nativ keinen horizontalen Margin gibt.*/
-    -fx-background-insets: 5 10 5 10;
-    -fx-max-width: 400;
-}
-
 .small_text {
     -fx-font-size: 15;
     -fx-padding: 0 50 0 50;

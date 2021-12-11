@@ -100,6 +100,7 @@ public class SceneController {
 
     private void loadView(URL path) throws IOException {
         Parent view;
+        System.out.println("path: " + path.getPath());
         view = FXMLLoader.load(path);
 
         Scene scene = new Scene(view, this.APPLICATION_WIDTH, this.APPLICATION_HEIGHT);
