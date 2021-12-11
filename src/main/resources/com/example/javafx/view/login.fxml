@@ -19,8 +19,8 @@
                         <!-- Input-Teil -->
                         <VBox prefWidth="480.0" prefHeight="200.0" alignment="CENTER">
                             <children>
-                                <TextField fx:id="username" styleClass="text_field" promptText="Username"/>
-                                <PasswordField fx:id="password" styleClass="text_field" promptText="Passwort"/>
+                                <TextField fx:id="usernameTextfield" styleClass="text_field" promptText="Username"/>
+                                <PasswordField fx:id="passwordTextfield" styleClass="text_field" promptText="Passwort"/>
 
                                 <VBox alignment="CENTER_RIGHT">
                                     <Label fx:id="loginLink" onMouseClicked="#sendToRegistration" alignment="TOP_RIGHT"

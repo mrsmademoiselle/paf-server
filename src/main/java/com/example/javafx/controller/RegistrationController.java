@@ -1,7 +1,6 @@
 package com.example.javafx.controller;
 
-import com.example.javafx.HttpConnector;
-import com.example.javafx.model.UserAuthDto;
+import com.example.javafx.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
@@ -71,7 +70,7 @@ public class RegistrationController {
 
     private static double applicationWidth;
     private static double applicationHeight;
-    SceneController sceneController = SceneController.getInstance();
+    UserService userService = new UserService();
 
 
     @FXML
@@ -114,41 +113,34 @@ public class RegistrationController {
     }
 
     public void register(ActionEvent event) {
-        if (username.getText().matches("[\\w|\\d]*") &&
-                !password.getText().isBlank() && !username.getText().isBlank()) {
 
-            UserAuthDto userAuthDto = new UserAuthDto(username.getText(), password.getText());
+        String username = this.username.getText();
+        String password = this.password.getText();
 
-            // Userdaten registrieren
-            boolean isOk = HttpConnector.post("user/register", userAuthDto);
+        if (!username.matches("[\\w|\\d]*") &&
+                password.isBlank() && username.isBlank()) {
+            bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
+            return;
+        }
+        boolean successful = userService.registerUserData(username, password);
 
-            // Bild hochladen
-            if (isOk && (imageBytes != null && imageBytes.length > 0)) {
-                // send to Dashboard
-                boolean successfullyUploaded = HttpConnector.post("user/image/upload", imageBytes);
-                if (successfullyUploaded) {
-                    sceneController.loadAccountData();
-                    // sceneController.loadLobby();
-                } else {
-                    bannerController.setText("Es gab einen Serverfehler beim verarbeiten des Bildes", false);
-                }
+        if (successful) {
+            if (imageBytes != null && imageBytes.length > 0) {
+                userService.uploadImage(imageBytes);
+                // diesen Banner erreichen wir nur, wenn kein Bild hochgeladen werden konnte
+                bannerController.setText("Es gab einen Serverfehler beim Verarbeiten des Bildes", false);
+
             } else {
                 // User Notification
-                sceneController.loadAccountData();
-                bannerController.setText("Es konnte kein Bild hochgeladen werden.", false);
+                userService.redirectToAccount();
             }
         } else {
-            bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
-
+            bannerController.setText("Der Benutzer konnte nicht angelegt werden.", false);
         }
     }
 
     public void sendToLogin() {
-        sceneController.loadLogin();
-    }
-
-    private void setButtonPic() {
-        editProfilePic.setGraphic(new ImageView(getPic("edit.png")));
+        userService.redirectToLogin();
     }
 
     public void hoverOverProfilePic() {
@@ -187,6 +179,10 @@ public class RegistrationController {
             // transformieren des Bildes in Byte
             imageBytes = Files.readAllBytes(selectedFile.toPath());
         }
+    }
+
+    private void setButtonPic() {
+        editProfilePic.setGraphic(new ImageView(getPic("edit.png")));
     }
 
     private Image getPic(String fileName) {
