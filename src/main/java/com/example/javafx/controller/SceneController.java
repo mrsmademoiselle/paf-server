@@ -18,7 +18,7 @@ public class SceneController {
     // check Auth hier einbauen und auf /register /login prüfen
     private URL loginScene;
     private URL registerScene;
-    private URL dashboardScene;
+    private URL lobbyScene;
     private URL accountDataScene;
     private URL generalCSS;
     private static final SceneController instance = new SceneController();
@@ -38,8 +38,8 @@ public class SceneController {
         this.loadScene(this.registerScene);
     }
 
-    public void loadDashboard() {
-        this.loadScene(this.dashboardScene);
+    public void loadLobby() {
+        this.loadScene(this.lobbyScene);
     }
 
     public void loadAccountData() {
@@ -62,8 +62,8 @@ public class SceneController {
         this.loginScene = loginScene;
     }
 
-    public void setDashboardScene(URL dashboardScene) {
-        this.dashboardScene = dashboardScene;
+    public void setLobbyScene(URL lobbyScene) {
+        this.lobbyScene = lobbyScene;
     }
 
     public void setRegisterScene(URL registerScene) {

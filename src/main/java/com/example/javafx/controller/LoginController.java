@@ -74,7 +74,7 @@ public class LoginController {
         boolean isOk = HttpConnector.post("user/login", userAuthDto);
         if (isOk) {
             sceneController.loadAccountData();
-            // sceneController.loadDashboard();
+            // sceneController.loadLobby();
         } else {
             bannerController.setText("User kann nicht eingeloggt werden", false);
         }

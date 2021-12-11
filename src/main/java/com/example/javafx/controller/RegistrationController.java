@@ -128,7 +128,7 @@ public class RegistrationController {
                 boolean successfullyUploaded = HttpConnector.post("user/image/upload", imageBytes);
                 if (successfullyUploaded) {
                     sceneController.loadAccountData();
-                    // sceneController.loadDashboard();
+                    // sceneController.loadLobby();
                 } else {
                     bannerController.setText("Es gab einen Serverfehler beim verarbeiten des Bildes", false);
                 }
