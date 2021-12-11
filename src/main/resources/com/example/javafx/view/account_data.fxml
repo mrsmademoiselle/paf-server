@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
-<AnchorPane xmlns="http://javafx.com/javafx"
+<AnchorPane xmlns="http://javafx.com/javafx" fx:id="page"
             xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/account_data.css"
             fx:controller="com.example.javafx.controller.AccountDataController"
             prefHeight="400.0" prefWidth="600.0">
@@ -19,8 +19,8 @@
                     <Circle fx:id="profilePic" styleClass="profile_pic"/>
                 </VBox>
                 <VBox prefWidth="830.0" alignment="CENTER">
-                    <Button styleClass="button">Bild hochladen</Button>
-                    <Button styleClass="button">Bild entfernen</Button>
+                    <Button styleClass="button" onMouseClicked="#uploadPicture">Bild hochladen</Button>
+                    <Button styleClass="button" onMouseClicked="#removePicture">Bild entfernen</Button>
                 </VBox>
             </HBox>
             <Separator/>

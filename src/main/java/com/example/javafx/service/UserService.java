@@ -1,11 +1,19 @@
 package com.example.javafx.service;
 
 import com.example.javafx.model.UserAuthDto;
+import com.example.javafx.model.UserDto;
 import com.example.javafx.service.helper.HttpConnector;
 import com.example.javafx.service.helper.SceneManager;
+import org.json.JSONObject;
 
 public class UserService {
     SceneManager sceneManager = SceneManager.getInstance();
+
+    public UserDto getUserInfo() {
+        JSONObject jsonObject = new JSONObject(HttpConnector.get("user/username").getBody());
+        // UserDto userDto = new UserDto(jsonObject.getString("username"), jsonObject.getString("image").getBytes(StandardCharsets.UTF_8));
+        return new UserDto("nevergonnagiveyouup", "", new byte[]{});
+    }
 
     public boolean registerUserData(String username, String password) {
         UserAuthDto userAuthDto = new UserAuthDto(username, password);
@@ -29,13 +37,10 @@ public class UserService {
         }
     }
 
-    public boolean updateUserInfo(String username, String password) {
-        if (username.matches("[\\w|\\d]*") && username.isBlank() && password.isBlank()) {
-            UserAuthDto userAuthDto = new UserAuthDto(username, password);
+    public boolean updateUserInfo(String username, String password, byte[] image) {
+        UserDto userAuthDto = new UserDto(username, password, image);
 
-            return HttpConnector.post("user/update", userAuthDto);
-        }
-        return false;
+        return HttpConnector.post("user/update", userAuthDto);
     }
 
     public void redirectToAccount() {

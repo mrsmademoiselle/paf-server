@@ -84,41 +84,17 @@ public class RegistrationController {
         editProfilePic.setTranslateY(editProfilePic.getLayoutY() - 25);
         editProfilePic.setTranslateX(editProfilePic.getLayoutX() + 85);
 
-        // Livevalidierung
-        username.textProperty().addListener((obs, oldInput, newInput) -> {
-            if (!username.getText().matches("[\\w|\\d]*")) {
-                username.setStyle("-fx-border-color:#d95252;" +
-                        "-fx-border-width: 10;"
-                );
-                bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
-            } else {
-                username.setStyle("");
-            }
-        });
+        activateInputListener();
 
     }
 
-    private void setFormLayout() {
-        // erstmal workaround
-        Rectangle2D primaryScreen = Screen.getPrimary().getVisualBounds();
-        applicationWidth = primaryScreen.getWidth() < 1920 ? primaryScreen.getWidth() : 1920;
-        applicationHeight = primaryScreen.getHeight() < 1080 ? primaryScreen.getHeight() : 1080;
-
-        form.setLayoutX(applicationWidth / 3);
-        form.setLayoutY(applicationHeight / 9);
-
-        title.setLayoutX(form.getLayoutX() + 110);
-        title.setTranslateY(form.getLayoutY() / 4);
-        title.toFront();
-    }
 
     public void register(ActionEvent event) {
-
         String username = this.username.getText();
         String password = this.password.getText();
 
-        if (!username.matches("[\\w|\\d]*") &&
-                password.isBlank() && username.isBlank()) {
+        if (!username.matches("[\\w|\\d]*") ||
+                password.isBlank() || username.isBlank()) {
             bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
             return;
         }
@@ -179,6 +155,34 @@ public class RegistrationController {
             // transformieren des Bildes in Byte
             imageBytes = Files.readAllBytes(selectedFile.toPath());
         }
+    }
+
+    private void activateInputListener() {
+        // Livevalidierung
+        username.textProperty().addListener((obs, oldInput, newInput) -> {
+            if (!username.getText().matches("[\\w|\\d]*")) {
+                username.setStyle("-fx-border-color:#d95252;" +
+                        "-fx-border-width: 10;"
+                );
+                bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
+            } else {
+                username.setStyle("");
+            }
+        });
+    }
+
+    private void setFormLayout() {
+        // erstmal workaround
+        Rectangle2D primaryScreen = Screen.getPrimary().getVisualBounds();
+        applicationWidth = primaryScreen.getWidth() < 1920 ? primaryScreen.getWidth() : 1920;
+        applicationHeight = primaryScreen.getHeight() < 1080 ? primaryScreen.getHeight() : 1080;
+
+        form.setLayoutX(applicationWidth / 3);
+        form.setLayoutY(applicationHeight / 9);
+
+        title.setLayoutX(form.getLayoutX() + 110);
+        title.setTranslateY(form.getLayoutY() / 4);
+        title.toFront();
     }
 
     private void setButtonPic() {
