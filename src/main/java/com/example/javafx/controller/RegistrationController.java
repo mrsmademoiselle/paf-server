@@ -1,6 +1,6 @@
 package com.example.javafx.controller;
 
-import com.example.javafx.UserService;
+import com.example.javafx.service.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;

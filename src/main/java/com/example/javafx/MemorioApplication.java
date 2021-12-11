@@ -1,6 +1,6 @@
 package com.example.javafx;
 
-import com.example.javafx.controller.SceneController;
+import com.example.javafx.service.helper.SceneManager;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -18,7 +18,7 @@ public class MemorioApplication extends javafx.application.Application {
         //Parent view = FXMLLoader.load(getClass().getResource("view/register.fxml"));
         //Parent view = FXMLLoader.load(getClass().getResource("view/login.fxml"));
 
-        SceneController sceneController = SceneController.getInstance();
+        SceneManager sceneManager = SceneManager.getInstance();
 
         Rectangle2D primaryScreen = Screen.getPrimary().getVisualBounds();
 
@@ -26,15 +26,15 @@ public class MemorioApplication extends javafx.application.Application {
         double applicationWidth = primaryScreen.getWidth() < 1920 ? primaryScreen.getWidth() : 1920;
         double applicationHeight = primaryScreen.getHeight() < 1080 ? primaryScreen.getHeight() : 1080;
 
-        sceneController.setScale(applicationWidth, applicationHeight);
-        sceneController.setStage(stage);
+        sceneManager.setScale(applicationWidth, applicationHeight);
+        sceneManager.setStage(stage);
 
         //TODO: Move into scene conntroller
-        sceneController.setLoginScene(getClass().getResource("view/login.fxml"));
-        sceneController.setRegisterScene(getClass().getResource("view/register.fxml"));
-        sceneController.setLobbyScene(getClass().getResource("view/lobby.fxml"));
-        sceneController.setAccountDataScene(getClass().getResource("view/account_data.fxml"));
-        sceneController.setGeneralCSS(getClass().getResource("css/general.css"));
+        sceneManager.setLoginScene(getClass().getResource("view/login.fxml"));
+        sceneManager.setRegisterScene(getClass().getResource("view/register.fxml"));
+        sceneManager.setLobbyScene(getClass().getResource("view/lobby.fxml"));
+        sceneManager.setAccountDataScene(getClass().getResource("view/account_data.fxml"));
+        sceneManager.setGeneralCSS(getClass().getResource("css/general.css"));
 
 
         // Fenster zentrieren
@@ -44,7 +44,7 @@ public class MemorioApplication extends javafx.application.Application {
         stage.setHeight(applicationHeight);
 
         System.out.println("MemorioApplication: loadLogin");
-        sceneController.loadLogin();
+        sceneManager.loadLogin();
         stage.show();
     }
 }

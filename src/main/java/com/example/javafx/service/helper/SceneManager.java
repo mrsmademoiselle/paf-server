@@ -1,6 +1,5 @@
-package com.example.javafx.controller;
+package com.example.javafx.service.helper;
 
-import com.example.javafx.HttpConnector;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,7 +8,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-public class SceneController {
+public class SceneManager {
 
     private Stage stage;
     private double APPLICATION_WIDTH;
@@ -21,12 +20,12 @@ public class SceneController {
     private URL lobbyScene;
     private URL accountDataScene;
     private URL generalCSS;
-    private static final SceneController instance = new SceneController();
+    private static final SceneManager instance = new SceneManager();
 
-    private SceneController() {
+    private SceneManager() {
     }
 
-    public static SceneController getInstance() {
+    public static SceneManager getInstance() {
         return instance;
     }
 

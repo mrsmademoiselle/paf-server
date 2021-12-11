@@ -1,19 +1,20 @@
-package com.example.javafx.controller;
-import java.util.prefs.*;
+package com.example.javafx.service.helper;
 
-public class TokenController {
+import java.util.prefs.Preferences;
+
+public class TokenManager {
 
     private Preferences prefs;
-    private static TokenController instance;
+    private static TokenManager instance;
 
-    private TokenController(){
+    private TokenManager() {
         this.prefs = Preferences.userNodeForPackage(this.getClass());
         setToken("");
     }
 
-    public static TokenController getInstance() {
+    public static TokenManager getInstance() {
         if (instance == null) {
-            instance = new TokenController();
+            instance = new TokenManager();
         }
         return instance;
     }
@@ -22,7 +23,7 @@ public class TokenController {
         this.prefs.put("token", token);
     }
 
-    public void clearToken(){
+    public void clearToken() {
         this.prefs.put("token", "");
     }
 

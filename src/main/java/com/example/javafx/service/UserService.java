@@ -1,10 +1,11 @@
-package com.example.javafx;
+package com.example.javafx.service;
 
-import com.example.javafx.controller.SceneController;
 import com.example.javafx.model.UserAuthDto;
+import com.example.javafx.service.helper.HttpConnector;
+import com.example.javafx.service.helper.SceneManager;
 
 public class UserService {
-    SceneController sceneController = SceneController.getInstance();
+    SceneManager sceneManager = SceneManager.getInstance();
 
     public boolean registerUserData(String username, String password) {
         UserAuthDto userAuthDto = new UserAuthDto(username, password);
@@ -14,7 +15,7 @@ public class UserService {
     public void uploadImage(byte[] imageBytes) {
         boolean successfullyUploaded = HttpConnector.post("user/image/upload", imageBytes);
         if (successfullyUploaded) {
-            sceneController.loadAccountData();
+            sceneManager.loadAccountData();
             // sceneController.loadLobby();
         }
     }
@@ -24,7 +25,7 @@ public class UserService {
 
         boolean isOk = HttpConnector.post("user/login", userAuthDto);
         if (isOk) {
-            sceneController.loadAccountData();
+            sceneManager.loadAccountData();
         }
     }
 
@@ -38,14 +39,14 @@ public class UserService {
     }
 
     public void redirectToAccount() {
-        sceneController.loadAccountData();
+        sceneManager.loadAccountData();
     }
 
     public void redirectToLogin() {
-        sceneController.loadLogin();
+        sceneManager.loadLogin();
     }
 
     public void redirectToRegister() {
-        sceneController.loadRegistration();
+        sceneManager.loadRegistration();
     }
 }

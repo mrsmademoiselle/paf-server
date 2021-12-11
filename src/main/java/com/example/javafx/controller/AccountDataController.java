@@ -1,6 +1,6 @@
 package com.example.javafx.controller;
 
-import com.example.javafx.UserService;
+import com.example.javafx.service.UserService;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;

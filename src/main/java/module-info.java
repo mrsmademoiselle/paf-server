@@ -1,4 +1,4 @@
-    module com.example.javafx {
+module com.example.javafx {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
@@ -11,4 +11,8 @@
     exports com.example.javafx.controller;
     exports com.example.javafx.model;
     opens com.example.javafx.controller to javafx.fxml;
+    exports com.example.javafx.service;
+    opens com.example.javafx.service to javafx.fxml;
+    exports com.example.javafx.service.helper;
+    opens com.example.javafx.service.helper to javafx.fxml;
 }

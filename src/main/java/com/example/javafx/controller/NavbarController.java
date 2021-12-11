@@ -1,15 +1,10 @@
 package com.example.javafx.controller;
 
-import com.example.javafx.HttpConnector;
-import coresearch.cvurl.io.constant.HttpStatus;
-import coresearch.cvurl.io.model.Response;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 public class NavbarController {
 
