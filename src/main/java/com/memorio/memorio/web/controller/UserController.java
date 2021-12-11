@@ -104,22 +104,6 @@ public class UserController {
     }
 
     /**
-     * Für Testzwecke und zur Demonstration im Meeting am 11.12.
-     * Dafür muss ein Bild im User gesetzt sein -> vorher /image/upload anpingen
-     */
-    @GetMapping("/image/server")
-    public void saveImgToServer(@RequestHeader(name = "Authorization") String jwtToken) {
-        try {
-            String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-            Optional<User> userOptional = userRepository.findByUsername(username);
-            User user = userOptional.orElseThrow(NotFoundException::new);
-            user.saveUserProfilePicToServer();
-        } catch (Exception e) {
-            logger.error("Profilbild konnte nicht auf dem Server gespeichert werden.");
-        }
-    }
-
-    /**
      * "Pseudo"-Endpunkt für jene Client-Seiten, welche zwar einen Login erfordern, aber keinen eigenen Request an den
      * Server abfeuern müssen.
      * Dient der Validierung des JWT vor Ausgabe der Seite.
