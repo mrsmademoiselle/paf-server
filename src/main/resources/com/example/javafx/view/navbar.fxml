@@ -14,8 +14,10 @@
             <VBox alignment="CENTER_LEFT" prefWidth="300">
                 <ImageView fx:id="logo" pickOnBounds="true" preserveRatio="true"/>
             </VBox>
-            <VBox alignment="CENTER_RIGHT" prefWidth="1200">
-                <Button alignment="CENTER_RIGHT" styleClass="logoutButton" fx:id="logoutButton">Logout</Button>
+            <VBox alignment="CENTER_RIGHT" prefWidth="1200" layoutX="300">
+                <Button styleClass="logoutButton" fx:id="logoutButton"
+                        onMouseClicked="#logout">Logout
+                </Button>
             </VBox>
         </HBox>
     </children>

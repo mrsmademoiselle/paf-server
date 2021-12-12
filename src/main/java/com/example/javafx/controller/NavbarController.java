@@ -1,5 +1,7 @@
 package com.example.javafx.controller;
 
+import com.example.javafx.service.helper.SceneManager;
+import com.example.javafx.service.helper.TokenManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -40,6 +42,11 @@ public class NavbarController {
         return null;
     }
 
+    // TODO evtl verschieben
     public void logout(MouseEvent mouseEvent) {
+        TokenManager tokenManager = TokenManager.getInstance();
+        SceneManager sceneManager = SceneManager.getInstance();
+        tokenManager.clearToken();
+        sceneManager.loadLogin();
     }
 }
