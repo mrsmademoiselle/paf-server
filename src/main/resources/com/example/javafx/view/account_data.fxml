@@ -3,15 +3,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
-<AnchorPane xmlns="http://javafx.com/javafx" fx:id="page"
-            xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/account_data.css"
-            fx:controller="com.example.javafx.controller.AccountDataController">
+<Pane xmlns="http://javafx.com/javafx" fx:id="page"
+      xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/account_data.css"
+      fx:controller="com.example.javafx.controller.AccountDataController">
     <fx:include fx:id="navbar" source="navbar.fxml"/>
     <fx:include fx:id="banner" source="banner.fxml"/>
 
     <!-- Valuebinding durch "PapaController"-->
-    <StackPane prefHeight="${controller.heightWithOffset}" prefWidth="${controller.widthWithOffset}"
-               layoutY="${controller.offsetY}" layoutX="${controller.offsetX}">
+    <Pane prefHeight="${controller.heightWithOffset}" prefWidth="${controller.widthWithOffset}"
+          layoutY="${controller.offsetY}" layoutX="${controller.offsetX}">
         <VBox alignment="TOP_LEFT">
             <HBox styleClass="title_box" alignment="CENTER_LEFT" prefWidth="${controller.widthWithOffset}">
                 <Label styleClass="profile_title">Profil aktualisieren</Label>
@@ -45,6 +45,6 @@
                 </VBox>
             </HBox>
         </VBox>
-    </StackPane>
+    </Pane>
 
-</AnchorPane>
+</Pane>

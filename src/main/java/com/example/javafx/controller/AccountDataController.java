@@ -8,7 +8,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
@@ -20,7 +20,7 @@ import java.nio.file.Files;
 public class AccountDataController extends PapaController {
 
     @FXML
-    AnchorPane page;
+    Pane page;
 
     @FXML
     Circle profilePic;

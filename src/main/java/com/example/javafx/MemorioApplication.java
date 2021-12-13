@@ -44,8 +44,7 @@ public class MemorioApplication extends javafx.application.Application {
         stage.setHeight(applicationHeight);
 
         System.out.println("MemorioApplication: loadLogin");
-        // to be changed to login
-        sceneManager.loadRegistration();
+        sceneManager.loadLogin();
         stage.show();
     }
 }

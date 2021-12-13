@@ -7,15 +7,16 @@
 <?import javafx.scene.layout.VBox?>
 <AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" styleClass="navbar_container"
             fx:controller="com.example.javafx.controller.NavbarController"
-            stylesheets="@../css/navbar.css"
-            prefWidth="1700.0" prefHeight="40">
+            stylesheets="@../css/navbar.css" prefWidth="${controller.widthWithoutOffset}" prefHeight="40">
     <children>
         <!-- Navbar -->
-        <HBox styleClass="navbar" prefWidth="1700" alignment="CENTER_LEFT" prefHeight="40">
-            <VBox alignment="CENTER_LEFT" prefWidth="300" prefHeight="50">
+        <HBox styleClass="navbar" prefWidth="${controller.widthWithoutOffset}" alignment="CENTER_LEFT" prefHeight="40">
+            <VBox alignment="CENTER_LEFT" prefWidth="${controller.widthWithoutOffset * 0.4}"
+                  prefHeight="40">
                 <ImageView fx:id="logo" pickOnBounds="true" preserveRatio="true"/>
             </VBox>
-            <VBox alignment="CENTER_RIGHT" prefWidth="1200" layoutX="300" prefHeight="40">
+            <!-- * 0.58 statt 0.6, damit wir rechts noch ein klein bisschen Padding haben -->
+            <VBox alignment="CENTER_RIGHT" prefWidth="${controller.widthWithoutOffset * 0.58}" prefHeight="40">
                 <Button styleClass="logoutButton" fx:id="logoutButton" onMouseClicked="#logout" text="Logout">
                 </Button>
             </VBox>

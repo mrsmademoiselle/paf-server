@@ -2,9 +2,9 @@ package com.example.javafx.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 
@@ -14,7 +14,7 @@ public class BannerController extends PapaController {
     Label text;
 
     @FXML
-    AnchorPane banner;
+    Pane banner;
 
     @FXML
     StackPane stackP;
