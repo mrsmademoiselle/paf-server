@@ -2,6 +2,7 @@ package com.example.javafx.controller;
 
 import com.example.javafx.model.UserDto;
 import com.example.javafx.service.UserService;
+import com.example.javafx.service.helper.FileManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -10,7 +11,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.stage.FileChooser;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -52,7 +52,7 @@ public class AccountDataController extends PapaController {
 
     public void setProfilePic() {
         if (imageBytes == null || imageBytes.length == 0) {
-            Image pic = getPic("painting2.png");
+            Image pic = FileManager.getPic("painting2.png");
             profilePic.setFill(new ImagePattern(pic));
             profilePic.setRadius(80);
         } else {
@@ -77,12 +77,7 @@ public class AccountDataController extends PapaController {
     }
 
     public void uploadPicture() throws IOException {
-        // File Chooser für Bildauswahl
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Profilbild hochladen");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-        File selectedFile = fileChooser.showOpenDialog(page.getScene().getWindow());
+        File selectedFile = FileManager.openImageChooser(page);
 
         if (selectedFile != null) {
             // Bild als Vorschau setzten
@@ -98,16 +93,6 @@ public class AccountDataController extends PapaController {
     public void removePicture(MouseEvent mouseEvent) {
         imageBytes = new byte[]{};
         setProfilePic();
-    }
-
-    private Image getPic(String fileName) {
-        File folder = new File("src/main/resources/com/example/javafx/pics");
-        if (folder.exists()) {
-            File imageFile = new File(folder, fileName);
-
-            return new Image(imageFile.toURI().toString());
-        }
-        throw new RuntimeException("AccountDataController: Bild konnte nicht geladen werden: " + fileName);
     }
 
     private void activateInputListener() {

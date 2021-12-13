@@ -1,6 +1,7 @@
 package com.example.javafx.controller;
 
 import com.example.javafx.service.UserService;
+import com.example.javafx.service.helper.FileManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -14,7 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.stage.FileChooser;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -98,7 +98,7 @@ public class RegistrationController extends PapaController {
     }
 
     public void hoverOverProfilePic() {
-        Image pic = getPic("upload.png");
+        Image pic = FileManager.getPic("upload.png");
         profilePic.setFill(new ImagePattern(pic));
         profilePic.setRadius(100);
         profilePic.setCursor(Cursor.HAND);
@@ -106,7 +106,7 @@ public class RegistrationController extends PapaController {
 
     public void setProfilePic() {
         if (imageBytes == null || imageBytes.length == 0) {
-            Image pic = getPic("painting2.png");
+            Image pic = FileManager.getPic("painting2.png");
             profilePic.setFill(new ImagePattern(pic));
             profilePic.setStrokeWidth(3);
             profilePic.setStroke(Color.WHITE);
@@ -119,12 +119,7 @@ public class RegistrationController extends PapaController {
     }
 
     public void uploadPicture() throws IOException {
-        // File Chooser für Bildauswahl
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Profilbild hochladen");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-        File selectedFile = fileChooser.showOpenDialog(page.getScene().getWindow());
+        File selectedFile = FileManager.openImageChooser(page);
 
         if (selectedFile != null) {
             // Bild als Vorschau setzten
@@ -136,6 +131,7 @@ public class RegistrationController extends PapaController {
             imageBytes = Files.readAllBytes(selectedFile.toPath());
         }
     }
+
 
     private void activateInputListener() {
         // Livevalidierung
@@ -150,14 +146,5 @@ public class RegistrationController extends PapaController {
         });
     }
 
-    private Image getPic(String fileName) {
-        File folder = new File("src/main/resources/com/example/javafx/pics");
-        if (folder.exists()) {
-            File imageFile = new File(folder, fileName);
-
-            return new Image(imageFile.toURI().toString());
-        }
-        throw new RuntimeException("RegistrationController: Bild konnte nicht geladen werden: " + fileName);
-    }
 
 }
