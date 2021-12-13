@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
-<Pane xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/login.css"
+<Pane xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/login.css" fx:id="page"
       fx:controller="com.example.javafx.controller.RegistrationController">
     <fx:include fx:id="banner" source="banner.fxml"/>
 

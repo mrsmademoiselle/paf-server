@@ -9,10 +9,7 @@
 
 .profile_pic {
     -fx-background-color: -primary-buttons;
-    -fx-border-radius: 100;
-    -fx-stroke-width: 5;
     -fx-border-color: -primary-buttons;
-    -fx-stroke: white;
 }
 
 .small_text {

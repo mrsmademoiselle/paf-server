@@ -9,8 +9,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
@@ -49,7 +50,7 @@ public class RegistrationController extends PapaController {
     Label title;
 
     @FXML
-    AnchorPane page;
+    Pane page;
 
     @FXML
     VBox form;
@@ -116,6 +117,8 @@ public class RegistrationController extends PapaController {
         if (imageBytes == null || imageBytes.length == 0) {
             Image pic = getPic("painting2.png");
             profilePic.setFill(new ImagePattern(pic));
+            profilePic.setStrokeWidth(3);
+            profilePic.setStroke(Color.WHITE);
             profilePic.setRadius(100);
         } else {
             Image img = new Image(new ByteArrayInputStream(imageBytes));
