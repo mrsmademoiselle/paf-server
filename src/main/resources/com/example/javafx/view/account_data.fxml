@@ -10,9 +10,8 @@
     <fx:include fx:id="banner" source="banner.fxml"/>
 
     <!-- Valuebinding durch "PapaController"-->
-    <StackPane prefHeight="${controller.height}"
-               prefWidth="${controller.width}"
-               layoutY="${controller.YOffset}" layoutX="${controller.XOffset}">
+    <StackPane prefHeight="${controller.height}" prefWidth="${controller.width}"
+               layoutY="${controller.offsetY}" layoutX="${controller.offsetX}">
         <VBox alignment="TOP_LEFT">
             <HBox styleClass="title_box" alignment="CENTER_LEFT" prefWidth="${controller.width}">
                 <Label styleClass="title">Profil aktualisieren</Label>

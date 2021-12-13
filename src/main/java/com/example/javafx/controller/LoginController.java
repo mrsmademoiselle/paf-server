@@ -2,20 +2,10 @@ package com.example.javafx.controller;
 
 import com.example.javafx.service.UserService;
 import javafx.fxml.FXML;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
 
 public class LoginController extends PapaController {
-
-    @FXML
-    Label title;
-
-    @FXML
-    VBox form;
 
     @FXML
     TextField usernameTextfield;
@@ -26,24 +16,11 @@ public class LoginController extends PapaController {
     @FXML
     BannerController bannerController;
 
-    private static double applicationWidth;
-    private static double applicationHeight;
 
     UserService userService = new UserService();
 
     @FXML
     protected void initialize() {
-        Rectangle2D primaryScreen = Screen.getPrimary().getVisualBounds();
-        applicationWidth = primaryScreen.getWidth() < 1920 ? primaryScreen.getWidth() : 1920;
-        applicationHeight = primaryScreen.getHeight() < 1080 ? primaryScreen.getHeight() : 1080;
-
-        form.setLayoutX(applicationWidth / 3);
-        form.setLayoutY(applicationHeight / 9);
-
-        title.setLayoutX(form.getLayoutX() + 110);
-        title.setTranslateY(form.getLayoutY() / 4);
-        title.toFront();
-
         activateInputListener();
     }
 

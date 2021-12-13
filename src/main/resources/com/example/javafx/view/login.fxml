@@ -2,43 +2,31 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/login.css" alignment="CENTER"
-      fx:controller="com.example.javafx.controller.LoginController" fillWidth="true">
-    <children>
+<Pane xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/login.css"
+      fx:controller="com.example.javafx.controller.LoginController">
+    <fx:include fx:id="banner" source="banner.fxml"/>
 
-        <fx:include fx:id="banner" source="banner.fxml"/>
-
-        <AnchorPane fx:id="page" styleClass="container" VBox.vgrow="ALWAYS">
-            <children>
-                <Label fx:id="title" prefHeight="18.0" prefWidth="258.0" styleClass="title" text="Login"
-                       alignment="TOP_CENTER" textAlignment="CENTER"/>
-
+    <Pane styleClass="container" layoutY="${controller.offsetY /2}"
+          layoutX="${controller.offsetX}" prefWidth="${controller.width}">
+        <VBox alignment="TOP_CENTER" layoutY="${controller.offsetY/2}" prefWidth="${controller.width}"
+              prefHeight="${controller.height}">
+            <HBox alignment="CENTER" prefWidth="${controller.width}">
                 <!-- Formular -->
-                <VBox alignment="CENTER" prefHeight="350.0" prefWidth="480.0" styleClass="form" fx:id="form">
-                    <children>
-                        <!-- Input-Teil -->
-                        <VBox prefWidth="480.0" prefHeight="200.0" alignment="CENTER">
-                            <children>
-                                <TextField fx:id="usernameTextfield" styleClass="text_field" promptText="Username"/>
-                                <PasswordField fx:id="passwordTextfield" styleClass="text_field" promptText="Passwort"/>
+                <VBox alignment="TOP_CENTER" prefWidth="${controller.width /3}" styleClass="form">
+                    <Label styleClass="title" text="Login"
+                           alignment="TOP_CENTER" textAlignment="CENTER"/>
+                    <TextField fx:id="usernameTextfield" styleClass="text_field" promptText="Username"/>
+                    <PasswordField fx:id="passwordTextfield" styleClass="text_field" promptText="Passwort"/>
 
-                                <VBox alignment="CENTER_RIGHT">
-                                    <Label fx:id="loginLink" onMouseClicked="#sendToRegistration" alignment="TOP_RIGHT"
-                                           styleClass="small_text" text="Du hast noch keinen Account?"
-                                           textAlignment="JUSTIFY"/>
-                                </VBox>
-                                <Button fx:id="submit" onAction="#login" alignment="BOTTOM_CENTER"
-                                        mnemonicParsing="false" prefHeight="26.0" prefWidth="116.0"
-                                        styleClass="submit_button" text="Login"/>
-                                <VBox fx:id="successOrErrorContainer" alignment="CENTER">
-                                    <Label fx:id="bannerLabel" styleClass="banner-label"></Label>
-                                </VBox>
-                            </children>
-                        </VBox>
-                    </children>
+                    <VBox alignment="CENTER_RIGHT">
+                        <Label fx:id="loginLink" onMouseClicked="#sendToRegistration" alignment="TOP_RIGHT"
+                               styleClass="small_text" text="Du hast noch keinen Account?"
+                               textAlignment="JUSTIFY"/>
+                    </VBox>
+                    <Button fx:id="submit" onAction="#login" alignment="BOTTOM_CENTER"
+                            mnemonicParsing="false" styleClass="submit_button" text="Login"/>
                 </VBox>
-            </children>
-        </AnchorPane>
-
-    </children>
-</VBox>
+            </HBox>
+        </VBox>
+    </Pane>
+</Pane>

@@ -11,11 +11,6 @@
     /* to be fixed -fx-background-color: -site-background;*/
 }
 
-.form {
-    -fx-background-color: -side-nav;
-    -fx-background-radius: 10;
-}
-
 .profile_pic {
     -fx-background-color: -primary-buttons;
     -fx-border-radius: 100;

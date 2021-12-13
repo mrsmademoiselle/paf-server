@@ -20,6 +20,11 @@
     -fx-font-family: 'Wendy One';
 }
 
+.form {
+    -fx-background-color: -side-nav;
+    -fx-background-radius: 10;
+}
+
 .text_field {
     -fx-text-fill: -primary-buttons;
     -fx-font-size: 15px;
@@ -35,7 +40,7 @@
     -fx-padding: 40;
     -fx-background-color: -primary-buttons;
     -fx-text-fill: white;
-    -fx-pref-width: 200;
+    -fx-pref-width: 15em;
     -fx-font-size: 20px;
     -fx-alignment: center;
     -fx-background-insets: 30;
