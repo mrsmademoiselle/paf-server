@@ -53,7 +53,7 @@ public class AccountDataController {
         if (imageBytes == null || imageBytes.length == 0) {
             Image pic = getPic("painting2.png");
             profilePic.setFill(new ImagePattern(pic));
-            profilePic.setRadius(100);
+            profilePic.setRadius(80);
         } else {
             Image img = new Image(new ByteArrayInputStream(imageBytes));
             ImagePattern imagePattern = new ImagePattern(img);
