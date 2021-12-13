@@ -30,3 +30,14 @@
     -fx-background-insets: 5 10 5 10;
     -fx-max-width: 400;
 }
+
+.submit_button {
+    -fx-padding: 40;
+    -fx-background-color: -primary-buttons;
+    -fx-text-fill: white;
+    -fx-pref-width: 200;
+    -fx-font-size: 20px;
+    -fx-alignment: center;
+    -fx-background-insets: 30;
+    -fx-cursor: hand;
+}

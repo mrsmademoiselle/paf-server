@@ -7,11 +7,22 @@
     -fx-background-color: -navbar;
 }
 
-
 .logoutButton {
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    /* entferne standard-button-padding, damit die border direkt am background anliegt */
+    -fx-padding: 0 0 0 0;
+    -fx-background-insets: 0 0 0 0, 0, 0, 0;
+    -fx-background-radius: 6;
+    /* colors */
     -fx-background-color: white;
     -fx-text-fill: black;
-    -fx-pref-height: 20px;
-    -fx-pref-width: 200px;
-    -fx-cursor: hand;
+    /* sizing */
+    -fx-pref-width: 130px;
+    -fx-pref-height: 35px;
+    -fx-font-size: 20px;
+    /* border */
+    -fx-border-width: 1;
+    -fx-border-color: black;
+    -fx-border-radius: 6;
 }

@@ -28,8 +28,8 @@ public class NavbarController {
 
     private void setLogoPic() {
         logo.setImage(getPic("Brand.png"));
-        logo.setFitHeight(35);
-        logo.setFitHeight(35);
+        logo.setFitHeight(30);
+        logo.setFitHeight(30);
     }
 
     private Image getPic(String fileName) {

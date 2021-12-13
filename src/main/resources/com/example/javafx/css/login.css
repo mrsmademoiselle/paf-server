@@ -44,23 +44,8 @@
     -fx-cursor: hand;
 }
 
-.submit_button {
-    -fx-padding: 40;
-    -fx-background-color: -primary-buttons;
-    -fx-text-fill: white;
-    -fx-pref-width: 250;
-    -fx-font-size: 20px;
-    -fx-alignment: center;
-    -fx-background-insets: 30;
-    -fx-cursor: hand;
-}
-
 .banner-label {
     -fx-padding: 10;
     -fx-font-size: 15;
     -fx-background-insets: 30;
-}
-
-.page {
-    -fx-background-color: "red";
 }
