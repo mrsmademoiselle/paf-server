@@ -28,9 +28,6 @@ public class RegistrationController extends PapaController {
     Button submit;
 
     @FXML
-    Button editProfilePic;
-
-    @FXML
     TextField username;
 
     @FXML

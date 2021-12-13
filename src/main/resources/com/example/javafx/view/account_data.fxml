@@ -10,25 +10,25 @@
     <fx:include fx:id="banner" source="banner.fxml"/>
 
     <!-- Valuebinding durch "PapaController"-->
-    <StackPane prefHeight="${controller.height}" prefWidth="${controller.width}"
+    <StackPane prefHeight="${controller.heightWithOffset}" prefWidth="${controller.widthWithOffset}"
                layoutY="${controller.offsetY}" layoutX="${controller.offsetX}">
         <VBox alignment="TOP_LEFT">
-            <HBox styleClass="title_box" alignment="CENTER_LEFT" prefWidth="${controller.width}">
+            <HBox styleClass="title_box" alignment="CENTER_LEFT" prefWidth="${controller.widthWithOffset}">
                 <Label styleClass="profile_title">Profil aktualisieren</Label>
             </HBox>
             <HBox>
                 <!-- Der Compiler Fehler kann ignoriert werden, der kommt von Intellij. JavaFX versteht das.-->
-                <VBox prefWidth="${controller.width / 2}" alignment="CENTER_LEFT">
+                <VBox prefWidth="${controller.widthWithOffset / 2}" alignment="CENTER_LEFT">
                     <Circle fx:id="profilePic" styleClass="profile_pic"/>
                 </VBox>
-                <VBox prefWidth="${controller.width / 2}" alignment="CENTER_RIGHT">
+                <VBox prefWidth="${controller.widthWithOffset / 2}" alignment="CENTER_RIGHT">
                     <Button styleClass="button, gray" onMouseClicked="#uploadPicture">Bild hochladen</Button>
                     <Button styleClass="button, gray" onMouseClicked="#removePicture">Bild entfernen</Button>
                 </VBox>
             </HBox>
-            <Separator prefWidth="${controller.width}"/>
+            <Separator prefWidth="${controller.widthWithOffset}"/>
             <HBox>
-                <VBox prefWidth="${controller.width / 2}" alignment="CENTER_LEFT">
+                <VBox prefWidth="${controller.widthWithOffset / 2}" alignment="CENTER_LEFT">
                     <VBox styleClass="y_padding">
                         <Label styleClass="textfield_label">Username</Label>
                         <TextField fx:id="usernameTextfield" styleClass="text_field"/>
@@ -39,7 +39,7 @@
                                        promptText="*****"/>
                     </VBox>
                 </VBox>
-                <VBox alignment="BOTTOM_RIGHT" prefWidth="${controller.width / 2}">
+                <VBox alignment="BOTTOM_RIGHT" prefWidth="${controller.widthWithOffset / 2}">
                     <Button styleClass="button" onMouseClicked="#updateUserInfo">Speichern
                     </Button>
                 </VBox>

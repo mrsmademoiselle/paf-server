@@ -7,12 +7,12 @@
     <fx:include fx:id="banner" source="banner.fxml"/>
 
     <Pane styleClass="container" layoutY="${controller.offsetY}" layoutX="${controller.offsetX}"
-          prefWidth="${controller.width}">
-        <VBox alignment="TOP_CENTER" layoutY="${controller.offsetY/2}" prefWidth="${controller.width}"
-              prefHeight="${controller.height}">
-            <HBox alignment="CENTER" prefWidth="${controller.width}">
+          prefWidth="${controller.widthWithOffset}">
+        <VBox alignment="TOP_CENTER" layoutY="${controller.offsetY/2}" prefWidth="${controller.widthWithOffset}"
+              prefHeight="${controller.heightWithOffset}">
+            <HBox alignment="CENTER" prefWidth="${controller.widthWithOffset}">
                 <!-- Formular -->
-                <VBox alignment="TOP_CENTER" prefWidth="${controller.width /3}" styleClass="form">
+                <VBox alignment="TOP_CENTER" prefWidth="${controller.widthWithOffset /3}" styleClass="form">
                     <Label styleClass="login_register_title" text="Login" alignment="TOP_CENTER"
                            textAlignment="CENTER"/>
                     <TextField fx:id="usernameTextfield" styleClass="text_field" promptText="Username"/>

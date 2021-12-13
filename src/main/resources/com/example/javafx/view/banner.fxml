@@ -6,11 +6,9 @@
 <AnchorPane xmlns="http://javafx.com/javafx" fx:id="banner"
             xmlns:fx="http://javafx.com/fxml" styleClass="banner"
             fx:controller="com.example.javafx.controller.BannerController"
-            prefHeight="50.0" stylesheets="@../css/banner.css" layoutY="60"
-            prefWidth="1080.0">
-    <children>
-        <StackPane prefWidth="1760.0" fx:id="stackP">
-            <Label styleClass="text" fx:id="text"/>
-        </StackPane>
-    </children>
+            prefHeight="50.0" stylesheets="@../css/banner.css" layoutY="40"
+            prefWidth="${controller.widthWithoutOffset}">
+    <StackPane prefWidth="${controller.widthWithoutOffset}" fx:id="stackP">
+        <Label styleClass="text" fx:id="text"/>
+    </StackPane>
 </AnchorPane>

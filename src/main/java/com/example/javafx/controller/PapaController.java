@@ -26,19 +26,25 @@ public abstract class PapaController {
     /**
      * Height für Bildschirminhalt. Berücksichtigt schon den Y Offset.
      */
-    public double getHeight() {
-        System.out.println(Screen.getPrimary().getVisualBounds().getHeight());
+    public double getHeightWithOffset() {
         return Screen.getPrimary().getVisualBounds().getHeight() - getOffsetY();
     }
 
     /**
      * Width für Bildschirminhalt. Berücksichtigt schon den X Offset.
      */
-    public double getWidth() {
-        System.out.println(Screen.getPrimary().getVisualBounds().getWidth());
+    public double getWidthWithOffset() {
         // * 2, weil links & rechts padding sein soll:
         // Durch den x Offset im fxml (layoutX=${controller.getXOffset}) gilt der schon links, durch das *2 wird die Width so weit
         // beschränkt, dass auch rechts Platz ist.
         return Screen.getPrimary().getVisualBounds().getWidth() - getOffsetX() * 2;
+    }
+
+    /**
+     * Width für Komponenten wie Banner & Navbar, die die komplette Breite (ohne Padding) einnehmen sollen.
+     */
+    public double getWidthWithoutOffset() {
+        return Screen.getPrimary().getVisualBounds().getWidth();
+
     }
 }
