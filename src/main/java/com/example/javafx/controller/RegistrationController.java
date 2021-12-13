@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class RegistrationController {
+public class RegistrationController extends PapaController {
 
     // Bedeutet, dass dieses Feld in der fxml-Datei referenziert wird
     @FXML

@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class AccountDataController {
+public class AccountDataController extends PapaController {
 
     @FXML
     AnchorPane page;
@@ -39,6 +39,7 @@ public class AccountDataController {
 
     byte[] imageBytes;
     UserService userService = new UserService();
+
 
     @FXML
     public void initialize() {

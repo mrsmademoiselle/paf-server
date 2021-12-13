@@ -6,14 +6,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.TextAlignment;
 
-import java.util.Timer;
-
-public class BannerController {
+public class BannerController extends PapaController {
 
     @FXML
     Label text;
@@ -24,22 +21,22 @@ public class BannerController {
     @FXML
     StackPane stackP;
 
-    public BannerController(){
+    public BannerController() {
     }
 
     @FXML
-    protected void initialize(){
+    protected void initialize() {
         banner.setVisible(false);
     }
 
-    public void setText(String input, boolean success){
+    public void setText(String input, boolean success) {
         banner.setVisible(false);
         text.setText(input);
         text.setTextAlignment(TextAlignment.CENTER);
         stackP.setAlignment(text, Pos.CENTER);
 
         String color = success ? "#6dd06d" : "#d06d6d";
-        banner.setBackground(new Background(new BackgroundFill(Paint.valueOf(color),null, null)));
+        banner.setBackground(new Background(new BackgroundFill(Paint.valueOf(color), null, null)));
 
         text.setTextFill(Paint.valueOf("#ffffff"));
 

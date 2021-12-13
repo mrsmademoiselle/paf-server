@@ -5,39 +5,42 @@
 <?import javafx.scene.shape.Circle?>
 <AnchorPane xmlns="http://javafx.com/javafx" fx:id="page"
             xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/account_data.css"
-            fx:controller="com.example.javafx.controller.AccountDataController"
-            prefHeight="900.0" prefWidth="1800.0">
+            fx:controller="com.example.javafx.controller.AccountDataController">
     <fx:include fx:id="navbar" source="navbar.fxml"/>
     <fx:include fx:id="banner" source="banner.fxml"/>
 
-    <StackPane prefWidth="1800.0" layoutY="140" prefHeight="800" layoutX="70">
+    <!-- Valuebinding durch "PapaController"-->
+    <StackPane prefHeight="${controller.height}"
+               prefWidth="${controller.width}"
+               layoutY="${controller.YOffset}" layoutX="${controller.XOffset}">
         <VBox alignment="TOP_LEFT">
-            <HBox styleClass="title_box" alignment="CENTER_LEFT" prefWidth="1360" maxWidth="1360">
+            <HBox styleClass="title_box" alignment="CENTER_LEFT" prefWidth="${controller.width}">
                 <Label styleClass="title">Profil aktualisieren</Label>
             </HBox>
             <HBox>
-                <VBox prefWidth="830.0" alignment="CENTER_LEFT">
+                <!-- Der Compiler Fehler kann ignoriert werden, der kommt von Intellij. JavaFX versteht das.-->
+                <VBox prefWidth="${controller.width / 2}" alignment="CENTER_LEFT">
                     <Circle fx:id="profilePic" styleClass="profile_pic"/>
                 </VBox>
-                <VBox prefWidth="830.0" alignment="CENTER">
+                <VBox prefWidth="${controller.width / 2}" alignment="CENTER_RIGHT">
                     <Button styleClass="button, gray" onMouseClicked="#uploadPicture">Bild hochladen</Button>
                     <Button styleClass="button, gray" onMouseClicked="#removePicture">Bild entfernen</Button>
                 </VBox>
             </HBox>
-            <Separator prefWidth="1360" maxWidth="1360"/>
+            <Separator prefWidth="${controller.width}"/>
             <HBox>
-                <VBox prefWidth="830.0" alignment="CENTER_LEFT">
-                    <VBox styleClass="vbox_group">
-                        <Label styleClass="textfield-label">Username</Label>
+                <VBox prefWidth="${controller.width / 2}" alignment="CENTER_LEFT">
+                    <VBox styleClass="y_padding">
+                        <Label styleClass="textfield_label">Username</Label>
                         <TextField fx:id="usernameTextfield" styleClass="text_field"/>
                     </VBox>
-                    <VBox styleClass="vbox_group">
-                        <Label styleClass="textfield-label">Passwort</Label>
+                    <VBox styleClass="y_padding">
+                        <Label styleClass="textfield_label">Passwort</Label>
                         <PasswordField fx:id="passwordTextfield" styleClass="text_field"
                                        promptText="*****"/>
                     </VBox>
                 </VBox>
-                <VBox alignment="BOTTOM_CENTER" prefWidth="830.0">
+                <VBox alignment="BOTTOM_RIGHT" prefWidth="${controller.width / 2}">
                     <Button styleClass="button" onMouseClicked="#updateUserInfo">Speichern
                     </Button>
                 </VBox>

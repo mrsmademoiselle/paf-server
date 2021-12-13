@@ -10,7 +10,7 @@ import javafx.scene.input.MouseEvent;
 
 import java.io.File;
 
-public class NavbarController {
+public class NavbarController extends PapaController {
 
     @FXML
     ImageView logo;

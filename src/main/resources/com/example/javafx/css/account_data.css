@@ -1,31 +1,34 @@
+.stackpane_container {
+    -fx-pref-width: 100%;
+    -fx-pref-height: 100%;
+}
+
 .title {
     -fx-text-fill: black;
     -fx-font-style: bold;
     -fx-font-size: 30px;
-    -fx-min-width: 100%;
 }
 
 .title_box {
-    -fx-min-width: 100%;
     -fx-border-color: black;
     -fx-border-width: 0 0 2 0;
 }
 
-.textfield-label {
+.textfield_label {
     -fx-font-size: 20px;
     -fx-text-fill: gray;
-    -fx-padding: 0 0 0 15;
+    -fx-padding: 0px 0px 0px 15px;
 }
 
-.vbox_group {
-    -fx-padding: 10 0 10 0;
-    -fx-background-insets: 20 0 20 0;
+.y_padding {
+    -fx-padding: 10px 0px 10px 0px;
+    -fx-background-insets: 20px 0px 20px 0px;
 }
 
 .profile_pic {
     -fx-background-color: -primary-buttons;
-    -fx-border-radius: 100;
-    -fx-stroke-width: 5;
+    -fx-border-radius: 100px;
+    -fx-stroke-width: 5px;
     -fx-border-color: -primary-buttons;
     -fx-stroke: white;
 }
@@ -34,7 +37,7 @@
     -fx-padding: 13;
     -fx-background-color: -primary-buttons;
     -fx-text-fill: white;
-    -fx-pref-width: 230px;
+    -fx-pref-width: 12em;
     -fx-font-size: 20px;
     -fx-background-insets: 3;
     -fx-alignment: center;

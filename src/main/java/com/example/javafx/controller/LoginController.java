@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 
-public class LoginController {
+public class LoginController extends PapaController {
 
     @FXML
     Label title;
