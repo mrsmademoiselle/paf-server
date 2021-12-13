@@ -47,19 +47,10 @@ public class RegistrationController extends PapaController {
     NavbarController navbarController;
 
     @FXML
-    Label title;
-
-    @FXML
     Pane page;
 
     @FXML
     VBox form;
-
-    @FXML
-    VBox successOrErrorContainer;
-
-    @FXML
-    Label bannerLabel;
 
     @FXML
     BannerController bannerController;
@@ -150,8 +141,7 @@ public class RegistrationController extends PapaController {
         // Livevalidierung
         username.textProperty().addListener((obs, oldInput, newInput) -> {
             if (!username.getText().matches("[\\w|\\d]*")) {
-                username.setStyle("-fx-border-color:#d95252;" +
-                        "-fx-border-width: 3;"
+                username.setStyle("-fx-border-color:#d95252; -fx-border-width: 3;"
                 );
                 bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
             } else {
@@ -167,7 +157,7 @@ public class RegistrationController extends PapaController {
 
             return new Image(imageFile.toURI().toString());
         }
-        return null;
+        throw new RuntimeException("RegistrationController: Bild konnte nicht geladen werden: " + fileName);
     }
 
 }

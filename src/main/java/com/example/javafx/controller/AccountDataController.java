@@ -107,7 +107,7 @@ public class AccountDataController extends PapaController {
 
             return new Image(imageFile.toURI().toString());
         }
-        return null;
+        throw new RuntimeException("AccountDataController: Bild konnte nicht geladen werden: " + fileName);
     }
 
     private void activateInputListener() {

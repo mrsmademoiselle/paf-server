@@ -2,6 +2,11 @@ package com.example.javafx.controller;
 
 import javafx.stage.Screen;
 
+/**
+ * Abstrakte Klasse für Verwendung von layoutrelevanten Werten zur Laufzeit.
+ * Alle Component-Controller sollten diese Datei extenden. Im FXML können die Werte dann verwendet werden,
+ * z.B. mit ${controller.height}.
+ */
 public abstract class PapaController {
 
     /**
