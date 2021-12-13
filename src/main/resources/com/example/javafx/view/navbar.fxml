@@ -8,16 +8,15 @@
 <AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" styleClass="navbar_container"
             fx:controller="com.example.javafx.controller.NavbarController"
             stylesheets="@../css/navbar.css"
-            prefWidth="1700.0" prefHeight="50">
+            prefWidth="1700.0" prefHeight="40">
     <children>
         <!-- Navbar -->
-        <HBox styleClass="navbar" prefWidth="1700" alignment="CENTER_LEFT" prefHeight="50">
+        <HBox styleClass="navbar" prefWidth="1700" alignment="CENTER_LEFT" prefHeight="40">
             <VBox alignment="CENTER_LEFT" prefWidth="300" prefHeight="50">
                 <ImageView fx:id="logo" pickOnBounds="true" preserveRatio="true"/>
             </VBox>
-            <VBox alignment="CENTER_RIGHT" prefWidth="1200" layoutX="300" prefHeight="50">
-                <Button styleClass="logoutButton" fx:id="logoutButton"
-                        onMouseClicked="#logout">Logout
+            <VBox alignment="CENTER_RIGHT" prefWidth="1200" layoutX="300" prefHeight="40">
+                <Button styleClass="logoutButton" fx:id="logoutButton" onMouseClicked="#logout" text="Logout">
                 </Button>
             </VBox>
         </HBox>

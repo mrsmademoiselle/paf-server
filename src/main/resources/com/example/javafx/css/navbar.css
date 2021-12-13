@@ -26,3 +26,8 @@
     -fx-border-color: black;
     -fx-border-radius: 6;
 }
+
+#logoutIcon {
+    -fx-text-fill: black;
+    -fx-background-color: pink;
+}

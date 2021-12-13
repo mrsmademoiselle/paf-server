@@ -20,10 +20,17 @@ public class NavbarController {
 
     @FXML
     protected void initialize() {
-        // TODO der kack geht noch nicht
-        // ImageView value = new ImageView(getPic("logout.svg"));
-        // logoutButton.setGraphic(value);
         setLogoPic();
+        setLogoutButtonPic();
+
+    }
+
+    private void setLogoutButtonPic() {
+        // aus irgendeinem javafx-Grund funktioniert das Setzen eines Bilds in einem Button nur mit pngs, nicht mit svgs
+        ImageView img = new ImageView(getPic("logout_png.png"));
+        img.setFitHeight(20);
+        img.setFitWidth(20);
+        logoutButton.setGraphic(img);
     }
 
     private void setLogoPic() {
