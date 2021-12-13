@@ -31,12 +31,16 @@
 }
 
 .button {
-    -fx-padding: 20;
+    -fx-padding: 13;
     -fx-background-color: -primary-buttons;
     -fx-text-fill: white;
-    -fx-pref-width: 250px;
+    -fx-pref-width: 230px;
     -fx-font-size: 20px;
-    -fx-background-insets: 10;
+    -fx-background-insets: 3;
     -fx-alignment: center;
     -fx-cursor: hand;
+}
+
+.gray {
+    -fx-background-color: gray;
 }

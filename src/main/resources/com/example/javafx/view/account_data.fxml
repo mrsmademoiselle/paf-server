@@ -20,8 +20,8 @@
                     <Circle fx:id="profilePic" styleClass="profile_pic"/>
                 </VBox>
                 <VBox prefWidth="830.0" alignment="CENTER">
-                    <Button styleClass="button" onMouseClicked="#uploadPicture">Bild hochladen</Button>
-                    <Button styleClass="button" onMouseClicked="#removePicture">Bild entfernen</Button>
+                    <Button styleClass="button, gray" onMouseClicked="#uploadPicture">Bild hochladen</Button>
+                    <Button styleClass="button, gray" onMouseClicked="#removePicture">Bild entfernen</Button>
                 </VBox>
             </HBox>
             <Separator prefWidth="1360" maxWidth="1360"/>
@@ -37,8 +37,9 @@
                                        promptText="*****"/>
                     </VBox>
                 </VBox>
-                <VBox prefWidth="830.0" alignment="BOTTOM_CENTER">
-                    <Button styleClass="button" onMouseClicked="#updateUserInfo">Speichern</Button>
+                <VBox alignment="BOTTOM_CENTER" prefWidth="830.0">
+                    <Button styleClass="button" onMouseClicked="#updateUserInfo">Speichern
+                    </Button>
                 </VBox>
             </HBox>
         </VBox>
