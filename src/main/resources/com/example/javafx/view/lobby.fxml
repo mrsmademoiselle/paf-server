@@ -11,7 +11,7 @@
 
         <AnchorPane fx:id="page" styleClass="container" VBox.vgrow="ALWAYS">
             <children>
-                <Label fx:id="title" prefHeight="18.0" prefWidth="258.0" styleClass="title" text="Lobby"
+                <Label fx:id="title" prefHeight="18.0" prefWidth="258.0" styleClass="login_register_title" text="Lobby"
                        alignment="TOP_CENTER" textAlignment="CENTER"/>
 
             </children>

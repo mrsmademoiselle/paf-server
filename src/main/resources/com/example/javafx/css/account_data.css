@@ -3,7 +3,7 @@
     -fx-pref-height: 100%;
 }
 
-.title {
+.login_register_title {
     -fx-text-fill: black;
     -fx-font-style: bold;
     -fx-font-size: 30px;

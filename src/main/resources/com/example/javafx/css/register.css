@@ -7,25 +7,12 @@
     -fx-cursor: hand;
 }
 
-.container {
-    /* to be fixed -fx-background-color: -site-background;*/
-}
-
 .profile_pic {
     -fx-background-color: -primary-buttons;
     -fx-border-radius: 100;
     -fx-stroke-width: 5;
     -fx-border-color: -primary-buttons;
     -fx-stroke: white;
-}
-
-.title {
-    -fx-background-radius: 2;
-    -fx-font-size: 25;
-    -fx-padding: 50;
-    -fx-background-color: -first-background;
-    -fx-text-fill: white;
-    -fx-background-insets: 40px;
 }
 
 .small_text {

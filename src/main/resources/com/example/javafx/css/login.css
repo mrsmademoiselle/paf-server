@@ -10,19 +10,6 @@
     /* to be fixed -fx-background-color: -site-background;*/
 }
 
-
-.title {
-    -fx-pref-height: 4em;
-    -fx-pref-width: 15em;
-    -fx-translate-y: -2.5em;
-    -fx-background-radius: 2;
-    -fx-font-size: 25;
-    -fx-padding: 50;
-    -fx-background-color: -first-background;
-    -fx-text-fill: white;
-    -fx-background-insets: 40px;
-}
-
 .text_field {
     -fx-text-fill: -primary-buttons;
     -fx-font-size: 15px;

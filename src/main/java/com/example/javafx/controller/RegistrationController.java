@@ -3,20 +3,17 @@ package com.example.javafx.controller;
 import com.example.javafx.service.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
-import javafx.stage.Screen;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -68,24 +65,13 @@ public class RegistrationController extends PapaController {
 
     private byte[] imageBytes;
 
-    private static double applicationWidth;
-    private static double applicationHeight;
     UserService userService = new UserService();
 
 
     @FXML
     protected void initialize() {
         setProfilePic();
-        setButtonPic();
-
-        // TODO: Werte müssen responsive gemacht werden (?)
-        setFormLayout();
-        // Werte haben keine Bedeutung, hat nur bei mir gepasst
-        editProfilePic.setTranslateY(editProfilePic.getLayoutY() - 25);
-        editProfilePic.setTranslateX(editProfilePic.getLayoutX() + 85);
-
         activateInputListener();
-
     }
 
 
@@ -169,24 +155,6 @@ public class RegistrationController extends PapaController {
                 username.setStyle("");
             }
         });
-    }
-
-    private void setFormLayout() {
-        // erstmal workaround
-        Rectangle2D primaryScreen = Screen.getPrimary().getVisualBounds();
-        applicationWidth = primaryScreen.getWidth() < 1920 ? primaryScreen.getWidth() : 1920;
-        applicationHeight = primaryScreen.getHeight() < 1080 ? primaryScreen.getHeight() : 1080;
-
-        form.setLayoutX(applicationWidth / 3);
-        form.setLayoutY(applicationHeight / 9);
-
-        title.setLayoutX(form.getLayoutX() + 110);
-        title.setTranslateY(form.getLayoutY() / 4);
-        title.toFront();
-    }
-
-    private void setButtonPic() {
-        editProfilePic.setGraphic(new ImageView(getPic("edit.svg")));
     }
 
     private Image getPic(String fileName) {
