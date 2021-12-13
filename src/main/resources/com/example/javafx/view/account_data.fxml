@@ -14,7 +14,7 @@
                layoutY="${controller.offsetY}" layoutX="${controller.offsetX}">
         <VBox alignment="TOP_LEFT">
             <HBox styleClass="title_box" alignment="CENTER_LEFT" prefWidth="${controller.width}">
-                <Label styleClass="login_register_title">Profil aktualisieren</Label>
+                <Label styleClass="profile_title">Profil aktualisieren</Label>
             </HBox>
             <HBox>
                 <!-- Der Compiler Fehler kann ignoriert werden, der kommt von Intellij. JavaFX versteht das.-->
