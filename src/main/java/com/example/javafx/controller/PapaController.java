@@ -6,6 +6,14 @@ import javafx.stage.Screen;
  * Abstrakte Klasse für Verwendung von layoutrelevanten Werten zur Laufzeit.
  * Alle Component-Controller sollten diese Datei extenden. Im FXML können die Werte dann verwendet werden,
  * z.B. mit ${controller.height}.
+ * <p>
+ * <p>
+ * PS:
+ * Falls ihr einen "cannot bind StackPane.layoutX"-Fehler bekommt beim Verwenden dieser Felder für
+ * layoutX/layoutY, liegt das an der StackPane. StackPanes (und ein paar andere Komponenten wie z.B. AnchorPanes)
+ * legen das Layout ihrer Kinder automatisch fest. Wenn man entsprechend versucht das manuell zu setzen, kommt dieser
+ * Fehler, weil die Property ja schon "gebindet" ist. Das kann man entweder umgehen indem man stattdessen "Pane" verwendet,
+ * oder indem man der StackPane die Property "managed=false" gibt.
  */
 public abstract class PapaController {
 
