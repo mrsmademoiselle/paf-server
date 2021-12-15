@@ -52,7 +52,7 @@ public class AccountDataController extends PapaController {
 
     public void setProfilePic() {
         if (imageBytes == null || imageBytes.length == 0) {
-            Image pic = FileManager.getPic("painting2.png");
+            Image pic = FileManager.getPic("standard_profile_pic.png");
             profilePic.setFill(new ImagePattern(pic));
             profilePic.setRadius(80);
         } else {

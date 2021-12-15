@@ -27,14 +27,14 @@ public class NavbarController extends PapaController {
 
     private void setLogoutButtonPic() {
         // aus irgendeinem javafx-Grund funktioniert das Setzen eines Bilds in einem Button nur mit pngs, nicht mit svgs
-        ImageView img = new ImageView(getPic("logout_png.png"));
+        ImageView img = new ImageView(getPic("button_logout.png"));
         img.setFitHeight(20);
         img.setFitWidth(20);
         logoutButton.setGraphic(img);
     }
 
     private void setLogoPic() {
-        logo.setImage(getPic("Brand.png"));
+        logo.setImage(getPic("logo.png"));
         logo.setFitHeight(30);
         logo.setFitHeight(30);
     }
