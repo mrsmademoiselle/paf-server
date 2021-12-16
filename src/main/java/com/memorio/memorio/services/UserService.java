@@ -3,12 +3,15 @@ package com.memorio.memorio.services;
 import com.memorio.memorio.entities.User;
 import com.memorio.memorio.repositories.UserRepository;
 import com.memorio.memorio.web.dto.UserAuthDto;
+import com.memorio.memorio.web.dto.UserUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -60,6 +63,24 @@ public class UserService implements UserDetailsService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public User updateUser(String username, UserUpdateDto userUpdateDto) throws Exception{
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        User user = userOptional.orElseThrow(NotFoundException::new);
+	try {
+	    if(userUpdateDto.getUsername() != null){
+		user.setUsername(userUpdateDto.getUsername());
+	    } else if(userUpdateDto.getPassword() != null){
+		user.setPassword(bcryptEncoder.encode(userUpdateDto.getPassword()));
+	    } else if(userUpdateDto.getImg() != null){
+		user.setImage(userUpdateDto.getImg());
+	    }
+	    userRepository.save(user);
+	    return user;
+	} catch(Exception e){
+	    return null;
+	}
     }
 
     @Override

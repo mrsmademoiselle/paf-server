@@ -6,6 +6,9 @@ import com.memorio.memorio.repositories.UserRepository;
 import com.memorio.memorio.services.UserService;
 import com.memorio.memorio.web.dto.JwtResponse;
 import com.memorio.memorio.web.dto.UserAuthDto;
+import com.memorio.memorio.web.dto.UserDataResponse;
+import com.memorio.memorio.web.dto.UserUpdateDto;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,15 @@ import javax.validation.Valid;
 import javax.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.nio.file.Files;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.net.URL;
+
 
 @RestController
 /* Transactional zeigt an, dass jede aufgerufene Methode eine abgeschlossene Transaktion abbildet. In einer Transaktion
@@ -64,7 +76,6 @@ public class UserController {
 
         if (userService.saveUser(userAuthDto)) {
             logger.info("Registrierung war erfolgreich.");
-
             return loginUser(userAuthDto);
         } else {
             logger.warn("Benutzername ist bereits vergeben.");
@@ -83,17 +94,45 @@ public class UserController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto, BindingResult bindingResult, @RequestHeader(name="Authorization")String jwtToken) throws Exception {
+	// find Username
+	String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+	System.out.println(username);
+	// get Entity
+	try {
+	    User user = userService.updateUser(username, userUpdateDto);
+	    // create UserDetails
+	    UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
+	    // generate new Token
+	    UserAuthDto uad = new UserAuthDto(user.getUsername(), user.getPassword());
+	    return loginUser(uad);
+	    //return ResponseEntity.ok(new JwtResponse(token));
+	} catch(Exception e){
+	    e.printStackTrace();
+            return new ResponseEntity<>("Der Benutzername ist bereits vergeben", HttpStatus.BAD_REQUEST);
+	}
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<?> getUserInfo(@RequestHeader(name = "Authorization") String jwtToken){
+	String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        User user = userOptional.orElseThrow(NotFoundException::new);
+	byte []	image = user.getImage();
+	return ResponseEntity.ok(new UserDataResponse(username, image));
+    }
+
     // Falls im Request anderes Format, evtl MultipartFile, Blob oder einfach InputStream statt byte[]
     // -> abzusprechen
     @PostMapping("/image/upload")
     public ResponseEntity<?> uploadImage(@RequestBody byte[] profilePicBytes, @RequestHeader(name = "Authorization") String jwtToken) {
-
         try {
             String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             Optional<User> userOptional = userRepository.findByUsername(username);
             // zu dieser Exception darf es eigentlich nie kommen, aber besser haben als nicht haben
             User user = userOptional.orElseThrow(NotFoundException::new);
-            user.setImage(profilePicBytes);
+	    this.setProfileImg(user, profilePicBytes);
             // User muss wegen @Transactional nicht händisch persistiert werden
             logger.info("Profilbild wurde erfolgreich im User {} gespeichert", user.getUsername());
         } catch (Exception e) {
@@ -101,6 +140,16 @@ public class UserController {
             return new ResponseEntity<>("Das Profilbild konnte nicht gespeichert werden.", HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok("");
+    }
+
+    @GetMapping("/image/remove")
+    public ResponseEntity<?> removeImage(@RequestHeader(name = "Authorization") String jwtToken) {
+	String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+	Optional<User> userOptional = userRepository.findByUsername(username);
+	User user = userOptional.orElseThrow(NotFoundException::new);
+	// switch to default image
+	this.setProfileImg(user, null);
+	return ResponseEntity.ok(new UserDataResponse(username, getDefaultImg()));
     }
 
     /**
@@ -123,6 +172,7 @@ public class UserController {
 
     private void authenticate(String username, String password) throws Exception {
         try {
+	    System.out.println(username + "   " + password);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
             logger.error("Account ist gesperrt. Darf in unserer Anwendung nicht auftreten.");
@@ -138,7 +188,25 @@ public class UserController {
         // Pruefen ob Token existiert
         authenticate(dto.getUsername(), dto.getPassword());
         UserDetails userDetails = userService.loadUserByUsername(dto.getUsername());
-
         return jwtTokenUtil.generateToken(userDetails);
+    }
+
+    private void setProfileImg(User user, byte [] imgArray){
+	if(imgArray == null){imgArray = this.getDefaultImg();}
+	user.setImage(imgArray);
+    }
+
+    private byte[] getDefaultImg(){
+	URL url = Thread.currentThread().getContextClassLoader().getResource("images/default.jpg");
+	try {
+	    BufferedImage bufferImage = ImageIO.read(url);
+	    ByteArrayOutputStream output = new ByteArrayOutputStream();
+	    ImageIO.write(bufferImage, "jpg", output);
+	    byte [] data = output.toByteArray();
+	    return data;
+	} catch (IOException e) {
+	    logger.error("Could not read default profile image");
+	    return null;
+	}
     }
 }

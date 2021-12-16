@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.nio.charset.Charset;
 
 /**
  * Utilklasse für Bereitstellung von geläufigen JWT-Funktionen.
@@ -42,7 +43,7 @@ public class JwtTokenUtil implements Serializable {
 
     // Secret rauslesen damit wir rueckwirkend infos aus den Tokens ziehen koennen
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+	return Jwts.parser().setSigningKey(secret.getBytes(Charset.forName("UTF-8"))).parseClaimsJws(token.replace("{", "").replace("}","")).getBody();
     }
 
     // Pruefen ob Token bereits abgelaufen
@@ -70,7 +71,7 @@ public class JwtTokenUtil implements Serializable {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-                .signWith(SignatureAlgorithm.HS512, secret).compact();
+                .signWith(SignatureAlgorithm.HS512, secret.getBytes(Charset.forName("UTF-8"))).compact();
     }
 
     // Validieren ueber Username und TTL
