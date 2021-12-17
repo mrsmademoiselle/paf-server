@@ -37,13 +37,14 @@ public class AccountDataController extends PapaController {
     @FXML
     NavbarController navbarController;
 
-    byte[] imageBytes;
+    UserDto userDto;
+
     UserService userService = new UserService();
 
 
     @FXML
     public void initialize() {
-        UserDto userDto = userService.getUserInfo();
+        userDto = userService.getUserInfo();
         usernameTextfield.setText(userDto.getUsername());
 
         // TODO tatsächliches Bild vom Server nehmen
@@ -52,12 +53,12 @@ public class AccountDataController extends PapaController {
     }
 
     public void setProfilePic() {
-        if (imageBytes == null || imageBytes.length == 0) {
+        if (userDto.getProfilePic() == null || userDto.getProfilePic().length == 0) {
             Image pic = FileManager.getPic("standard_profile_pic.png");
             profilePic.setFill(new ImagePattern(pic));
             profilePic.setRadius(80);
         } else {
-            Image img = new Image(new ByteArrayInputStream(imageBytes));
+            Image img = new Image(new ByteArrayInputStream(userDto.getProfilePic()));
             ImagePattern imagePattern = new ImagePattern(img);
             profilePic.setFill(imagePattern);
         }
@@ -71,7 +72,7 @@ public class AccountDataController extends PapaController {
             bannerController.setText("Das Username oder Passwortformat wird nicht akzeptiert.", false);
             return;
         }
-        boolean successful = userService.updateUserInfo(username, password, imageBytes);
+        boolean successful = userService.updateUserInfo(username, password, userDto.getProfilePic());
 
         String bannerText = successful ? "Die Userinformationen wurden erfolgreich bearbeitet." : "Die Userinformationen konnten nicht bearbeitet werden.";
         bannerController.setText(bannerText, successful);
@@ -87,12 +88,12 @@ public class AccountDataController extends PapaController {
             profilePic.setFill(imagePattern);
 
             // transformieren des Bildes in Byte
-            imageBytes = Files.readAllBytes(selectedFile.toPath());
+            userDto.setProfilePic(Files.readAllBytes(selectedFile.toPath()));
         }
     }
 
     public void removePicture(MouseEvent mouseEvent) {
-        imageBytes = new byte[]{};
+        userDto = userService.removeImage();
         setProfilePic();
     }
 
@@ -108,10 +109,5 @@ public class AccountDataController extends PapaController {
                 usernameTextfield.setStyle("");
             }
         });
-    }
-
-    public void login(MouseEvent mouseEvent) {
-        userService.redirectToLogin();
-        ;
     }
 }

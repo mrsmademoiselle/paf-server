@@ -9,13 +9,9 @@ public class UserService {
     SceneManager sceneManager = SceneManager.getInstance();
 
     public UserDto getUserInfo() {
-        JSONObject jsonObject = new JSONObject(HttpConnector.get("user/info").getBody());
-
-        byte[] image = jsonObject.get("profileImage").equals(JSONObject.NULL)
-                ? new byte[]{}
-                : java.util.Base64.getDecoder().decode(jsonObject.getString("profileImage"));
-
-        return new UserDto(jsonObject.getString("username"), image);
+        String body = HttpConnector.get("user/info").getBody();
+        UserDto userDto = getUserDtoFromResponseBody(body);
+        return userDto;
     }
 
     public boolean registerUser(String username, String password) {
@@ -56,5 +52,23 @@ public class UserService {
 
     public void redirectToRegister() {
         sceneManager.loadRegistration();
+    }
+
+    public UserDto removeImage() {
+        String body = HttpConnector.get("user/image/remove").getBody();
+        UserDto userDto = getUserDtoFromResponseBody(body);
+
+        return userDto;
+    }
+
+    private UserDto getUserDtoFromResponseBody(String body) {
+        JSONObject jsonObject = new JSONObject(body);
+
+        byte[] image = jsonObject.get("profileImage").equals(JSONObject.NULL)
+                ? new byte[]{}
+                : java.util.Base64.getDecoder().decode(jsonObject.getString("profileImage"));
+
+        UserDto userDto = new UserDto(jsonObject.getString("username"), image);
+        return userDto;
     }
 }
