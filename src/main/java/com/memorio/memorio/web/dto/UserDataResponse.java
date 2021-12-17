@@ -10,9 +10,15 @@ import lombok.ToString;
 public class UserDataResponse {
     private String username;
     private byte[] profileImage;
+    private String profilbild;
 
-    public UserDataResponse(String username, byte[] profileImage){
-	this.username = username;
-	this.profileImage = profileImage;
+    public UserDataResponse(String username, String profilbild) {
+        this.username = username;
+        this.profilbild = profilbild;
+    }
+
+    public UserDataResponse(String username, byte[] profileImage) {
+        this.username = username;
+        this.profileImage = profileImage;
     }
 }

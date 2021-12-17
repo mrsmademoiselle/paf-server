@@ -5,7 +5,11 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.lang.Nullable;
 
+import javax.imageio.ImageIO;
 import javax.persistence.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 
 /**
  * Das User-Objekt repräsentiert einen User für das Spiel.
@@ -15,7 +19,6 @@ import javax.persistence.*;
 @Setter
 @Entity(name = "user")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -39,6 +42,20 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public void saveUserProfilePicToServer() {
+        if (this.image != null) {
+            try {
+                ByteArrayInputStream bis = new ByteArrayInputStream(this.image);
+                BufferedImage bImage2 = ImageIO.read(bis);
+                ImageIO.write(bImage2, "jpg", new File("output.jpg"));
+            } catch (Exception e) {
+                System.out.println("Das hat wohl nicht geklappt: " + e);
+            }
+        } else {
+            System.out.println("image is null");
+        }
     }
 
 }

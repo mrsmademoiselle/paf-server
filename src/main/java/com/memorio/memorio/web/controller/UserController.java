@@ -8,7 +8,6 @@ import com.memorio.memorio.web.dto.JwtResponse;
 import com.memorio.memorio.web.dto.UserAuthDto;
 import com.memorio.memorio.web.dto.UserDataResponse;
 import com.memorio.memorio.web.dto.UserUpdateDto;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +21,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.NotFoundException;
-import java.util.List;
-import java.util.Optional;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -92,41 +91,48 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto, BindingResult bindingResult, @RequestHeader(name="Authorization")String jwtToken) throws Exception {
-    // usernamen aus aktuellem Token holen
-	String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto, BindingResult bindingResult, @RequestHeader(name = "Authorization") String jwtToken) throws Exception {
+        // usernamen aus aktuellem Token holen
+        String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
         try {
-
             // user in der Datenbank updaten
             User user = userService.updateUser(username, userUpdateDto);
+            user.saveUserProfilePicToServer();
+            System.out.println("pic uploaded (update user)");
 
             // neues Token generieren
             UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
             String token = jwtTokenUtil.generateToken(userDetails);
 
             return ResponseEntity.ok(new JwtResponse(token));
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-                return new ResponseEntity<>("Der Benutzername ist bereits vergeben", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Der Benutzername ist bereits vergeben", HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/info")
-    public ResponseEntity<?> getUserInfo(@RequestHeader(name = "Authorization") String jwtToken){
+    public ResponseEntity<?> getUserInfo(@RequestHeader(name = "Authorization") String jwtToken) {
         String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
         Optional<User> userOptional = userRepository.findByUsername(username);
         User user = userOptional.orElseThrow(NotFoundException::new);
-        byte []	image = user.getImage();
-        return ResponseEntity.ok(new UserDataResponse(username, image));
+
+        // das encoden hat es für Franzi gefixt
+        byte[] img = user.getImage() == null ? getDefaultImg() : user.getImage();
+        String encodedString = java.util.Base64.getEncoder().encodeToString(img);
+
+        return ResponseEntity.ok(new UserDataResponse(username, encodedString));
     }
 
     @GetMapping("/info/image")
-    public ResponseEntity<?> getUserImage(@RequestHeader(name = "Authorization") String jwtToken){
+    public ResponseEntity<?> getUserImage(@RequestHeader(name = "Authorization") String jwtToken) {
         String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
         Optional<User> userOptional = userRepository.findByUsername(username);
         User user = userOptional.orElseThrow(NotFoundException::new);
-        byte []	image = user.getImage();
-	if(image == null){return ResponseEntity.ok(getDefaultImg());}
+        byte[] image = user.getImage();
+        if (image == null) {
+            return ResponseEntity.ok(getDefaultImg());
+        }
         return ResponseEntity.ok(image);
     }
 
@@ -134,12 +140,14 @@ public class UserController {
     // -> abzusprechen
     @PostMapping("/image/upload")
     public ResponseEntity<?> uploadImage(@RequestBody byte[] profilePicBytes, @RequestHeader(name = "Authorization") String jwtToken) {
+        System.out.println("uploadImage!");
         try {
             String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             Optional<User> userOptional = userRepository.findByUsername(username);
             // zu dieser Exception darf es eigentlich nie kommen, aber besser haben als nicht haben
             User user = userOptional.orElseThrow(NotFoundException::new);
-	    userService.saveUserImage(username, profilePicBytes);
+            System.out.println("uploading pic...");
+            userService.saveUserImage(username, profilePicBytes);
             // User muss wegen @Transactional nicht händisch persistiert werden
             logger.info("Profilbild wurde erfolgreich im User {} gespeichert", user.getUsername());
         } catch (Exception e) {
@@ -149,13 +157,14 @@ public class UserController {
         return ResponseEntity.ok("");
     }
 
+
     @GetMapping("/image/remove")
     public ResponseEntity<?> removeImage(@RequestHeader(name = "Authorization") String jwtToken) {
         String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
         Optional<User> userOptional = userRepository.findByUsername(username);
         User user = userOptional.orElseThrow(NotFoundException::new);
         // switch to default image
-	userService.saveUserImage(username, getDefaultImg());
+        userService.saveUserImage(username, getDefaultImg());
         return ResponseEntity.ok(new UserDataResponse(username, getDefaultImg()));
     }
 
@@ -198,13 +207,13 @@ public class UserController {
         return jwtTokenUtil.generateToken(userDetails);
     }
 
-    private byte[] getDefaultImg(){
+    private byte[] getDefaultImg() {
         URL url = Thread.currentThread().getContextClassLoader().getResource("images/default.jpg");
         try {
             BufferedImage bufferImage = ImageIO.read(url);
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             ImageIO.write(bufferImage, "jpg", output);
-            byte [] data = output.toByteArray();
+            byte[] data = output.toByteArray();
             return data;
         } catch (IOException e) {
             logger.error("Could not read default profile image");
