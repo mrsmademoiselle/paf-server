@@ -98,20 +98,20 @@ public class UserController {
     public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto, BindingResult bindingResult, @RequestHeader(name="Authorization")String jwtToken) throws Exception {
 	// find Username
 	String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-	System.out.println(username);
-	// get Entity
-	try {
-	    User user = userService.updateUser(username, userUpdateDto);
-	    // create UserDetails
-	    UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
-	    // generate new Token
-	    UserAuthDto uad = new UserAuthDto(user.getUsername(), user.getPassword());
-	    return loginUser(uad);
-	    //return ResponseEntity.ok(new JwtResponse(token));
-	} catch(Exception e){
-	    e.printStackTrace();
-            return new ResponseEntity<>("Der Benutzername ist bereits vergeben", HttpStatus.BAD_REQUEST);
-	}
+        try {
+
+            // user in der Datenbank updaten
+            User user = userService.updateUser(username, userUpdateDto);
+
+            // neues Token generieren
+            UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
+            String token = jwtTokenUtil.generateToken(userDetails);
+
+            return ResponseEntity.ok(new JwtResponse(token));
+        } catch(Exception e){
+            e.printStackTrace();
+                return new ResponseEntity<>("Der Benutzername ist bereits vergeben", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/info")
