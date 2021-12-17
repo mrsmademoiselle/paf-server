@@ -9,13 +9,16 @@ public class UserService {
     SceneManager sceneManager = SceneManager.getInstance();
 
     public UserDto getUserInfo() {
-        JSONObject jsonObject = new JSONObject(HttpConnector.get("user/username").getBody());
-        // TODO Bild parsen
-        // UserDto userDto = new UserDto(jsonObject.getString("username"), jsonObject.getString("image").getBytes(StandardCharsets.UTF_8));
-        return new UserDto("nevergonnagiveyouup", "", new byte[]{});
+        JSONObject jsonObject = new JSONObject(HttpConnector.get("user/info").getBody());
+
+        byte[] image = jsonObject.get("profileImage").equals(JSONObject.NULL)
+                ? new byte[]{}
+                : java.util.Base64.getDecoder().decode(jsonObject.getString("profileImage"));
+
+        return new UserDto(jsonObject.getString("username"), image);
     }
 
-    public boolean registerUserData(String username, String password) {
+    public boolean registerUser(String username, String password) {
         UserDto userAuthDto = new UserDto(username, password, new byte[]{});
         return HttpConnector.post("user/register", userAuthDto);
     }

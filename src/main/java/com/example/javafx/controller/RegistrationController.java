@@ -73,7 +73,7 @@ public class RegistrationController extends PapaController {
             bannerController.setText("Es sind nur Buchstaben und Zahlen erlaubt", false);
             return;
         }
-        boolean successful = userService.registerUserData(username, password);
+        boolean successful = userService.registerUser(username, password);
 
         if (successful) {
             if (imageBytes != null && imageBytes.length > 0) {

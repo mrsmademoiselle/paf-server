@@ -45,6 +45,7 @@ public class AccountDataController extends PapaController {
     public void initialize() {
         UserDto userDto = userService.getUserInfo();
         usernameTextfield.setText(userDto.getUsername());
+
         // TODO tatsächliches Bild vom Server nehmen
         setProfilePic();
         activateInputListener();
@@ -109,4 +110,8 @@ public class AccountDataController extends PapaController {
         });
     }
 
+    public void login(MouseEvent mouseEvent) {
+        userService.redirectToLogin();
+        ;
+    }
 }
