@@ -114,10 +114,9 @@ public class UserController {
     @GetMapping("/info")
     public ResponseEntity<?> getUserInfo(@RequestHeader(name = "Authorization") String jwtToken){
         String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-            Optional<User> userOptional = userRepository.findByUsername(username);
-            User user = userOptional.orElseThrow(NotFoundException::new);
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        User user = userOptional.orElseThrow(NotFoundException::new);
         byte []	image = user.getImage();
-
         return ResponseEntity.ok(new UserDataResponse(username, image));
     }
 
@@ -127,9 +126,7 @@ public class UserController {
         Optional<User> userOptional = userRepository.findByUsername(username);
         User user = userOptional.orElseThrow(NotFoundException::new);
         byte []	image = user.getImage();
-	if(image == null){
-	    return ResponseEntity.ok(getDefaultImg());
-	}
+	if(image == null){return ResponseEntity.ok(getDefaultImg());}
         return ResponseEntity.ok(image);
     }
 
@@ -142,7 +139,7 @@ public class UserController {
             Optional<User> userOptional = userRepository.findByUsername(username);
             // zu dieser Exception darf es eigentlich nie kommen, aber besser haben als nicht haben
             User user = userOptional.orElseThrow(NotFoundException::new);
-	    this.setProfileImg(user, profilePicBytes);
+	    userService.saveUserImage(username, profilePicBytes);
             // User muss wegen @Transactional nicht händisch persistiert werden
             logger.info("Profilbild wurde erfolgreich im User {} gespeichert", user.getUsername());
         } catch (Exception e) {
@@ -158,7 +155,7 @@ public class UserController {
         Optional<User> userOptional = userRepository.findByUsername(username);
         User user = userOptional.orElseThrow(NotFoundException::new);
         // switch to default image
-        this.setProfileImg(user, null);
+	userService.saveUserImage(username, getDefaultImg());
         return ResponseEntity.ok(new UserDataResponse(username, getDefaultImg()));
     }
 
@@ -199,13 +196,6 @@ public class UserController {
         authenticate(username, password);
 
         return jwtTokenUtil.generateToken(userDetails);
-    }
-
-    private void setProfileImg(User user, byte [] imgArray){
-        if(imgArray == null){
-            imgArray = this.getDefaultImg();
-        }
-        user.setImage(imgArray);
     }
 
     private byte[] getDefaultImg(){

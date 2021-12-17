@@ -87,6 +87,21 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public boolean saveUserImage(String username, byte[] userImage) {
+        if (!this.userRepository.existsByUsername(username)){
+            return false;
+        }
+        try {
+	    Optional<User> userOptional = userRepository.findByUsername(username);
+	    User user = userOptional.orElseThrow(NotFoundException::new);
+	    user.setImage(userImage);
+            userRepository.save(user);
+	    return true;
+	} catch(Exception e){
+	    return false;
+	}
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> optional = userRepository.findByUsername(username);
