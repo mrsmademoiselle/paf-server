@@ -59,8 +59,13 @@ public class AccountDataController extends PapaController {
             profilePic.setRadius(80);
         } else {
             Image img = new Image(new ByteArrayInputStream(userDto.getProfilePic()));
+
+            // TODO aktuell gibt es beim Registrieren-Bildhochladen noch einen Error, weshalb in den kommenden Zeilen
+            // ohne die if-Bedingung die Anwendung crashen würde
+            if (img.isError()) return;
             ImagePattern imagePattern = new ImagePattern(img);
             profilePic.setFill(imagePattern);
+            profilePic.setRadius(80);
         }
     }
 
@@ -82,13 +87,9 @@ public class AccountDataController extends PapaController {
         File selectedFile = FileManager.openImageChooser(page);
 
         if (selectedFile != null) {
-            // Bild als Vorschau setzten
-            Image image = new Image(selectedFile.toURI().toString());
-            ImagePattern imagePattern = new ImagePattern(image);
-            profilePic.setFill(imagePattern);
-
             // transformieren des Bildes in Byte
             userDto.setProfilePic(Files.readAllBytes(selectedFile.toPath()));
+            setProfilePic();
         }
     }
 

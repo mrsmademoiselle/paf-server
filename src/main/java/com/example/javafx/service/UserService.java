@@ -10,6 +10,11 @@ public class UserService {
 
     public UserDto getUserInfo() {
         String body = HttpConnector.get("user/info").getBody();
+
+        if (new JSONObject(body).has("error")) {
+            // TODO Fehlermeldung zurückgeben
+            return new UserDto();
+        }
         UserDto userDto = getUserDtoFromResponseBody(body);
         return userDto;
     }
@@ -64,9 +69,10 @@ public class UserService {
     private UserDto getUserDtoFromResponseBody(String body) {
         JSONObject jsonObject = new JSONObject(body);
 
-        byte[] image = jsonObject.get("profileImage").equals(JSONObject.NULL)
-                ? new byte[]{}
-                : java.util.Base64.getDecoder().decode(jsonObject.getString("profileImage"));
+        boolean imageIsThere = jsonObject.has("profilbild") && !jsonObject.get("profilbild").equals(JSONObject.NULL);
+        byte[] image = imageIsThere
+                ? java.util.Base64.getDecoder().decode(jsonObject.getString("profilbild"))
+                : new byte[]{};
 
         UserDto userDto = new UserDto(jsonObject.getString("username"), image);
         return userDto;
