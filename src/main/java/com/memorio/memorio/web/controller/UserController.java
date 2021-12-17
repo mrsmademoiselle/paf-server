@@ -121,6 +121,18 @@ public class UserController {
         return ResponseEntity.ok(new UserDataResponse(username, image));
     }
 
+    @GetMapping("/info/image")
+    public ResponseEntity<?> getUserImage(@RequestHeader(name = "Authorization") String jwtToken){
+        String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        User user = userOptional.orElseThrow(NotFoundException::new);
+        byte []	image = user.getImage();
+	if(image == null){
+	    return ResponseEntity.ok(getDefaultImg());
+	}
+        return ResponseEntity.ok(image);
+    }
+
     // Falls im Request anderes Format, evtl MultipartFile, Blob oder einfach InputStream statt byte[]
     // -> abzusprechen
     @PostMapping("/image/upload")
@@ -147,7 +159,6 @@ public class UserController {
         User user = userOptional.orElseThrow(NotFoundException::new);
         // switch to default image
         this.setProfileImg(user, null);
-        
         return ResponseEntity.ok(new UserDataResponse(username, getDefaultImg()));
     }
 
