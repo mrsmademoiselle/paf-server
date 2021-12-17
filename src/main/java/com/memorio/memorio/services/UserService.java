@@ -65,22 +65,26 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User updateUser(String username, UserUpdateDto userUpdateDto) throws Exception{
+    public User updateUser(String username, UserUpdateDto userUpdateDto){
         Optional<User> userOptional = userRepository.findByUsername(username);
         User user = userOptional.orElseThrow(NotFoundException::new);
-	try {
-	    if(userUpdateDto.getUsername() != null){
-		user.setUsername(userUpdateDto.getUsername());
-	    } else if(userUpdateDto.getPassword() != null){
-		user.setPassword(bcryptEncoder.encode(userUpdateDto.getPassword()));
-	    } else if(userUpdateDto.getImg() != null){
-		user.setImage(userUpdateDto.getImg());
-	    }
-	    userRepository.save(user);
-	    return user;
-	} catch(Exception e){
-	    return null;
-	}
+
+        try {
+            if(userUpdateDto.getUsername() != null){
+                user.setUsername(userUpdateDto.getUsername());
+            }
+            if(userUpdateDto.getPassword() != null){
+                user.setPassword(bcryptEncoder.encode(userUpdateDto.getPassword()));
+            }
+            if(userUpdateDto.getImg() != null){
+                user.setImage(userUpdateDto.getImg());
+            }
+            user = userRepository.save(user);
+
+            return user;
+        } catch(Exception e){
+            return null;
+        }
     }
 
     @Override

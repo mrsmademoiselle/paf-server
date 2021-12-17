@@ -27,11 +27,8 @@ import javax.validation.Valid;
 import javax.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.Optional;
-import java.nio.file.Files;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InvalidObjectException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.net.URL;
@@ -89,14 +86,14 @@ public class UserController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@Valid @RequestBody UserAuthDto userAuthDto) throws Exception {
-        final String token = getTokenForUser(userAuthDto);
+        final String token = authenticateAndGetTokenForUserCredentials(userAuthDto.getUsername(), userAuthDto.getPassword());
         logger.info("Login erfolgreich.");
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
     @PostMapping("/update")
     public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto, BindingResult bindingResult, @RequestHeader(name="Authorization")String jwtToken) throws Exception {
-	// find Username
+    // usernamen aus aktuellem Token holen
 	String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
         try {
 
@@ -116,11 +113,12 @@ public class UserController {
 
     @GetMapping("/info")
     public ResponseEntity<?> getUserInfo(@RequestHeader(name = "Authorization") String jwtToken){
-	String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        User user = userOptional.orElseThrow(NotFoundException::new);
-	byte []	image = user.getImage();
-	return ResponseEntity.ok(new UserDataResponse(username, image));
+        String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+            Optional<User> userOptional = userRepository.findByUsername(username);
+            User user = userOptional.orElseThrow(NotFoundException::new);
+        byte []	image = user.getImage();
+
+        return ResponseEntity.ok(new UserDataResponse(username, image));
     }
 
     // Falls im Request anderes Format, evtl MultipartFile, Blob oder einfach InputStream statt byte[]
@@ -144,12 +142,13 @@ public class UserController {
 
     @GetMapping("/image/remove")
     public ResponseEntity<?> removeImage(@RequestHeader(name = "Authorization") String jwtToken) {
-	String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-	Optional<User> userOptional = userRepository.findByUsername(username);
-	User user = userOptional.orElseThrow(NotFoundException::new);
-	// switch to default image
-	this.setProfileImg(user, null);
-	return ResponseEntity.ok(new UserDataResponse(username, getDefaultImg()));
+        String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        User user = userOptional.orElseThrow(NotFoundException::new);
+        // switch to default image
+        this.setProfileImg(user, null);
+        
+        return ResponseEntity.ok(new UserDataResponse(username, getDefaultImg()));
     }
 
     /**
@@ -172,7 +171,6 @@ public class UserController {
 
     private void authenticate(String username, String password) throws Exception {
         try {
-	    System.out.println(username + "   " + password);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
             logger.error("Account ist gesperrt. Darf in unserer Anwendung nicht auftreten.");
@@ -184,29 +182,32 @@ public class UserController {
         }
     }
 
-    private String getTokenForUser(UserAuthDto dto) throws Exception {
+    private String authenticateAndGetTokenForUserCredentials(String username, String password) throws Exception {
         // Pruefen ob Token existiert
-        authenticate(dto.getUsername(), dto.getPassword());
-        UserDetails userDetails = userService.loadUserByUsername(dto.getUsername());
+        UserDetails userDetails = userService.loadUserByUsername(username);
+        authenticate(username, password);
+
         return jwtTokenUtil.generateToken(userDetails);
     }
 
     private void setProfileImg(User user, byte [] imgArray){
-	if(imgArray == null){imgArray = this.getDefaultImg();}
-	user.setImage(imgArray);
+        if(imgArray == null){
+            imgArray = this.getDefaultImg();
+        }
+        user.setImage(imgArray);
     }
 
     private byte[] getDefaultImg(){
-	URL url = Thread.currentThread().getContextClassLoader().getResource("images/default.jpg");
-	try {
-	    BufferedImage bufferImage = ImageIO.read(url);
-	    ByteArrayOutputStream output = new ByteArrayOutputStream();
-	    ImageIO.write(bufferImage, "jpg", output);
-	    byte [] data = output.toByteArray();
-	    return data;
-	} catch (IOException e) {
-	    logger.error("Could not read default profile image");
-	    return null;
-	}
+        URL url = Thread.currentThread().getContextClassLoader().getResource("images/default.jpg");
+        try {
+            BufferedImage bufferImage = ImageIO.read(url);
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            ImageIO.write(bufferImage, "jpg", output);
+            byte [] data = output.toByteArray();
+            return data;
+        } catch (IOException e) {
+            logger.error("Could not read default profile image");
+            return null;
+        }
     }
 }
