@@ -5,6 +5,9 @@ import com.example.javafx.service.helper.HttpConnector;
 import com.example.javafx.service.helper.SceneManager;
 import org.json.JSONObject;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class UserService {
     SceneManager sceneManager = SceneManager.getInstance();
 
@@ -25,11 +28,26 @@ public class UserService {
     }
 
     public void uploadImage(byte[] imageBytes) {
+        System.out.println("array: " + imageBytes.length);
+        
+        main(java.util.Base64.getEncoder().encodeToString(imageBytes));
+
         boolean successfullyUploaded = HttpConnector.post("user/image/upload", imageBytes);
         if (successfullyUploaded) {
             sceneManager.loadAccountData();
             // sceneController.loadLobby();
         }
+    }
+
+    public void main(String s) {
+        try {
+            FileWriter writer = new FileWriter("MyFile.txt", true);
+            writer.write(s);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void loginUser(String username, String password) {

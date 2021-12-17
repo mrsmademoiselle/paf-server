@@ -63,6 +63,7 @@ public class AccountDataController extends PapaController {
             // TODO aktuell gibt es beim Registrieren-Bildhochladen noch einen Error, weshalb in den kommenden Zeilen
             // ohne die if-Bedingung die Anwendung crashen würde
             if (img.isError()) return;
+
             ImagePattern imagePattern = new ImagePattern(img);
             profilePic.setFill(imagePattern);
             profilePic.setRadius(80);
