@@ -77,10 +77,7 @@ public class RegistrationController extends PapaController {
         System.out.println("successful: " + successful);
         if (successful) {
 
-            boolean b = imageBytes != null;
-            boolean b1 = imageBytes.length > 0;
-            System.out.println("b1: " + b + ", b2: " + b1);
-            if (b && b1) {
+            if (imageBytes != null && imageBytes.length > 0) {
                 userService.uploadImage(imageBytes);
                 // diesen Banner erreichen wir nur, wenn kein Bild hochgeladen werden konnte
                 bannerController.setText("Es gab einen Serverfehler beim Verarbeiten des Bildes", false);
