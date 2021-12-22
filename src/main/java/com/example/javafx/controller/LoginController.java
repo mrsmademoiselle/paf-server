@@ -39,7 +39,7 @@ public class LoginController extends PapaController {
         }
 
         if (userService.loginUser(username, password)) {
-            sceneManager.loadAccountData();
+            sceneManager.loadProfile();
         }
         // diesen Text erreichen wir nur, wenn Login nicht erfolgreich war
         bannerController.setText("User kann nicht eingeloggt werden", false);

@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class AccountDataController extends PapaController {
+public class ProfileController extends PapaController {
 
     @FXML
     Pane page;

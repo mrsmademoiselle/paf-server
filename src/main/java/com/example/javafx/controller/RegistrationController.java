@@ -80,14 +80,14 @@ public class RegistrationController extends PapaController {
 
             if (imageBytes != null && imageBytes.length > 0) {
                 if (userService.uploadImage(imageBytes)) {
-                    sceneManager.loadAccountData();
+                    sceneManager.loadProfile();
                 }
                 // diesen Banner erreichen wir nur, wenn kein Bild hochgeladen werden konnte
                 bannerController.setText("Es gab einen Serverfehler beim Verarbeiten des Bildes", false);
 
             } else {
                 // User Notification
-                sceneManager.loadAccountData();
+                sceneManager.loadProfile();
             }
         } else {
             bannerController.setText("Der Benutzer konnte nicht angelegt werden.", false);

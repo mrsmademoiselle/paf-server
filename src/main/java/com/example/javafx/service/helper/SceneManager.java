@@ -18,7 +18,7 @@ public class SceneManager {
     private URL loginScene;
     private URL registerScene;
     private URL lobbyScene;
-    private URL accountDataScene;
+    private URL profile;
     private URL generalCSS;
     private static final SceneManager instance = new SceneManager();
 
@@ -41,16 +41,19 @@ public class SceneManager {
         this.loadScene(this.lobbyScene);
     }
 
-    public void loadAccountData() {
-        this.loadScene(this.accountDataScene);
+    public void loadProfile() {
+        this.loadScene(this.profile);
+    }
+
+    public void loadHistory() {
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-    public void setAccountDataScene(URL stage) {
-        this.accountDataScene = stage;
+    public void setProfileScene(URL stage) {
+        this.profile = stage;
     }
 
     public Stage loadStage() {
@@ -105,8 +108,5 @@ public class SceneManager {
         Scene scene = new Scene(view, this.APPLICATION_WIDTH, this.APPLICATION_HEIGHT);
         scene.getStylesheets().add(generalCSS.toExternalForm());
         stage.setScene(scene);
-    }
-
-    public void loadHistory() {
     }
 }

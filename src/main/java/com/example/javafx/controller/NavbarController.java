@@ -62,7 +62,7 @@ public class NavbarController extends PapaController {
     }
 
     public void profile(MouseEvent mouseEvent) {
-        sceneManager.loadAccountData();
+        sceneManager.loadProfile();
     }
 
     public void history(MouseEvent mouseEvent) {

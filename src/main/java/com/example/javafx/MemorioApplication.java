@@ -33,7 +33,7 @@ public class MemorioApplication extends javafx.application.Application {
         sceneManager.setLoginScene(getClass().getResource("view/login.fxml"));
         sceneManager.setRegisterScene(getClass().getResource("view/register.fxml"));
         sceneManager.setLobbyScene(getClass().getResource("view/lobby.fxml"));
-        sceneManager.setAccountDataScene(getClass().getResource("view/account_data.fxml"));
+        sceneManager.setProfileScene(getClass().getResource("view/profile.fxml"));
         sceneManager.setGeneralCSS(getClass().getResource("css/general.css"));
 
 
