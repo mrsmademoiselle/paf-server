@@ -21,7 +21,7 @@
             <!-- Die HBox ist für das Padding zum Button zuständig. pls don't hurt me -->
             <HBox prefHeight="20" prefWidth="${controller.widthWithOffset}"/>
 
-            <Button styleClass="cancel" text="Abbrechen"/>
+            <Button styleClass="cancel" onAction="#cancel" text="Abbrechen"/>
         </VBox>
     </Pane>
 </Pane>

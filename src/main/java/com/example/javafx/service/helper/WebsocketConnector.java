@@ -22,10 +22,7 @@ public class WebsocketConnector {
               PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
               BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         ) {
-
-            // Daten rausschicken
-            output.println(data);
-
+            sendData(data, output);
             return readServerResponse(input);
 
         } catch (IOException e) {
@@ -34,12 +31,18 @@ public class WebsocketConnector {
         return false;
     }
 
+    private void sendData(String data, PrintWriter output) {
+        // Daten rausschicken
+        output.println(data);
+    }
+
     private boolean readServerResponse(BufferedReader input) {
         // Empfange Response vom Server
         String serverResponse = "";
         boolean found = false;
 
-        while (!found) {
+        while (!found && !Thread.currentThread().isInterrupted()) {
+            System.out.println("loop");
             try {
                 serverResponse = input.readLine();
                 // TODO: trigger anpassen
