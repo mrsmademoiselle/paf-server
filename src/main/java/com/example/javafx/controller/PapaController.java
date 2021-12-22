@@ -28,7 +28,7 @@ public abstract class PapaController {
      * Offset nach oben, damit Navbar & Banner noch Platz haben
      */
     public double getOffsetY() {
-        return 140.00;
+        return 150.00;
     }
 
     /**
