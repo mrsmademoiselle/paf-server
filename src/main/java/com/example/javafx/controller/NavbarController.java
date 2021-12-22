@@ -56,4 +56,13 @@ public class NavbarController extends PapaController {
         tokenManager.clearToken();
         sceneManager.loadLogin();
     }
+
+    public void profile(MouseEvent mouseEvent) {
+    }
+
+    public void history(MouseEvent mouseEvent) {
+    }
+
+    public void startGame(MouseEvent mouseEvent) {
+    }
 }

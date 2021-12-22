@@ -2,24 +2,29 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" styleClass="navbar_container"
             fx:controller="com.example.javafx.controller.NavbarController"
             stylesheets="@../css/navbar.css" prefWidth="${controller.widthWithoutOffset}" prefHeight="40">
     <children>
         <!-- Navbar -->
         <HBox styleClass="navbar" prefWidth="${controller.widthWithoutOffset}" alignment="CENTER_LEFT" prefHeight="40">
-            <VBox alignment="CENTER_LEFT" prefWidth="${controller.widthWithoutOffset * 0.4}"
+            <HBox alignment="CENTER_LEFT" prefWidth="${controller.widthWithoutOffset * 0.7}"
                   prefHeight="40">
-                <ImageView fx:id="logo" pickOnBounds="true" preserveRatio="true"/>
-            </VBox>
-            <!-- * 0.58 statt 0.6, damit wir rechts noch ein klein bisschen Padding haben -->
-            <VBox alignment="CENTER_RIGHT" prefWidth="${controller.widthWithoutOffset * 0.58}" prefHeight="40">
+                <HBox prefWidth="${controller.widthWithoutOffset * 0.15}" prefHeight="40">
+                    <ImageView fx:id="logo" pickOnBounds="true" preserveRatio="true"/>
+                </HBox>
+                <HBox prefWidth="${controller.widthWithoutOffset * 0.55}" prefHeight="40">
+                    <Button styleClass="linkButton" text="Profil" onMouseClicked="#profile"/>
+                    <Button styleClass="linkButton" text="Historie" onMouseClicked="#history"/>
+                    <Button styleClass="linkButton" text="Spiel starten" onMouseClicked="#startGame"/>
+                </HBox>
+            </HBox>
+            <!-- * 0.28 statt 0.3, damit wir rechts noch ein klein bisschen Padding haben -->
+            <HBox alignment="CENTER_RIGHT" prefWidth="${controller.widthWithoutOffset * 0.28}" prefHeight="40">
                 <Button styleClass="logoutButton" fx:id="logoutButton" onMouseClicked="#logout" text="Logout">
                 </Button>
-            </VBox>
+            </HBox>
         </HBox>
     </children>
 </AnchorPane>
