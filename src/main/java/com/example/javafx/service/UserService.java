@@ -2,14 +2,12 @@ package com.example.javafx.service;
 
 import com.example.javafx.model.UserDto;
 import com.example.javafx.service.helper.HttpConnector;
-import com.example.javafx.service.helper.SceneManager;
 import org.json.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class UserService {
-    SceneManager sceneManager = SceneManager.getInstance();
 
     public UserDto getUserInfo() {
         String body = HttpConnector.get("user/info").getBody();
@@ -27,16 +25,12 @@ public class UserService {
         return HttpConnector.post("user/register", userAuthDto);
     }
 
-    public void uploadImage(byte[] imageBytes) {
+    public boolean uploadImage(byte[] imageBytes) {
         System.out.println("array: " + imageBytes.length);
-        
+
         main(java.util.Base64.getEncoder().encodeToString(imageBytes));
 
-        boolean successfullyUploaded = HttpConnector.post("user/image/upload", imageBytes);
-        if (successfullyUploaded) {
-            sceneManager.loadAccountData();
-            // sceneController.loadLobby();
-        }
+        return HttpConnector.post("user/image/upload", imageBytes);
     }
 
     public void main(String s) {
@@ -50,31 +44,16 @@ public class UserService {
 
     }
 
-    public void loginUser(String username, String password) {
+    public boolean loginUser(String username, String password) {
         UserDto userAuthDto = new UserDto(username, password, new byte[]{});
 
-        boolean isOk = HttpConnector.post("user/login", userAuthDto);
-        if (isOk) {
-            sceneManager.loadAccountData();
-        }
+        return HttpConnector.post("user/login", userAuthDto);
     }
 
     public boolean updateUserInfo(String username, String password, byte[] image) {
         UserDto userAuthDto = new UserDto(username, password, image);
 
         return HttpConnector.post("user/update", userAuthDto);
-    }
-
-    public void redirectToAccount() {
-        sceneManager.loadAccountData();
-    }
-
-    public void redirectToLogin() {
-        sceneManager.loadLogin();
-    }
-
-    public void redirectToRegister() {
-        sceneManager.loadRegistration();
     }
 
     public UserDto removeImage() {
@@ -92,7 +71,6 @@ public class UserService {
                 ? java.util.Base64.getDecoder().decode(jsonObject.getString("profilbild"))
                 : new byte[]{};
 
-        UserDto userDto = new UserDto(jsonObject.getString("username"), image);
-        return userDto;
+        return new UserDto(jsonObject.getString("username"), image);
     }
 }

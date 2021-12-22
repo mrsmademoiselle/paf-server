@@ -2,6 +2,7 @@ package com.example.javafx.controller;
 
 import com.example.javafx.service.UserService;
 import com.example.javafx.service.helper.FileManager;
+import com.example.javafx.service.helper.SceneManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -55,7 +56,7 @@ public class RegistrationController extends PapaController {
     private byte[] imageBytes;
 
     UserService userService = new UserService();
-
+    SceneManager sceneManager = SceneManager.getInstance();
 
     @FXML
     protected void initialize() {
@@ -78,13 +79,15 @@ public class RegistrationController extends PapaController {
         if (successful) {
 
             if (imageBytes != null && imageBytes.length > 0) {
-                userService.uploadImage(imageBytes);
+                if (userService.uploadImage(imageBytes)) {
+                    sceneManager.loadAccountData();
+                }
                 // diesen Banner erreichen wir nur, wenn kein Bild hochgeladen werden konnte
                 bannerController.setText("Es gab einen Serverfehler beim Verarbeiten des Bildes", false);
 
             } else {
                 // User Notification
-                userService.redirectToAccount();
+                sceneManager.loadAccountData();
             }
         } else {
             bannerController.setText("Der Benutzer konnte nicht angelegt werden.", false);
@@ -92,7 +95,7 @@ public class RegistrationController extends PapaController {
     }
 
     public void sendToLogin() {
-        userService.redirectToLogin();
+        sceneManager.loadLogin();
     }
 
     public void hoverOverProfilePic() {

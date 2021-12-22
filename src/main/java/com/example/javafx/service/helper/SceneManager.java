@@ -107,4 +107,6 @@ public class SceneManager {
         stage.setScene(scene);
     }
 
+    public void loadHistory() {
+    }
 }

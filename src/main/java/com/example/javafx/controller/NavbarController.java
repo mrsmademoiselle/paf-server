@@ -1,5 +1,6 @@
 package com.example.javafx.controller;
 
+import com.example.javafx.service.GameService;
 import com.example.javafx.service.helper.SceneManager;
 import com.example.javafx.service.helper.TokenManager;
 import javafx.fxml.FXML;
@@ -17,6 +18,9 @@ public class NavbarController extends PapaController {
 
     @FXML
     Button logoutButton;
+
+    SceneManager sceneManager = SceneManager.getInstance();
+    GameService gameService = new GameService();
 
     @FXML
     protected void initialize() {
@@ -58,11 +62,14 @@ public class NavbarController extends PapaController {
     }
 
     public void profile(MouseEvent mouseEvent) {
+        sceneManager.loadAccountData();
     }
 
     public void history(MouseEvent mouseEvent) {
+        sceneManager.loadHistory();
     }
 
     public void startGame(MouseEvent mouseEvent) {
+        gameService.openLobby();
     }
 }
