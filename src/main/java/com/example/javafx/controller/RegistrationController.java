@@ -75,7 +75,6 @@ public class RegistrationController extends PapaController {
             return;
         }
         boolean successful = userService.registerUser(username, password);
-        System.out.println("successful: " + successful);
         if (successful) {
 
             if (imageBytes != null && imageBytes.length > 0) {

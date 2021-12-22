@@ -20,6 +20,7 @@ public class SceneManager {
     private URL lobbyScene;
     private URL profile;
     private URL generalCSS;
+    private URL gameScene;
     private static final SceneManager instance = new SceneManager();
 
     private SceneManager() {
@@ -72,6 +73,14 @@ public class SceneManager {
         this.registerScene = registerScene;
     }
 
+    public void loadGame() {
+        this.loadScene(this.gameScene);
+    }
+
+    public void setGameScene(URL gameScene) {
+        this.gameScene = gameScene;
+    }
+
     public void setGeneralCSS(URL resource) {
         this.generalCSS = resource;
     }
@@ -102,11 +111,11 @@ public class SceneManager {
 
     private void loadView(URL path) throws IOException {
         Parent view;
-        System.out.println("path: " + path.getPath());
         view = FXMLLoader.load(path);
 
         Scene scene = new Scene(view, this.APPLICATION_WIDTH, this.APPLICATION_HEIGHT);
         scene.getStylesheets().add(generalCSS.toExternalForm());
         stage.setScene(scene);
     }
+
 }
