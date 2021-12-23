@@ -13,16 +13,20 @@
             <HBox alignment="CENTER" prefWidth="${controller.widthWithOffset}">
                 <!-- Formular -->
                 <VBox alignment="TOP_CENTER" prefWidth="${controller.widthWithOffset /3}" styleClass="form">
+                    <!-- Inputfields -->
                     <Label styleClass="login_register_title" text="Login" alignment="TOP_CENTER"
                            textAlignment="CENTER"/>
                     <TextField fx:id="usernameTextfield" styleClass="text_field" promptText="Username"/>
                     <PasswordField fx:id="passwordTextfield" styleClass="text_field" promptText="Passwort"/>
 
+                    <!-- Login-Link -->
                     <VBox alignment="CENTER_RIGHT">
                         <Label fx:id="loginLink" onMouseClicked="#sendToRegistration" alignment="TOP_RIGHT"
                                styleClass="small_text" text="Du hast noch keinen Account?"
                                textAlignment="JUSTIFY"/>
                     </VBox>
+
+                    <!-- Submit -->
                     <Button fx:id="submit" onAction="#login" alignment="BOTTOM_CENTER"
                             mnemonicParsing="false" styleClass="submit_button" text="Login"/>
                 </VBox>

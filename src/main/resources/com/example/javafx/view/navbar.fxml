@@ -5,24 +5,27 @@
 <?import javafx.scene.layout.*?>
 <AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" styleClass="navbar_container"
             fx:controller="com.example.javafx.controller.NavbarController"
-            stylesheets="@../css/navbar.css" prefWidth="${controller.widthWithoutOffset}" prefHeight="40">
+            stylesheets="@../css/navbar.css" prefWidth="${controller.widthWithoutOffset}" prefHeight="50">
     <children>
         <!-- Navbar -->
-        <HBox styleClass="navbar" prefWidth="${controller.widthWithoutOffset}" alignment="CENTER_LEFT" prefHeight="40">
+        <HBox styleClass="navbar" prefWidth="${controller.widthWithoutOffset}" alignment="CENTER_LEFT" prefHeight="50">
             <HBox alignment="CENTER_LEFT" prefWidth="${controller.widthWithoutOffset * 0.7}"
-                  prefHeight="40">
-                <HBox prefWidth="${controller.widthWithoutOffset * 0.15}" prefHeight="40">
+                  prefHeight="50">
+                <!-- Logo -->
+                <HBox prefWidth="${controller.widthWithoutOffset * 0.15}" prefHeight="50">
                     <ImageView fx:id="logo" pickOnBounds="true" preserveRatio="true"/>
                 </HBox>
-                <HBox prefWidth="${controller.widthWithoutOffset * 0.55}" prefHeight="40">
-                    <Button styleClass="linkButton" text="Profil" onMouseClicked="#profile"/>
-                    <Button styleClass="linkButton" text="Historie" onMouseClicked="#history"/>
-                    <Button styleClass="linkButton" text="Spiel starten" onMouseClicked="#startGame"/>
+                <!-- Hauptbuttons zur Navigation-->
+                <HBox prefWidth="${controller.widthWithoutOffset * 0.55}" prefHeight="50">
+                    <Button styleClass="linkButton" text="Profil" onAction="#redirectToProfile"/>
+                    <Button styleClass="linkButton" text="Historie" onAction="#redirectToHistory"/>
+                    <Button styleClass="linkButton" text="Spiel starten" onAction="#startGame"/>
                 </HBox>
             </HBox>
             <!-- * 0.28 statt 0.3, damit wir rechts noch ein klein bisschen Padding haben -->
             <HBox alignment="CENTER_RIGHT" prefWidth="${controller.widthWithoutOffset * 0.28}" prefHeight="40">
-                <Button styleClass="logoutButton" fx:id="logoutButton" onMouseClicked="#logout" text="Logout">
+                <!-- Logout -->
+                <Button styleClass="logoutButton" fx:id="logoutButton" onAction="#logout" text="Logout">
                 </Button>
             </HBox>
         </HBox>

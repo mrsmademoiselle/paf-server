@@ -20,7 +20,6 @@
                            textAlignment="CENTER"/>
                     <!-- Bild-->
                     <VBox alignment="BOTTOM_CENTER">
-                        <!-- Später FileChooser einbauen -->
                         <Circle onMouseClicked="#uploadPicture" onMouseEntered="#hoverOverProfilePic"
                                 onMouseExited="#setProfilePic" fx:id="profilePic" styleClass="profile_pic"/>
                     </VBox>

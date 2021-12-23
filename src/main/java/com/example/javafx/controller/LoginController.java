@@ -22,7 +22,7 @@ public class LoginController extends PapaController {
 
     @FXML
     protected void initialize() {
-        activateInputListener();
+        addInputListenersForTextfields();
     }
 
     public void sendToRegistration() {
@@ -46,7 +46,7 @@ public class LoginController extends PapaController {
 
     }
 
-    private void activateInputListener() {
+    private void addInputListenersForTextfields() {
         // Livevalidierung
         usernameTextfield.textProperty().addListener((obs, oldInput, newInput) -> {
             if (!usernameTextfield.getText().matches("[\\w|\\d]*")) {

@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 
 public class NavbarController extends PapaController {
 
@@ -25,7 +24,6 @@ public class NavbarController extends PapaController {
     protected void initialize() {
         setLogoPic();
         setLogoutButtonPic();
-
     }
 
     private void setLogoutButtonPic() {
@@ -45,22 +43,22 @@ public class NavbarController extends PapaController {
     }
 
     // TODO evtl verschieben
-    public void logout(MouseEvent mouseEvent) {
+    public void logout() {
         TokenManager tokenManager = TokenManager.getInstance();
         SceneManager sceneManager = SceneManager.getInstance();
         tokenManager.clearToken();
         sceneManager.loadLogin();
     }
 
-    public void profile(MouseEvent mouseEvent) {
+    public void redirectToProfile() {
         sceneManager.loadProfile();
     }
 
-    public void history(MouseEvent mouseEvent) {
+    public void redirectToHistory() {
         sceneManager.loadHistory();
     }
 
-    public void startGame(MouseEvent mouseEvent) {
+    public void startGame() {
         gameService.openLobby();
     }
 }

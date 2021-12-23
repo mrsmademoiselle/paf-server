@@ -7,7 +7,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
- * Singleton Klasse für Websocket-Kommunikation
+ * Klasse für Websocket-Kommunikation.
+ * <p>
+ * Erstmal als Singleton umgesetzt, weil wir aktuell immer auf denselben Port lauschen.
  */
 public class WebsocketConnector {
     private static final WebsocketConnector instance = new WebsocketConnector();
@@ -22,7 +24,8 @@ public class WebsocketConnector {
               PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
               BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         ) {
-            sendData(data, output);
+            // Daten rausschicken
+            output.println(data);
             return readServerResponse(input);
 
         } catch (IOException e) {
@@ -31,18 +34,16 @@ public class WebsocketConnector {
         return false;
     }
 
-    private void sendData(String data, PrintWriter output) {
-        // Daten rausschicken
-        output.println(data);
-    }
-
     private boolean readServerResponse(BufferedReader input) {
         // Empfange Response vom Server
         String serverResponse = "";
         boolean found = false;
 
+        /* die zweite Bedingung soll dem Abbruch dienen, funktioniert allerdings noch nicht ganz.
+            Input so lange lesen, bis End-Trigger gefunden wurde.
+         */
         while (!found && !Thread.currentThread().isInterrupted()) {
-            System.out.println("loop");
+
             try {
                 serverResponse = input.readLine();
                 // TODO: trigger anpassen
@@ -54,7 +55,6 @@ public class WebsocketConnector {
                 break;
             }
         }
-
         return found;
     }
 

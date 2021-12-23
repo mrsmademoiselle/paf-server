@@ -13,8 +13,7 @@ public class UserService {
             // TODO Fehlermeldung zurückgeben
             return new UserDto();
         }
-        UserDto userDto = getUserDtoFromResponseBody(body);
-        return userDto;
+        return getUserDtoFromResponseBody(body);
     }
 
     public boolean registerUser(String username, String password) {
@@ -32,7 +31,7 @@ public class UserService {
         return HttpConnector.post("user/login", userAuthDto);
     }
 
-    public boolean updateUserInfo(String username, String password, byte[] image) {
+    public boolean updateUser(String username, String password, byte[] image) {
         UserDto userAuthDto = new UserDto(username, password, image);
 
         return HttpConnector.post("user/update", userAuthDto);
@@ -40,9 +39,8 @@ public class UserService {
 
     public UserDto removeImage() {
         String body = HttpConnector.get("user/image/remove").getBody();
-        UserDto userDto = getUserDtoFromResponseBody(body);
 
-        return userDto;
+        return getUserDtoFromResponseBody(body);
     }
 
     private UserDto getUserDtoFromResponseBody(String body) {

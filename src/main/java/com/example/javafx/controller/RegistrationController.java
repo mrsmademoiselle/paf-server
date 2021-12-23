@@ -3,7 +3,6 @@ package com.example.javafx.controller;
 import com.example.javafx.service.UserService;
 import com.example.javafx.service.helper.FileManager;
 import com.example.javafx.service.helper.SceneManager;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
@@ -65,7 +64,7 @@ public class RegistrationController extends PapaController {
     }
 
 
-    public void register(ActionEvent event) {
+    public void register() {
         String username = this.username.getText();
         String password = this.password.getText();
 

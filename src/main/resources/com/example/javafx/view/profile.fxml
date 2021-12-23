@@ -22,8 +22,8 @@
                     <Circle fx:id="profilePic" styleClass="profile_pic"/>
                 </VBox>
                 <VBox prefWidth="${controller.widthWithOffset / 2}" alignment="CENTER_RIGHT">
-                    <Button styleClass="button, gray" onMouseClicked="#uploadPicture">Bild hochladen</Button>
-                    <Button styleClass="button, gray" onMouseClicked="#removePicture">Bild entfernen</Button>
+                    <Button styleClass="button, gray" onAction="#changePicture">Bild hochladen</Button>
+                    <Button styleClass="button, gray" onAction="#removePicture">Bild entfernen</Button>
                 </VBox>
             </HBox>
             <Separator prefWidth="${controller.widthWithOffset}"/>
@@ -40,7 +40,7 @@
                     </VBox>
                 </VBox>
                 <VBox alignment="BOTTOM_RIGHT" prefWidth="${controller.widthWithOffset / 2}">
-                    <Button styleClass="button" onMouseClicked="#updateUserInfo">Speichern
+                    <Button styleClass="button" onAction="#updateUser">Speichern
                     </Button>
                 </VBox>
             </HBox>

@@ -15,7 +15,10 @@ public class GameService {
         backgroundThread = new Thread(() -> {
             // TODO: Absrepchen was wir schicken wollen
             boolean foundSuccessfully = websocketConnector.connect("hallo");
-            // irgendwas mit dem boolean/objekt tun
+
+            // TODO: später das ResponseObjekt irgendwie hier zwischenspeichern, wenn notwendig
+
+            // Diese Zeile wird nach Beendigung des Threads vom Main-Thread der Anwendung ausgeführt
             Platform.runLater(() -> {
                 if (foundSuccessfully) sceneManager.loadGame();
             });
@@ -25,9 +28,9 @@ public class GameService {
 
     public void stopQueue() {
         if (backgroundThread != null) {
+            // Diese Abbruchbedingung klappt noch nicht ganz
             backgroundThread.interrupt();
-            System.out.println("stopped successfullyx");
-            sceneManager.loadProfile();
         }
+        sceneManager.loadProfile();
     }
 }

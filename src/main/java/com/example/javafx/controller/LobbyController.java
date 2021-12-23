@@ -2,7 +2,6 @@ package com.example.javafx.controller;
 
 import com.example.javafx.service.GameService;
 import com.example.javafx.service.helper.FileManager;
-import com.example.javafx.service.helper.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,7 +15,6 @@ public class LobbyController extends PapaController {
     NavbarController navbarController;
 
     GameService gameService = new GameService();
-    SceneManager sceneManager = SceneManager.getInstance();
 
     @FXML
     protected void initialize() {

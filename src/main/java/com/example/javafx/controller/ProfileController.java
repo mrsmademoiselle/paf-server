@@ -3,12 +3,10 @@ package com.example.javafx.controller;
 import com.example.javafx.model.UserDto;
 import com.example.javafx.service.UserService;
 import com.example.javafx.service.helper.FileManager;
-import com.example.javafx.service.helper.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -40,7 +38,6 @@ public class ProfileController extends PapaController {
 
     UserDto userDto;
 
-    SceneManager sceneManager = SceneManager.getInstance();
     UserService userService = new UserService();
 
 
@@ -51,10 +48,12 @@ public class ProfileController extends PapaController {
 
         // TODO tatsächliches Bild vom Server nehmen
         setProfilePic();
-        activateInputListener();
+        addInputListenersForTextfields();
     }
 
     public void setProfilePic() {
+        // eigentlich sollte diese Zeile in unserem Fall nicht mehr auftreten, aber vorsichtshalber
+        // lasse ich sie erstmal drin.
         if (userDto.getProfilePic() == null || userDto.getProfilePic().length == 0) {
             Image pic = FileManager.getPic("standard_profile_pic.png");
             profilePic.setFill(new ImagePattern(pic));
@@ -62,8 +61,10 @@ public class ProfileController extends PapaController {
         } else {
             Image img = new Image(new ByteArrayInputStream(userDto.getProfilePic()));
 
-            // TODO aktuell gibt es beim Registrieren-Bildhochladen noch einen Error, weshalb in den kommenden Zeilen
-            // ohne die if-Bedingung die Anwendung crashen würde
+            /* Die Zeile war dafür da, dass beim Bildhochladen die Anwendung nicht crasht, weil es dort
+            so lange Probleme beim Bild gab. Wir können es sicherheitshalber drin behalten, falls so etwas
+            nochmal passiert, oder rausnehmen wenn wir uns sicher sind, *dass* es nicht nochmal passiert.
+             */
             if (img.isError()) return;
 
             ImagePattern imagePattern = new ImagePattern(img);
@@ -72,7 +73,7 @@ public class ProfileController extends PapaController {
         }
     }
 
-    public void updateUserInfo(MouseEvent mouseEvent) {
+    public void updateUser() {
         String username = usernameTextfield.getText();
         String password = passwordTextfield.getText();
         byte[] profilePic = userDto.getProfilePic();
@@ -82,14 +83,16 @@ public class ProfileController extends PapaController {
             bannerController.setText("Das Username oder Passwortformat wird nicht akzeptiert.", false);
             return;
         }
-        boolean successful = userService.updateUserInfo(username, password, new byte[]{});
+        // erst einmal ohne Bild updaten, wie beim Register
+        boolean successful = userService.updateUser(username, password, new byte[]{});
 
+        // wenn userInfo-Update erfolgreich, Bild hinterherschicken
         if (successful) {
             if (profilePic != null && profilePic.length > 0) {
+                // falls Bildupload nicht geklappt hat, zeige Fehlerbanner an
+                // evtl TODO: Banner für Userinfo & Bild auseinanderziehen
                 if (!userService.uploadImage(profilePic)) {
                     successful = false;
-                } else {
-                    sceneManager.loadLogin();
                 }
             }
         }
@@ -97,7 +100,7 @@ public class ProfileController extends PapaController {
         bannerController.setText(bannerText, successful);
     }
 
-    public void uploadPicture() throws IOException {
+    public void changePicture() throws IOException {
         File selectedFile = FileManager.openImageChooser(page);
 
         if (selectedFile != null) {
@@ -107,12 +110,16 @@ public class ProfileController extends PapaController {
         }
     }
 
-    public void removePicture(MouseEvent mouseEvent) {
+    public void removePicture() {
+        // Dto hat das neue Standardbild vom Server
         userDto = userService.removeImage();
         setProfilePic();
     }
 
-    private void activateInputListener() {
+    /**
+     * Dient der Live-Validierung beim Tippen.
+     */
+    private void addInputListenersForTextfields() {
         // Livevalidierung
         usernameTextfield.textProperty().addListener((obs, oldInput, newInput) -> {
             if (!usernameTextfield.getText().matches("[\\w|\\d]*")) {

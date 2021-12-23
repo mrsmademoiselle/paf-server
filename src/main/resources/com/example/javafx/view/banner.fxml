@@ -6,7 +6,7 @@
 <Pane xmlns="http://javafx.com/javafx" fx:id="banner"
       xmlns:fx="http://javafx.com/fxml" styleClass="banner"
       fx:controller="com.example.javafx.controller.BannerController"
-      prefHeight="50.0" stylesheets="@../css/banner.css" layoutY="40"
+      prefHeight="50.0" stylesheets="@../css/banner.css" layoutY="50"
       prefWidth="${controller.widthWithoutOffset}">
     <StackPane prefWidth="${controller.widthWithoutOffset}" fx:id="stackP">
         <Label styleClass="text" fx:id="text"/>
