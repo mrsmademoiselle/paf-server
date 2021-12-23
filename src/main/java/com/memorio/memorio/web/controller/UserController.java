@@ -139,7 +139,8 @@ public class UserController {
     // -> abzusprechen
     @PostMapping("/image/upload")
     public ResponseEntity<?> uploadImage(@RequestBody byte[] decodedBytes, @RequestHeader(name = "Authorization") String jwtToken) {
-        // notwendig für JavaFX, weil Jackson byte[] automatisch mit byte64 encoded. Evtl React anpassen.
+        // notwendig für JavaFX, weil Jackson byte[] automatisch mit byte64 encoded.
+        // Evtl React anpassen.
         byte[] profilePicBytes = Base64.decodeBase64(decodedBytes);
 
         try {
