@@ -3,6 +3,7 @@ package com.example.javafx.controller;
 import com.example.javafx.model.UserDto;
 import com.example.javafx.service.UserService;
 import com.example.javafx.service.helper.FileManager;
+import com.example.javafx.service.helper.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -39,6 +40,7 @@ public class ProfileController extends PapaController {
 
     UserDto userDto;
 
+    SceneManager sceneManager = SceneManager.getInstance();
     UserService userService = new UserService();
 
 
@@ -73,13 +75,24 @@ public class ProfileController extends PapaController {
     public void updateUserInfo(MouseEvent mouseEvent) {
         String username = usernameTextfield.getText();
         String password = passwordTextfield.getText();
+        byte[] profilePic = userDto.getProfilePic();
+
 
         if (!username.matches("\\w*") || username.isBlank()) {
             bannerController.setText("Das Username oder Passwortformat wird nicht akzeptiert.", false);
             return;
         }
-        boolean successful = userService.updateUserInfo(username, password, userDto.getProfilePic());
+        boolean successful = userService.updateUserInfo(username, password, new byte[]{});
 
+        if (successful) {
+            if (profilePic != null && profilePic.length > 0) {
+                if (!userService.uploadImage(profilePic)) {
+                    successful = false;
+                } else {
+                    sceneManager.loadLogin();
+                }
+            }
+        }
         String bannerText = successful ? "Die Userinformationen wurden erfolgreich bearbeitet." : "Die Userinformationen konnten nicht bearbeitet werden.";
         bannerController.setText(bannerText, successful);
     }

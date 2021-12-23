@@ -4,9 +4,6 @@ import com.example.javafx.model.UserDto;
 import com.example.javafx.service.helper.HttpConnector;
 import org.json.JSONObject;
 
-import java.io.FileWriter;
-import java.io.IOException;
-
 public class UserService {
 
     public UserDto getUserInfo() {
@@ -26,22 +23,7 @@ public class UserService {
     }
 
     public boolean uploadImage(byte[] imageBytes) {
-        System.out.println("array: " + imageBytes.length);
-
-        main(java.util.Base64.getEncoder().encodeToString(imageBytes));
-
         return HttpConnector.post("user/image/upload", imageBytes);
-    }
-
-    public void main(String s) {
-        try {
-            FileWriter writer = new FileWriter("MyFile.txt", true);
-            writer.write(s);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public boolean loginUser(String username, String password) {
