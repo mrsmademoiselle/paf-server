@@ -11,10 +11,10 @@ import java.net.Socket;
  * <p>
  * Erstmal als Singleton umgesetzt, weil wir aktuell immer auf denselben Port lauschen.
  */
-public class WebsocketConnector {
-    private static final WebsocketConnector instance = new WebsocketConnector();
+public class SocketConnector {
+    private static final SocketConnector instance = new SocketConnector();
 
-    private WebsocketConnector() {
+    private SocketConnector() {
     }
 
     public boolean connect(String data) {
@@ -58,7 +58,7 @@ public class WebsocketConnector {
         return found;
     }
 
-    public static WebsocketConnector getInstance() {
+    public static SocketConnector getInstance() {
         return instance;
     }
 }
