@@ -3,6 +3,7 @@ package com.memorio.memorio.web.dto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
 import javax.validation.constraints.Pattern;
 
 @ToString
@@ -18,12 +19,13 @@ public class UserUpdateDto {
     private byte[] img;
 
     @Deprecated
-    public UserUpdateDto(){}
-
-    public UserUpdateDto(String username, String password, byte[] img){
-	this.username = username;
-	this.password = password;
-	this.img = img;
+    public UserUpdateDto() {
     }
-     
+
+    public UserUpdateDto(String username, String password, byte[] img) {
+        this.username = username;
+        this.password = password;
+        this.img = img;
+    }
+
 }

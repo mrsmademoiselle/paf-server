@@ -8,6 +8,7 @@ import com.memorio.memorio.web.dto.JwtResponse;
 import com.memorio.memorio.web.dto.UserAuthDto;
 import com.memorio.memorio.web.dto.UserDataResponse;
 import com.memorio.memorio.web.dto.UserUpdateDto;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +99,6 @@ public class UserController {
             // user in der Datenbank updaten
             User user = userService.updateUser(username, userUpdateDto);
             user.saveUserProfilePicToServer();
-            System.out.println("pic uploaded (update user)");
 
             // neues Token generieren
             UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
@@ -139,14 +139,16 @@ public class UserController {
     // Falls im Request anderes Format, evtl MultipartFile, Blob oder einfach InputStream statt byte[]
     // -> abzusprechen
     @PostMapping("/image/upload")
-    public ResponseEntity<?> uploadImage(@RequestBody byte[] profilePicBytes, @RequestHeader(name = "Authorization") String jwtToken) {
-        System.out.println("uploadImage!");
+    public ResponseEntity<?> uploadImage(@RequestBody byte[] decodedBytes, @RequestHeader(name = "Authorization") String jwtToken) {
+        // notwendig für JavaFX, weil Jackson byte[] automatisch mit byte64 encoded. Evtl React anpassen.
+        byte[] profilePicBytes = Base64.decodeBase64(decodedBytes);
+
         try {
             String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             Optional<User> userOptional = userRepository.findByUsername(username);
             // zu dieser Exception darf es eigentlich nie kommen, aber besser haben als nicht haben
             User user = userOptional.orElseThrow(NotFoundException::new);
-            System.out.println("uploading pic...");
+
             userService.saveUserImage(username, profilePicBytes);
             // User muss wegen @Transactional nicht händisch persistiert werden
             logger.info("Profilbild wurde erfolgreich im User {} gespeichert", user.getUsername());
