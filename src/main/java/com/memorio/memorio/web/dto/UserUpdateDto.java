@@ -9,7 +9,6 @@ import javax.validation.constraints.Pattern;
 @ToString
 @Getter
 @Setter
-
 public class UserUpdateDto {
 
     @Pattern(regexp = "[A-Za-z0-9]+$")

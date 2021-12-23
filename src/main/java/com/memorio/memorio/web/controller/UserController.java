@@ -98,7 +98,6 @@ public class UserController {
         try {
             // user in der Datenbank updaten
             User user = userService.updateUser(username, userUpdateDto);
-            user.saveUserProfilePicToServer();
 
             // neues Token generieren
             UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
@@ -117,11 +116,11 @@ public class UserController {
         Optional<User> userOptional = userRepository.findByUsername(username);
         User user = userOptional.orElseThrow(NotFoundException::new);
 
-        // das encoden hat es für Franzi gefixt
         byte[] img = user.getImage() == null ? getDefaultImg() : user.getImage();
+        // für den FX-Client müssen wir das Bild einmal encoden, da wird es dort dann leichter parsen können
         String encodedString = java.util.Base64.getEncoder().encodeToString(img);
 
-        return ResponseEntity.ok(new UserDataResponse(username, encodedString));
+        return ResponseEntity.ok(new UserDataResponse(username, encodedString, img));
     }
 
     @GetMapping("/info/image")
@@ -167,7 +166,9 @@ public class UserController {
         User user = userOptional.orElseThrow(NotFoundException::new);
         // switch to default image
         userService.saveUserImage(username, getDefaultImg());
-        return ResponseEntity.ok(new UserDataResponse(username, getDefaultImg()));
+        String encodedString = java.util.Base64.getEncoder().encodeToString(getDefaultImg());
+
+        return ResponseEntity.ok(new UserDataResponse(username, encodedString, getDefaultImg()));
     }
 
     /**
