@@ -27,6 +27,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtRequestFilter jwtRequestFilter;
 
     @Autowired
+    private PasswordEncoder bcryptEncoder;
+
+    @Autowired
     public WebSecurityConfig(JwtAuthenticationExceptionHandler jwtAuthenticationExceptionHandler, UserService userService, JwtRequestFilter jwtRequestFilter) {
         this.jwtAuthenticationExceptionHandler = jwtAuthenticationExceptionHandler;
         this.userService = userService;
@@ -35,14 +38,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userService).passwordEncoder(this.bcryptEncoder);
     }
 
-    // Diese Bean wird für die Erstellung des UserService-Objekts benötigt (PasswordEncoder)
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     @Override
