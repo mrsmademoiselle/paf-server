@@ -11,13 +11,18 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import com.memorio.memorio.websocket.MemorioWebSocketServer;
+
 @Configuration
 @SpringBootApplication
 public class MemorioApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MemorioApplication.class, args);
-        createThread();
+	MemorioWebSocketServer server = MemorioWebSocketServer.getInstance();
+	new Thread(
+		() -> {server.start();}
+		).start();
         System.out.println("Startup successful");
     }
 
