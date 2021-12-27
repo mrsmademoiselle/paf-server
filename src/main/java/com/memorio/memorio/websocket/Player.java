@@ -7,6 +7,17 @@ import org.java_websocket.WebSocket;
 import java.util.UUID;
 
 public class Player {
+    /*
+     *
+     * Diese Klasse hält die zugehörige WebSocket
+     * sowie eine Liste anderer Player (subscriber), zu denen alle 
+     * eingehenden Nachrichten gesendet werden.
+     *
+     * TODO:
+     * ebenfalls hier gespeichert ist das token. Das muss evtl. noch
+     * angepasst werden und das eigentliche JWTToken enthalten.
+     *
+     */
     private WebSocket conn;
     private List<Player> subscribers = new ArrayList<>();
     private UUID token;

@@ -1,6 +1,12 @@
 package com.memorio.memorio.websocket;
 
 public class Match {
+    /*
+     *
+     * Diese Klasse enthält zwei Player-Instanzen die 
+     * erfolgreich gematched wurden.
+     *
+     */
     private Player playerOne;
     private Player playerTwo;
     
