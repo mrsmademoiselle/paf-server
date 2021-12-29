@@ -1,12 +1,12 @@
 package com.example.javafx.service;
 
 import com.example.javafx.service.helper.SceneManager;
-import com.example.javafx.service.helper.SocketConnector;
+import com.example.javafx.service.helper.WebSocketConnector;
 import javafx.application.Platform;
 
 public class GameService {
     SceneManager sceneManager = SceneManager.getInstance();
-    SocketConnector socketConnector = SocketConnector.getInstance();
+    WebSocketConnector webSocketConnector = WebSocketConnector.getInstance();
     Thread backgroundThread = null;
 
     public void openLobby() {
@@ -23,7 +23,9 @@ public class GameService {
          */
         backgroundThread = new Thread(() -> {
             // TODO: Absprechen was wir schicken wollen
-            boolean foundSuccessfully = socketConnector.connect("hallo");
+            try {
+                webSocketConnector.connect();
+            } catch(Exception e){System.out.println(e);}
 
             // TODO: später das ResponseObjekt irgendwie hier zwischenspeichern oder bearbeiten, wenn notwendig
 

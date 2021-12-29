@@ -70,3 +70,17 @@ beispielsweise die Elemente auch beim Resizing da wo sie sind und müssen nicht 
 FileManager übernimmt datei-relevante Aufgaben, z.B. das Managen von FileChoosers und das heraussuchen von Bildern als
 Ressourcen. Diese Aufgaben wurden in mehreren ComponentControllern verwendet und 1:1 stumpf kopiert, weswegen ich ein
 Auslagern sinnvoll fand.
+
+
+# Sprint: 2
+
+Datum: 27.12.-31.12. <br> Von: Chris
+
+### Websocket
+
+Bisher verwendet der Client eine simple SocketConnection, welche nicht das Websocket-Protokoll implementiert. Daher wäre 
+so auch keine Verbindung zum WebSocketServer möglich. Dafür wurde die "org.java-websocket" - Dependency hinzugefügt (also einmal mvn clean install ausführen).
+Die Klasse SocketConnector heißt nun WebSocketConnector um das Protokoll zu verdeutlichen.
+
+
+

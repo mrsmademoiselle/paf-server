@@ -5,6 +5,7 @@ module com.example.javafx {
     requires java.prefs;
     requires json;
     requires coresearch.cvurl.io;
+    requires org.java_websocket;
 
     opens com.example.javafx to javafx.fxml;
     exports com.example.javafx;
