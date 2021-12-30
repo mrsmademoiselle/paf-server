@@ -4,9 +4,12 @@ import com.example.javafx.service.helper.SceneManager;
 import com.example.javafx.service.helper.WebSocketConnector;
 import javafx.application.Platform;
 
+import java.net.URI;
+
 public class GameService {
+
     SceneManager sceneManager = SceneManager.getInstance();
-    WebSocketConnector webSocketConnector = WebSocketConnector.getInstance();
+    URI address;
     Thread backgroundThread = null;
 
     public void openLobby() {
@@ -24,6 +27,8 @@ public class GameService {
         backgroundThread = new Thread(() -> {
             // TODO: Absprechen was wir schicken wollen
             try {
+                address = new URI("ws://127.0.0.1:8888");
+                WebSocketConnector webSocketConnector = new WebSocketConnector(address);
                 webSocketConnector.connect();
             } catch(Exception e){System.out.println(e);}
 
@@ -31,7 +36,7 @@ public class GameService {
 
             // Diese Zeile wird nach Beendigung des Threads vom Main-Thread der Anwendung ausgeführt
             Platform.runLater(() -> {
-                if (foundSuccessfully) sceneManager.loadGame();
+                sceneManager.loadGame();
             });
         });
         backgroundThread.start();

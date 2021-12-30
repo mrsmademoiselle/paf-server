@@ -11,12 +11,11 @@ import org.java_websocket.handshake.ServerHandshake;
 /**
  * Klasse für Websocket-Kommunikation.
  */
-public class WebSocketConnector extends WebSocketClient{
+public class WebSocketConnector extends WebSocketClient {
 
-    private static final WebSocketConnector instance = new WebSocketConnector();
-    private static final InetSocketAddress address = new InetSocketAddress("127.0.0.1", 8888);
-    private WebSocketConnector() {super(address);}
-    public static WebSocketConnector getInstance() {return instance;}
+    public WebSocketConnector(URI address) {
+        super(address);
+    }
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
@@ -34,7 +33,5 @@ public class WebSocketConnector extends WebSocketClient{
     }
 
     @Override
-    public void onError(Exception e){
-        System.out.println(e);
-    }
+    public void onError(Exception e){System.out.println(e);}
 }
