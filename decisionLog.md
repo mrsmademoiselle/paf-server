@@ -1,4 +1,7 @@
-
+Refactor:
+- Code formatieren
+- Doku wo moeglich
+- verdeutschifizieren
 
 Bilderupload:
 - Das Dynamische laden ueber den imageController geht nun auch, dazu muss im header die ressource angegeben werden, allerdinggs ist die Frage

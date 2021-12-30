@@ -48,8 +48,8 @@ public class MemorioWebSocketServer extends WebSocketServer {
 		// zu matches hinzufügen
 		matches.add(m);
 		System.out.println("-------------------------------------------");
-		System.out.println("MATCH FOUND!!!!");
-		System.out.println("matching: " + p1.getToken() + " and " + p2.getToken());
+		System.out.println("MATCH GEFUNDEN!!!!");
+		System.out.println("Spieler: " + p1.getToken() + " VS " + p2.getToken());
 		System.out.println("-------------------------------------------");
 	}
 
@@ -101,7 +101,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 		p1.getConnection().close();
 		p2.getConnection().close();
 		if(matches.contains(m)){matches.remove(m);}
-		System.out.println("match dissolved");
+		System.out.println("match aufgelöst :(");
 	}
 
 
@@ -115,7 +115,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 		// wird aufgerufen wenn sich ein neuer Client verbindet
 		// erstellt einen Spieler und versucht ein Match zu finden
 		Player player = new Player(conn);
-		System.out.println("client connected: " + player.getToken());
+		System.out.println("Spieler verbunden: " + player.getToken());
 		playerQueue.add(player);
 		try{
 			matchPlayer();
@@ -136,7 +136,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 		Player player = findPlayerByConnection(conn);
 		if(player == null) return;
 		dissolveMatch(player.getMatch());
-		System.out.println("client disconnected: " + player.getToken());
+		System.out.println("Spieler getrennt: " + player.getToken());
 	}
 
 
@@ -166,7 +166,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	@Override
 	public void onStart() {
 		// Gebe aus, sobald der Server hochgefahren wurde
-		System.out.println("MemorioWebSocketServer hochgefahren");
+		System.out.println("Beep boop - MemorioWebSocketServer hochgefahren");
 	}
 
 
