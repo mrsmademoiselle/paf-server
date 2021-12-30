@@ -1,0 +1,22 @@
+.game-container {
+    -fx-border-radius: 10 10 0 0;
+    -fx-background-radius: 10 10 0 0;
+    -fx-padding: 0;
+    -fx-margin: 0;
+}
+.log-container {
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-radius: 10 10 10 10;
+    -fx-background-color: #aaa;
+    -fx-padding: 0;
+    -fx-margin: 0;
+}
+.turn {
+    -fx-font-size: 30px;
+    -fx-padding: 30 30 30 30;
+}
+
+.score {
+    -fx-background-color: #777;
+    -fx-font-size: 60px;
+}

@@ -3,6 +3,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.ListView?>
 <Pane xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/game.css"
       fx:controller="com.example.javafx.controller.GameController">
@@ -10,9 +15,37 @@
 
     <Pane prefHeight="${controller.heightWithOffset}" prefWidth="${controller.widthWithOffset}"
           layoutY="${controller.offsetY}" layoutX="${controller.offsetX}">
-        <VBox alignment="CENTER" prefHeight="${controller.heightWithOffset}"
+        <HBox prefHeight="${controller.heightWithOffset - 100}"
               prefWidth="${controller.widthWithOffset}">
-            <Label>Game</Label>
-        </VBox>
+            <children>
+
+                <!-- GAME CONTAINER -->
+                <VBox prefWidth="${controller.widthWithOffset / 1.5}" styleClass="game-container">
+                    <GridPane alignment="CENTER" fx:id="gameGrid">
+                    </GridPane>
+                </VBox>
+                <!-- GAME CONTAINER END -->
+
+                <!-- LOG CONTAINER -->
+                <VBox fx:id="logContainer" prefWidth="${controller.widthWithOffset /3}" styleClass="log-container" alignment="TOP_CENTER">
+                    <children>
+                        <Text styleClass="turn" fx:id="turn">Hello</Text>
+                        <HBox prefWidth="${controller.widthWithOffset /3}" styleClass="score" alignment="CENTER">
+                            <children>
+                                <Rectangle stroke="blue" width="80" height="80" arcHeight="40" arcWidth="40"/>
+                                <Text fx:id="score">2:3</Text>
+                                <Rectangle stroke="blue" width="80" height="80" arcHeight="40" arcWidth="40"/>
+                            </children>
+                        </HBox>
+                        <VBox alignment="TOP_RIGHT">
+                            <ListView fx:id="logBox">
+                            </ListView>
+                        </VBox>
+                    </children>
+                </VBox>
+                <!-- LOG CONTAINER END -->
+
+            </children>
+        </HBox>
     </Pane>
 </Pane>
