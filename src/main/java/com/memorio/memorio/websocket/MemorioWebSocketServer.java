@@ -161,7 +161,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	}
 
 	/**
-	 *
+	 * Methode wird aufgerufen wenn der Websocketserver gestartet wird.
 	 */
 	@Override
 	public void onStart() {
@@ -180,8 +180,9 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	}
 
 	/**
-	 *
-	 * @return
+	 *  Returnen der Websocket Server instanz.
+	 *  Wenn es keine Instanz gibt wird eine erzeugt.
+	 * @return Websocket Server Instanz
 	 */
 	public static MemorioWebSocketServer getInstance() {
 		if(instance==null){
@@ -192,7 +193,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 }
 
 /**
- *
+ * Exceptionhandling.
  */
 class MatchNotFoundException extends Exception {
 	public MatchNotFoundException(){super("Kein Match möglich");}
