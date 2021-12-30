@@ -24,8 +24,8 @@ public class Player {
     private Match match = null;
 
     public Player(WebSocket conn){
-	this.token = UUID.randomUUID();
-	this.conn = conn;
+        this.token = UUID.randomUUID();
+        this.conn = conn;
     }
 
     public void setConnection(WebSocket conn){this.conn = conn;}
@@ -37,7 +37,7 @@ public class Player {
     
     public void addSubscriber(Player player){subscribers.add(player);}
     public void removeSubscriber(Player player){
-	if(subscribers.contains(player)){subscribers.remove(player);}
+        if(subscribers.contains(player)){subscribers.remove(player);}
     }
 
 }

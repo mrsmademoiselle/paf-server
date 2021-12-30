@@ -16,7 +16,7 @@ public class Match {
     public void setPlayerTwo(Player p){this.playerTwo = p;}
 
     public Match(Player playerOne, Player playerTwo){
-	this.playerOne = playerOne;
-	this.playerTwo = playerTwo;
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
     }
 }

@@ -20,11 +20,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 public class MemorioApplication {
 
+    /* Exponiert alles was in /public/ drin ist nach aussen
+    * Es stellt eine Alternative zum Endpunkt da, ueber dem Bilder abgefragt werden
+    * und hat den Vorteil das Ressourcen direkt im fxml/jsx referenziert werden koennen */
     @Configuration
     @EnableWebMvc
     public class MvcConfig implements WebMvcConfigurer {
+        // Uebeshreiben des Standartressourcehandlers: Standartmaessig werden noch andere Verzeichnisse nach aussen exponiert
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
+            // Mappen von allem was die /public/** URI beeinhaltet auf die entsprechende Ressource im /public/ Verzeichnis
             registry
                     .addResourceHandler("/public/**")
                     .addResourceLocations("classpath:/public/");
