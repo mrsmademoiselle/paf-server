@@ -49,18 +49,20 @@ public class ImageController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<?> getCardImage()throws IOException {
+    public ResponseEntity<?> getCardImage(@RequestHeader(name = "Cardname") String cardName)throws IOException {
         /**
-         * Handeln der Kartenbilder
+         * Handeln der Kartenbilder TODO: Klaeren ob notwendig/mehrwert/gewollt oder doch vanilla spring weg
          */
-        var imgFile = new ClassPathResource("images/default.jpg");
+        // Fuer Bilder aus /images/ - To Be Klaeren ob das ueberhaupt von nutzen ist, vgl log
+        //var imgFile = new ClassPathResource("images/"+cardName);
+        // Hat de gleichen effekt nur das im Header der Name der Ressource gesetzt werden muss
+        var imgFile = new ClassPathResource("public/"+cardName);
         byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
 
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(bytes);
-
     }
 
 }

@@ -1,5 +1,10 @@
+
+
 Bilderupload:
-- ich hasse spring... Das war alles nicht notwendig, weil es bereits interfacing endpunkte gibt.........
+- Das Dynamische laden ueber den imageController geht nun auch, dazu muss im header die ressource angegeben werden, allerdinggs ist die Frage
+  ob wir den Imagecontroller ueberhaupt brauchen wenn spring das direkt selber machen kann (das hatte uns das laden des Bildes auch uebrigens stark vereinfacht)
+  und ob wir die Bilder nicht direkt in den Clients verankern
+- ... Das war alles nicht notwendig, weil es bereits internetfacing endpunkte gibt.........
 - der Endpunkt steht und liefert erstmal nur das default bild aus, getestet mit insomnia unter unix
   - Das muss noch umgebaut werden
 - Macht es wirklich sinn die Bilder von den Kartenset auf dem Server vorzuhalten und von 
