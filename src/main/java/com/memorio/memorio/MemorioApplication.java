@@ -12,10 +12,24 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import com.memorio.memorio.websocket.MemorioWebSocketServer;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @SpringBootApplication
 public class MemorioApplication {
+
+    @Configuration
+    @EnableWebMvc
+    public class MvcConfig implements WebMvcConfigurer {
+        @Override
+        public void addResourceHandlers(ResourceHandlerRegistry registry) {
+            registry
+                    .addResourceHandler("/public/**")
+                    .addResourceLocations("classpath:/public/");
+        }
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(MemorioApplication.class, args);

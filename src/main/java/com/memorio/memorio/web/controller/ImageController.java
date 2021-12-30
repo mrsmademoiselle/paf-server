@@ -12,13 +12,16 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StreamUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +38,7 @@ import java.util.Optional;
 
 @RestController
 @Transactional
-@RequestMapping("/image")
+@RequestMapping("/images")
 public class ImageController {
     /**
      * Image Controller zum zur verfuegung stellen der Bilder
@@ -46,8 +49,18 @@ public class ImageController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity getCardImage(){
-        return ResponseEntity.ok("");
+    public ResponseEntity<?> getCardImage()throws IOException {
+        /**
+         * Handeln der Kartenbilder
+         */
+        var imgFile = new ClassPathResource("images/default.jpg");
+        byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(bytes);
+
     }
 
 }
