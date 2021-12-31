@@ -4,7 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
+import java.util.UUID;
 
 /**
  * Dieses Objekt repräsentiert eine einzige Memory-Karte mit deren Bild.
@@ -14,13 +15,8 @@ import javax.persistence.*;
 @Setter
 @Embeddable
 public class Card {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
+    private String id;
     private int pairId;
-
     private boolean isFlipped;
 
     @Deprecated
@@ -30,10 +26,10 @@ public class Card {
     public Card(int pairID) {
         this.pairId = pairID;
         this.isFlipped = false;
+        this.id = UUID.randomUUID().toString();
     }
 
     public void flipCard() {
         this.isFlipped = true;
     }
-
 }

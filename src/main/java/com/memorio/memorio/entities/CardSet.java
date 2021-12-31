@@ -21,7 +21,7 @@ public class CardSet {
     private long id;
     @Column
     private String name;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ElementCollection
     private List<Card> cards;
 
     @Deprecated
