@@ -1,5 +1,6 @@
 package com.memorio.memorio.websocket;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.memorio.memorio.config.jwt.JwtTokenUtil;
 import com.memorio.memorio.entities.*;
 import com.memorio.memorio.repositories.UserRepository;
@@ -88,10 +89,6 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 String jwt_login = jsonMap.get(keyString);
                 verifyAndCreateConnection(conn, jwt_login);
                 break;
-            case CANCEL:
-                String reason = jsonMap.get(keyString);
-                // abbruchnachricht vom spiel ausgeben
-                break;
             case DISSOLVE:
                 Player player_dissolve = findPlayerByConnection(conn);
                 if (player_dissolve == null) return;
@@ -100,6 +97,11 @@ public class MemorioWebSocketServer extends WebSocketServer {
             case FLIP_CARD:
                 String cardId = jsonMap.get(keyString);
                 gameHandler.flipCard(cardId);
+                sendGameToAllClientsOfConnection(conn);
+                break;
+            case CANCEL:
+                String reason = jsonMap.get(keyString);
+                // abbruchnachricht vom spiel ausgeben
                 break;
             default:
                 // Ziehe vom Spieler mit der gefundenen Websocket alle Subscriber,
@@ -113,6 +115,24 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 }
                 break;
         }
+    }
+
+    private void sendGameToAllClientsOfConnection(WebSocket conn) {
+        try {
+            Game game = gameHandler.getGame();
+            String message = MemorioJsonMapper.getStringFromObject(game);
+            System.out.println("Match: " + message);
+
+            Player player = findPlayerByConnection(conn);
+            if (player == null) return;
+
+            for (int i = 0; i < player.getSubscribers().size(); i++) {
+                player.getSubscribers().get(i).getWebsocketConnection().send(message);
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void verifyAndCreateConnection(WebSocket conn, String jwt) {
@@ -129,6 +149,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
             String message = MemorioJsonMapper.getStringFromObject(game);
             System.out.println("Match: " + message);
             conn.send(message);
+            gameHandler.setGame(game);
         } catch (Exception e) {
             System.out.println(e);
         }

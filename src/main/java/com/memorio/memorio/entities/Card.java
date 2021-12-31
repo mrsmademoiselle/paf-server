@@ -17,7 +17,7 @@ import java.util.UUID;
 public class Card {
     private String id;
     private int pairId;
-    private boolean isFlipped;
+    private FlipStatus flipStatus;
 
     @Deprecated
     public Card() {
@@ -25,11 +25,19 @@ public class Card {
 
     public Card(int pairID) {
         this.pairId = pairID;
-        this.isFlipped = false;
+        this.flipStatus = FlipStatus.NOT_FLIPPED;
         this.id = UUID.randomUUID().toString();
     }
 
+    public void waitToFlip() {
+        this.flipStatus = FlipStatus.WAITING_TO_FLIP;
+    }
+
     public void flipCard() {
-        this.isFlipped = true;
+        this.flipStatus = FlipStatus.FLIPPED;
+    }
+
+    public void unflipCard() {
+        this.flipStatus = FlipStatus.NOT_FLIPPED;
     }
 }
