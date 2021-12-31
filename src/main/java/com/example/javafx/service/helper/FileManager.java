@@ -19,7 +19,7 @@ public class FileManager {
     }
 
     public static Image getPic(String fileName) {
-        File folder = new File("src/main/resources/com/example/javafx/pics");
+        File folder = new File("src/main/resources/com/example/javafx/images");
         if (folder.exists()) {
             File imageFile = new File(folder, fileName);
 

@@ -4,6 +4,7 @@ import com.example.javafx.service.GameService;
 import com.example.javafx.service.helper.FileManager;
 import com.example.javafx.service.helper.SceneManager;
 import com.example.javafx.service.helper.TokenManager;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -18,6 +19,9 @@ public class NavbarController extends PapaController {
 
     @FXML
     Button logoutButton;
+
+    @FXML
+    Button startGameButton;
 
     SceneManager sceneManager = SceneManager.getInstance();
     GameService gameService = GameService.getInstance();

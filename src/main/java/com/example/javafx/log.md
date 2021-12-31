@@ -88,6 +88,3 @@ die GameView laden. Ebenfalls implementiert sind eine stop-methode und eine stop
 die Connection schließt und den Thread beendet, stopLookingForGames ruft stop auf und läd außerdem die HomeView (Profil).
 
 Die GameController Klasse kann nun ein Spielfeld mit CARD_X * CARD_Y Karten rendern. Es existieren ebenfalls Methoden um Score und "turn" zu updaten.
-
-
-

@@ -1,12 +1,19 @@
 package com.example.javafx.controller;
 
 import com.example.javafx.model.Card;
+import com.example.javafx.service.helper.FileManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
+import javafx.event.EventHandler;
+
 
 public class GameController extends PapaController {
 
@@ -49,6 +56,15 @@ public class GameController extends PapaController {
                 card.setArcHeight(50);
                 card.setArcWidth(50);
                 card.setFill(Color.GRAY);
+                card.setStyle("-fx-cursor: hand");
+                card.setOnMouseClicked((new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        card.setFill(Color.CORAL);
+                    }
+                }));
+                Image pic = FileManager.getPic("cardPattern.jpg");
+                card.setFill(new ImagePattern(pic));
                 gameGrid.add(card, x, y);
             }
         }
@@ -71,5 +87,4 @@ public class GameController extends PapaController {
     public void updateScore(int score1, int score2){
         score.setText(score1 + " : " + score2);
     }
-
 }

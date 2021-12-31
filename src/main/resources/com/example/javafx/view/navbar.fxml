@@ -19,7 +19,7 @@
                 <HBox prefWidth="${controller.widthWithoutOffset * 0.55}" prefHeight="50">
                     <Button styleClass="linkButton" text="Profil" onAction="#redirectToProfile"/>
                     <Button styleClass="linkButton" text="Historie" onAction="#redirectToHistory"/>
-                    <Button styleClass="linkButton" text="Spiel starten" onAction="#startGame"/>
+                    <Button styleClass="linkButton" fx:id="startGameButton" text="Spiel starten" onAction="#startGame"/>
                 </HBox>
             </HBox>
             <!-- * 0.28 statt 0.3, damit wir rechts noch ein klein bisschen Padding haben -->

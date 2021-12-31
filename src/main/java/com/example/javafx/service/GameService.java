@@ -24,7 +24,8 @@ public class GameService implements Runnable {
     public void lookForGame() throws URISyntaxException {
         thread = new Thread(getInstance());
         thread.start();
-        sceneManager.loadLobby();
+        //sceneManager.loadLobby();
+        sceneManager.loadGame();
     }
 
     public void stopLookingForGame() {
