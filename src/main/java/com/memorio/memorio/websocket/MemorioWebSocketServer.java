@@ -19,20 +19,21 @@ public class MemorioWebSocketServer extends WebSocketServer {
      *  Player-Instanzen. 
      */ 
 	
-	// ADDRESSE
+	// Adresse und Port
 	private final static InetSocketAddress address = new InetSocketAddress("127.0.0.1", 8888);
 	// singleton
 	private static MemorioWebSocketServer instance = null;
 
-	// hier kommt jeder neue Player rein.
+	//  Playerqeue-  hier kommt jeder neue Player rein.
 	private Queue<Player> playerQueue = new LinkedList<>();
-	// Diese Liste enthält alle erfolgreichen Matches.
+	// Matchliste - Diese Liste enthält alle erfolgreichen Matches.
 	private List<Match> matches = new ArrayList<>();
 
 
 	/**
-	 *
-	 * @param m
+	 * Wird aufgerufen wenn ein neues Match gefunden wurde
+	 * Teilt den Clients mit das ein Match gefunden wurde und setzt das Match in die Matchliste
+	 * @param m Matchobjekt
 	 */
 	public void onNewMatch(Match m){
 		// wird aufgerufen wenn ein Match erfolgreich erstellt wurde
@@ -55,8 +56,8 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
 
 	/**
-	 *
-	 * @return
+	 * Matchen von zwei Spielern aus der Queue
+	 * @return Matchobjekt
 	 * @throws MatchNotFoundException
 	 */
 	public Match matchPlayer() throws MatchNotFoundException {
@@ -71,9 +72,9 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	}
 
 	/**
-	 *
-	 * @param conn
-	 * @return
+	 * Finden vom Spieler anhand seiner Verbindung ueber die Matchliste
+	 * @param conn Die Socketverbindung nach der gesucht werden soll
+	 * @return Gefundener Spieler
 	 */
 	public Player findPlayerByConnection(WebSocket conn){
 		// findet einen Player in bestehenden Matches anhand seiner WebSocket
@@ -106,7 +107,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
 
 	/**
-	 *
+	 * onOpen Handler, wird aufgerufen wenn ein neuer Client sich verbindet
 	 * @param conn
 	 * @param handshake
 	 */
@@ -123,11 +124,11 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	}
 
 	/**
-	 *
-	 * @param conn
-	 * @param code
-	 * @param reason
-	 * @param remote
+	 * Closehandler, wird aufgerufen wenn Spieler getrennt wird
+	 * @param conn Websocketverbindung
+	 * @param code Exitcode - wird aktuell nicht verwendet
+	 * @param reason Wird nicht verwendet
+	 * @param remote Wird nicht verwendet
 	 */
 	@Override
 	public void onClose(WebSocket conn, int code, String reason, boolean remote) {
@@ -140,14 +141,19 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	}
 
 
+	/**
+	 * Errorhandler
+	 * @param conn Socketverbindung
+	 * @param ex Exception
+	 */
 	@Override
 	public void onError(WebSocket conn, Exception ex) {System.out.println(ex);}
 
 
 	/**
-	 *
-	 * @param conn
-	 * @param message
+	 * Nachrichtenhandler, sucht Spieler anhand von Websocket und informiert Subscriber
+	 * @param conn Websocketverbindung ueber die ein User gefunden werden soll
+	 * @param message Nachricht die weitergeleitet werden soll
 	 */
 	@Override
 	public void onMessage(WebSocket conn, String message) {
@@ -156,6 +162,8 @@ public class MemorioWebSocketServer extends WebSocketServer {
 		Player player = findPlayerByConnection(conn);
 		if(player == null) return;
 		for(int i = 0; i < player.getSubscribers().size(); i++){
+			// Ziehe vom Spieler mit der gefundenen Websocket alle Subscriber,
+			// deren Verbindungen und sende Nachricht
 			player.getSubscribers().get(i).getConnection().send(message);
 		}
 	}

@@ -23,6 +23,10 @@ public class Player {
     private UUID token;
     private Match match = null;
 
+    /**
+     * Playekonstruktor
+     * @param conn Websocketverbindung des Spieles
+     */
     public Player(WebSocket conn){
         this.token = UUID.randomUUID();
         this.conn = conn;
