@@ -1,10 +1,12 @@
 package com.memorio.memorio.websocket;
 
 import com.memorio.memorio.config.jwt.JwtTokenUtil;
+import com.memorio.memorio.entities.Match;
+import com.memorio.memorio.entities.Player;
 import com.memorio.memorio.repositories.UserRepository;
+import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
-import org.java_websocket.WebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.InetSocketAddress;
@@ -17,23 +19,21 @@ import java.util.Queue;
 public class MemorioWebSocketServer extends WebSocketServer {
 
 	/*
-     * WebSocketServer: https://github.com/TooTallNate/Java-WebSocket
-     *
-     *  Game bezieht sich in diesem Fall auf die Verknüpfung zweier
-     *  Player-Instanzen. 
-     */
-
-	// Der Konstruktor darf nicht veraendert werden, daher wird der jwtTokenUtil ueber die injection reingezogen
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
-	@Autowired
-	private UserRepository userRepository;
+	 * WebSocketServer: https://github.com/TooTallNate/Java-WebSocket
+	 *
+	 *  Game bezieht sich in diesem Fall auf die Verknüpfung zweier
+	 *  Player-Instanzen.
+	 */
 
 	// Adresse und Port
 	private final static InetSocketAddress address = new InetSocketAddress("127.0.0.1", 8888);
 	// singleton
 	private static MemorioWebSocketServer instance = null;
-
+	// Der Konstruktor darf nicht veraendert werden, daher wird der jwtTokenUtil ueber die injection reingezogen
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
+	@Autowired
+	private UserRepository userRepository;
 	//  Playerqeue-  hier kommt jeder neue Player rein.
 	private Queue<Player> playerQueue = new LinkedList<>();
 	// Matchliste - Diese Liste enthält alle erfolgreichen Matches.
@@ -46,11 +46,35 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
 
 	/**
+	 * Super Konstruktor zum erstellen des Websocketservers
+	 *
+	 * @param address InetSocketAddress
+	 */
+	private MemorioWebSocketServer(InetSocketAddress address) {
+		// rufe Parent Konstruktor mit der InetSocketAddress auf.t
+		super(address);
+	}
+
+	/**
+	 * Returnen der Websocket Server instanz.
+	 * Wenn es keine Instanz gibt wird eine erzeugt.
+	 *
+	 * @return Websocket Server Instanz
+	 */
+	public static MemorioWebSocketServer getInstance() {
+		if (instance == null) {
+			instance = new MemorioWebSocketServer(address);
+		}
+		return instance;
+	}
+
+	/**
 	 * Wird aufgerufen wenn ein neues Game gefunden wurde
 	 * Teilt den Clients mit das ein Game gefunden wurde und setzt das Game in die Matchliste
+	 *
 	 * @param m Matchobjekt
 	 */
-	public void onNewMatch(Match m){
+	public void onNewMatch(Match m) {
 		// wird aufgerufen wenn ein Game erfolgreich erstellt wurde
 		// Player extrahieren
 		Player p1 = m.getPlayerOne();
@@ -69,16 +93,18 @@ public class MemorioWebSocketServer extends WebSocketServer {
 		System.out.println("-------------------------------------------");
 	}
 
-
 	/**
 	 * Matchen von zwei Spielern aus der Queue
+	 *
 	 * @return Matchobjekt
 	 * @throws MatchNotFoundException
 	 */
 	public Match matchPlayer() throws MatchNotFoundException {
 		// versucht sich zwei Player-Instanzen aus der playerQueue zu holen und diese
 		// zu matchen
-		if(playerQueue.size() < 2){throw new MatchNotFoundException();}
+		if (playerQueue.size() < 2) {
+			throw new MatchNotFoundException();
+		}
 		Player playerOne = playerQueue.remove();
 		Player playerTwo = playerQueue.remove();
 		Match match = new Match(playerOne, playerTwo);
@@ -88,25 +114,27 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
 	/**
 	 * Finden vom Spieler anhand seiner Verbindung ueber die Matchliste
+	 *
 	 * @param conn Die Socketverbindung nach der gesucht werden soll
 	 * @return Gefundener Spieler
 	 */
-	public Player findPlayerByConnection(WebSocket conn){
+	public Player findPlayerByConnection(WebSocket conn) {
 		// findet einen Player in bestehenden Matches anhand seiner WebSocket
-		for(Match m : matches){
+		for (Match m : matches) {
 			Player p1 = m.getPlayerOne();
 			Player p2 = m.getPlayerTwo();
-			if(conn == p1.getConnection()) return p1;
-			if(conn == p2.getConnection()) return p2;
+			if (conn == p1.getConnection()) return p1;
+			if (conn == p2.getConnection()) return p2;
 		}
 		return null;
 	}
 
 	/**
 	 * Aufloesen des Matches. Gegenseitiges entfernen aller Subscriber und Spieler im Game
+	 *
 	 * @param m Game das aufgeloest werden soll
 	 */
-	public void dissolveMatch(Match m){
+	public void dissolveMatch(Match m) {
 		// löst ein Game auf.
 		// Momentan werden hier alle subscriber der Player entfernt und alle
 		// zum Game gehörenden Connections beendet.
@@ -117,13 +145,15 @@ public class MemorioWebSocketServer extends WebSocketServer {
 		p1.getConnection().close();
 		p2.getConnection().close();
 		m.removePlayer();
-		if(matches.contains(m)){matches.remove(m);}
+		if (matches.contains(m)) {
+			matches.remove(m);
+		}
 		System.out.println("match aufgelöst :(");
 	}
 
-
 	/**
 	 * onOpen Handler, wird aufgerufen wenn ein neuer Client sich verbindet
+	 *
 	 * @param conn
 	 * @param handshake
 	 */
@@ -146,8 +176,9 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
 	/**
 	 * Closehandler, wird aufgerufen wenn Spieler getrennt wird
-	 * @param conn Websocketverbindung
-	 * @param code Exitcode - wird aktuell nicht verwendet
+	 *
+	 * @param conn   Websocketverbindung
+	 * @param code   Exitcode - wird aktuell nicht verwendet
 	 * @param reason Wird nicht verwendet
 	 * @param remote Wird nicht verwendet
 	 */
@@ -156,24 +187,26 @@ public class MemorioWebSocketServer extends WebSocketServer {
 		// wird aufgerufen wenn ein Client die Verbindung abbricht.
 		// wenn der Player in einem Game ist wird dieses aufgelöst.
 		Player player = findPlayerByConnection(conn);
-		if(player == null) return;
+		if (player == null) return;
 		dissolveMatch(player.getMatch());
 		System.out.println("Spieler getrennt: " + player.getUser().getUsername());
 	}
 
-
 	/**
 	 * Errorhandler
+	 *
 	 * @param conn Socketverbindung
-	 * @param ex Exception
+	 * @param ex   Exception
 	 */
 	@Override
-	public void onError(WebSocket conn, Exception ex) {System.out.println(ex);}
-
+	public void onError(WebSocket conn, Exception ex) {
+		System.out.println(ex);
+	}
 
 	/**
 	 * Nachrichtenhandler, sucht Spieler anhand von Websocket und informiert Subscriber
-	 * @param conn Websocketverbindung ueber die ein User gefunden werden soll
+	 *
+	 * @param conn    Websocketverbindung ueber die ein User gefunden werden soll
 	 * @param message Nachricht die weitergeleitet werden soll
 	 */
 	@Override
@@ -187,13 +220,13 @@ public class MemorioWebSocketServer extends WebSocketServer {
 		 Durch die Position des Pointers koennen wir im Switch/Case spaeter entsprechend auf die Nachricht reagieren
 		 */
 		int pointer;
-		for (pointer = 0; pointer < messageFlags.length; pointer++){
-			if(message.contains(messageFlags[pointer])) break;
+		for (pointer = 0; pointer < messageFlags.length; pointer++) {
+			if (message.contains(messageFlags[pointer])) break;
 		}
 		// Flaghandling - Hier weitere Messageflags hinzufuegen
-		switch (pointer){
+		switch (pointer) {
 			//flag: token
-			case 0:{
+			case 0: {
 				// wird aufgerufen wenn ein Client in der Nachricht das 'token' flag gesetzt hat
 				// erstellt einen Spieler und versucht ein Game zu finden
 				String jwt = message.substring(message.lastIndexOf(":") + 1);
@@ -201,18 +234,19 @@ public class MemorioWebSocketServer extends WebSocketServer {
 				Player player = new Player(conn, userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(jwt)).get(), jwt);
 				System.out.println("Spieler verbunden: " + player.getUser().getUsername());
 				playerQueue.add(player);
-				try{
+				try {
 					matchPlayer();
 					break;
-				} catch(MatchNotFoundException e){System.out.println(e);
+				} catch (MatchNotFoundException e) {
+					System.out.println(e);
 					break;
 				}
 			}
 			// Wenn kein Flag gesetzt, sende Nachricht an alle Subscriber
-			default:{
+			default: {
 				Player player = findPlayerByConnection(conn);
-				if(player == null) return;
-				for(int i = 0; i < player.getSubscribers().size(); i++){
+				if (player == null) return;
+				for (int i = 0; i < player.getSubscribers().size(); i++) {
 					// Ziehe vom Spieler mit der gefundenen Websocket alle Subscriber,
 					// deren Verbindungen und sende Nachricht
 					player.getSubscribers().get(i).getConnection().send(message);
@@ -229,33 +263,13 @@ public class MemorioWebSocketServer extends WebSocketServer {
 		// Gebe aus, sobald der Server hochgefahren wurde
 		System.out.println("Beep boop - MemorioWebSocketServer hochgefahren");
 	}
-
-
-	/**
-	 * Super Konstruktor zum erstellen des Websocketservers
-	 * @param address InetSocketAddress
-	 */
-	private MemorioWebSocketServer(InetSocketAddress address){
-		// rufe Parent Konstruktor mit der InetSocketAddress auf.t
-		super(address);
-	}
-
-	/**
-	 *  Returnen der Websocket Server instanz.
-	 *  Wenn es keine Instanz gibt wird eine erzeugt.
-	 * @return Websocket Server Instanz
-	 */
-	public static MemorioWebSocketServer getInstance() {
-		if(instance==null){
-			instance = new MemorioWebSocketServer(address);
-		}
-		return instance;
-	}
 }
 
 /**
  * Exceptionhandling.
  */
 class MatchNotFoundException extends Exception {
-	public MatchNotFoundException(){super("Kein Game möglich");}
+	public MatchNotFoundException() {
+		super("Kein Game möglich");
+	}
 }
