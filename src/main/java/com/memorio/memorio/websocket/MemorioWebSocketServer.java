@@ -8,6 +8,7 @@ import com.memorio.memorio.services.MemorioJsonMapper;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.InetSocketAddress;
@@ -78,20 +79,23 @@ public class MemorioWebSocketServer extends WebSocketServer {
     }
 
     private void handleMessage(WebSocket conn, Map<String, String> jsonMap) {
+        // .get() müssen wir hier nicht double-checken, weil wir das vor dem Methodenaufruf abfangen
         String keyString = jsonMap.keySet().stream().findFirst().get();
         MessageKeys messageKey = MessageKeys.getEnumForString(keyString);
 
         switch (messageKey) {
             case LOGIN:
-                String jwt = jsonMap.get(keyString);
-                verifyAndCreateConnection(conn, jwt);
+                String jwt_login = jsonMap.get(keyString);
+                verifyAndCreateConnection(conn, jwt_login);
                 break;
             case CANCEL:
-                // abbruchnachricht vom spiel
                 String reason = jsonMap.get(keyString);
+                // abbruchnachricht vom spiel ausgeben
                 break;
             case DISSOLVE:
-                // spieler aus der queue werfen
+                Player player_dissolve = findPlayerByConnection(conn);
+                if (player_dissolve == null) return;
+                playerQueue.remove(player_dissolve);
                 break;
             case FLIP_CARD:
                 String cardId = jsonMap.get(keyString);
@@ -101,10 +105,11 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 // Ziehe vom Spieler mit der gefundenen Websocket alle Subscriber,
                 // deren Verbindungen und sende Nachricht
                 String message = jsonMap.get(keyString);
-                Player player = findPlayerByConnection(conn);
-                if (player == null) return;
-                for (int i = 0; i < player.getSubscribers().size(); i++) {
-                    player.getSubscribers().get(i).getWebsocketConnection().send(message);
+                Player player_default = findPlayerByConnection(conn);
+                if (player_default == null) return;
+
+                for (int i = 0; i < player_default.getSubscribers().size(); i++) {
+                    player_default.getSubscribers().get(i).getWebsocketConnection().send(message);
                 }
                 break;
         }
@@ -113,11 +118,8 @@ public class MemorioWebSocketServer extends WebSocketServer {
     private void verifyAndCreateConnection(WebSocket conn, String jwt) {
         conn.send("Tokensuchmoodus aktiviert, suche Spieler.........");
 
-        Optional<User> userForToken = userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(jwt));
-        // todo exception werfen oder so
-        if (userForToken.isEmpty()) return;
-
-        Player player = new Player(conn, userForToken.get(), jwt);
+        Player player = getPlayerForJwt(conn, jwt);
+        if (player == null) return;
         System.out.println("Spieler verbunden: " + player.getUser().getUsername());
         playerQueue.add(player);
 
@@ -130,6 +132,16 @@ public class MemorioWebSocketServer extends WebSocketServer {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    @Nullable
+    private Player getPlayerForJwt(WebSocket conn, String jwt) {
+        Optional<User> userForToken = userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(jwt));
+        // todo exception werfen oder so
+        if (userForToken.isEmpty()) return null;
+
+        Player player = new Player(conn, userForToken.get(), jwt);
+        return player;
     }
 
     /**

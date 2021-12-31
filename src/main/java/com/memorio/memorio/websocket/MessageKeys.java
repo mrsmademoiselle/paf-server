@@ -3,10 +3,14 @@ package com.memorio.memorio.websocket;
 import java.util.Arrays;
 
 public enum MessageKeys {
+    // Der Spieler will sich für die Websocketverbindung authentifizieren
     LOGIN("LOGIN"),
+    // Der Spieler befindet sich in der Queue und hat noch kein Match gefunden
+    DISSOLVE("DISSOLVE"),
+    // eine Karte soll umgedreht werden
     FLIP_CARD("FLIP_CARD"),
-    CANCEL("CANCEL"),
-    DISSOLVE("DISSOLVE");
+    // Der Spieler will das laufende Match abbrechen
+    CANCEL("CANCEL");
 
     private String text;
 
