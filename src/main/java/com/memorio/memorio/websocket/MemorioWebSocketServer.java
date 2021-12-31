@@ -195,6 +195,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 			case 0:{
 				// wird aufgerufen wenn ein Client in der Nachricht das 'token' flag gesetzt hat
 				// erstellt einen Spieler und versucht ein Match zu finden
+				conn.send("Tokensuchmoodus aktiviert, suche Spieler");
 				Player player = new Player(conn, userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(message.substring(message.lastIndexOf(":") + 1))));
 				System.out.println("Spieler verbunden: " + player.getToken());
 				playerQueue.add(player);

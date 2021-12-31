@@ -1,9 +1,16 @@
+
+
 Verheiraten von User und Spieler:
 - Dazu habe ich die onMessage umgebaut 
-  - Es gibt eine Flagliste wo die Nachrichtenflags rein kommen
+  - Es gibt eine Flagliste, als Attribut vom WebSocketServer, wo die Nachrichtenflags rein kommen
   - Damit haben wir ein Standardisiertes Format nach dem wir die Nachrichten
   handeln und versenden, dass allen bekannt ist
   - Damit koennen wir die message tabelle eventuell auch besser handeln
+- jede Nachricht wird nun nach Flags durchsucht
+  - Aktuell wird nach 'token gesucht', wenn der String gefunden wird
+  Wird der Token gefiltert, der user des tokens wird gesucht und an das Playerobjekt uebergeben
+  anschliessend kommt er in die Queue
+  - Der Default ist, dass die Nachricht an alle Subscriber weitergeleitet wird
 
 Refactor:
 - Code formatieren
