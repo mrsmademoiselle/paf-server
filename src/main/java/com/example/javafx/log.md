@@ -80,7 +80,14 @@ Datum: 27.12.-31.12. <br> Von: Chris
 
 Bisher verwendet der Client eine simple SocketConnection, welche nicht das Websocket-Protokoll implementiert. Daher wäre 
 so auch keine Verbindung zum WebSocketServer möglich. Dafür wurde die "org.java-websocket" - Dependency hinzugefügt (also einmal mvn clean install ausführen).
-Die Klasse SocketConnector heißt nun WebSocketConnector um das Protokoll zu verdeutlichen.
+Die Klasse SocketConnector heißt nun WebSocketConnection um das Protokoll zu verdeutlichen. 
+
+Die Klasse GameService ist nun ein Singleton. Zudem haben sich die Methoden verändert. Es gibt nun eine Methode "lookForGame", welche eine WebSocketConnection
+in einem neuen Thread erstellt und den Ladebildschirm läd (loadLobby). später können wir dann in der Connection abfangen wenn ein Match gefunden wurde und 
+die GameView laden. Ebenfalls implementiert sind eine stop-methode und eine stopLookingForGames-methode. Der Unterschied der beiden liegt darin dass stop nur
+die Connection schließt und den Thread beendet, stopLookingForGames ruft stop auf und läd außerdem die HomeView (Profil).
+
+Die GameController Klasse kann nun ein Spielfeld mit CARD_X * CARD_Y Karten rendern. Es existieren ebenfalls Methoden um Score und "turn" zu updaten.
 
 
 

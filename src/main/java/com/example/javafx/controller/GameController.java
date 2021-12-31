@@ -54,7 +54,7 @@ public class GameController extends PapaController {
         }
 
         updateScore(0, 0);
-        setTurn("Du bi st dran!");
+        setTurn("Niemand ist dran!");
         newSysMessage("Field initialized hahaha");
     }
 

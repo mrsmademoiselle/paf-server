@@ -2,7 +2,7 @@ package com.example.javafx.model;
 
 import javafx.scene.shape.Rectangle;
 
-public class Card  extends Rectangle {
+public class Card extends Rectangle {
 
     private byte[] cardImage;
     private String cardId;

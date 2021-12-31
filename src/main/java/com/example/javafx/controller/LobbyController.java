@@ -14,7 +14,7 @@ public class LobbyController extends PapaController {
     @FXML
     NavbarController navbarController;
 
-    GameService gameService = new GameService();
+    GameService gameService = GameService.getInstance();
 
     @FXML
     protected void initialize() {
@@ -24,7 +24,6 @@ public class LobbyController extends PapaController {
         loading.setFitWidth(50);
     }
 
-    public void cancel() {
-        gameService.stopQueue();
-    }
+    public void cancel(){gameService.stopLookingForGame();}
+
 }

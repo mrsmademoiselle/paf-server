@@ -1,5 +1,6 @@
 package com.example.javafx;
 
+import com.example.javafx.service.GameService;
 import com.example.javafx.service.helper.SceneManager;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
@@ -8,6 +9,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MemorioApplication extends javafx.application.Application {
+
+    GameService gameService = GameService.getInstance();
 
     public static void main(String[] args) {
         launch(args);
@@ -48,4 +51,10 @@ public class MemorioApplication extends javafx.application.Application {
         sceneManager.loadLogin();
         stage.show();
     }
+
+    @Override
+    public void stop(){
+        gameService.stop();
+    }
+
 }

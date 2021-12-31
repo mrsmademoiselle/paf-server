@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.net.URISyntaxException;
+
 public class NavbarController extends PapaController {
 
     @FXML
@@ -18,7 +20,7 @@ public class NavbarController extends PapaController {
     Button logoutButton;
 
     SceneManager sceneManager = SceneManager.getInstance();
-    GameService gameService = new GameService();
+    GameService gameService = GameService.getInstance();
 
     @FXML
     protected void initialize() {
@@ -59,6 +61,10 @@ public class NavbarController extends PapaController {
     }
 
     public void startGame() {
-        gameService.openLobby();
+        try {
+            gameService.lookForGame();
+        } catch (URISyntaxException e){
+            System.out.println(e);
+        }
     }
 }

@@ -1,9 +1,6 @@
 package com.example.javafx.service.helper;
 
-import java.net.InetSocketAddress;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -11,11 +8,9 @@ import org.java_websocket.handshake.ServerHandshake;
 /**
  * Klasse für Websocket-Kommunikation.
  */
-public class WebSocketConnector extends WebSocketClient {
+public class WebSocketConnection extends WebSocketClient {
 
-    public WebSocketConnector(URI address) {
-        super(address);
-    }
+    public WebSocketConnection(URI address) {super(address);}
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
