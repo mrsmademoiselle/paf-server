@@ -140,6 +140,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 		ERSTMAL AUSKOMMENTIERT BIS ZUM 31.12 - ANSONSTEN MACHT DIE ERSTMAL NICHTS WENN DIE VERBINDUNG
 		GOEFFNET WIRD AUSSER SIGNALISIEREN DAS SIE OFFEN IST
 		 */
+		System.out.println("foobar");
 	}
 
 	/**
@@ -191,22 +192,29 @@ public class MemorioWebSocketServer extends WebSocketServer {
 		// Flaghandling - Hier weitere Messageflags hinzufuegen
 		switch (pointer){
 			//flag: token
-			case 0:
+			case 0:{
+				// wird aufgerufen wenn ein Client in der Nachricht das 'token' flag gesetzt hat
+				// erstellt einen Spieler und versucht ein Match zu finden
 				Player player = new Player(conn, userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(message.substring(message.lastIndexOf(":") + 1))));
 				System.out.println("Spieler verbunden: " + player.getToken());
 				playerQueue.add(player);
 				try{
 					matchPlayer();
-				} catch(MatchNotFoundException e){System.out.println(e);}
-		}
-
-
-		Player player = findPlayerByConnection(conn);
-		if(player == null) return;
-		for(int i = 0; i < player.getSubscribers().size(); i++){
-			// Ziehe vom Spieler mit der gefundenen Websocket alle Subscriber,
-			// deren Verbindungen und sende Nachricht
-			player.getSubscribers().get(i).getConnection().send(message);
+					break;
+				} catch(MatchNotFoundException e){System.out.println(e);
+					break;
+				}
+			}
+			// Wenn kein Flag gesetzt, sende Nachricht an alle Subscriber
+			default:{
+				Player player = findPlayerByConnection(conn);
+				if(player == null) return;
+				for(int i = 0; i < player.getSubscribers().size(); i++){
+					// Ziehe vom Spieler mit der gefundenen Websocket alle Subscriber,
+					// deren Verbindungen und sende Nachricht
+					player.getSubscribers().get(i).getConnection().send(message);
+				}
+			}
 		}
 	}
 
