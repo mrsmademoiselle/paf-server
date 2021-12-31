@@ -1,8 +1,12 @@
 package com.memorio.memorio.websocket;
 
+import com.memorio.memorio.config.jwt.JwtTokenUtil;
+import com.memorio.memorio.repositories.UserRepository;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.java_websocket.WebSocket;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -17,8 +21,14 @@ public class MemorioWebSocketServer extends WebSocketServer {
      *
      *  Match bezieht sich in diesem Fall auf die Verknüpfung zweier
      *  Player-Instanzen. 
-     */ 
-	
+     */
+
+	// Der Konstruktor darf nicht veraendert werden, daher wird der jwtTokenUtil ueber die injection reingezogen
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
+	@Autowired
+	private UserRepository userRepository;
+
 	// Adresse und Port
 	private final static InetSocketAddress address = new InetSocketAddress("127.0.0.1", 8888);
 	// singleton
@@ -28,6 +38,11 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	private Queue<Player> playerQueue = new LinkedList<>();
 	// Matchliste - Diese Liste enthält alle erfolgreichen Matches.
 	private List<Match> matches = new ArrayList<>();
+
+	// Nachrichten Flags nach denen gesucht werden kann
+	private String[] messageFlags = {
+			"token",
+	};
 
 
 	/**
@@ -115,12 +130,16 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	public void onOpen(WebSocket conn, ClientHandshake handshake) {
 		// wird aufgerufen wenn sich ein neuer Client verbindet
 		// erstellt einen Spieler und versucht ein Match zu finden
+		/*
 		Player player = new Player(conn);
 		System.out.println("Spieler verbunden: " + player.getToken());
 		playerQueue.add(player);
 		try{
 			matchPlayer();
 		} catch(MatchNotFoundException e){System.out.println(e);}
+		ERSTMAL AUSKOMMENTIERT BIS ZUM 31.12 - ANSONSTEN MACHT DIE ERSTMAL NICHTS WENN DIE VERBINDUNG
+		GOEFFNET WIRD AUSSER SIGNALISIEREN DAS SIE OFFEN IST
+		 */
 	}
 
 	/**
@@ -159,6 +178,29 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	public void onMessage(WebSocket conn, String message) {
 		// wird aufgerufen wenn eine WebSocket eine Nachricht sendet.
 		// findet zugehörigen Player und leitet Nachricht an alle Subscriber weiter.
+
+		/*
+		Verarbeiten der Nachricht, durchsuchen nach Flags und entsprechendes Handling der Nachricht
+		 Wenn die Nachricht ein entsprechendes Flag beeinhaltet bricht die Schleife
+		 Durch die Position des Pointers koennen wir im Switch/Case spaeter entsprechend auf die Nachricht reagieren
+		 */
+		int pointer;
+		for (pointer = 0; pointer < messageFlags.length; pointer++){
+			if(message.contains(messageFlags[pointer])) break;
+		}
+		// Flaghandling - Hier weitere Messageflags hinzufuegen
+		switch (pointer){
+			//flag: token
+			case 0:
+				Player player = new Player(conn, userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(message.substring(message.lastIndexOf(":") + 1))));
+				System.out.println("Spieler verbunden: " + player.getToken());
+				playerQueue.add(player);
+				try{
+					matchPlayer();
+				} catch(MatchNotFoundException e){System.out.println(e);}
+		}
+
+
 		Player player = findPlayerByConnection(conn);
 		if(player == null) return;
 		for(int i = 0; i < player.getSubscribers().size(); i++){

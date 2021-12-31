@@ -1,3 +1,10 @@
+Verheiraten von User und Spieler:
+- Dazu habe ich die onMessage umgebaut 
+  - Es gibt eine Flagliste wo die Nachrichtenflags rein kommen
+  - Damit haben wir ein Standardisiertes Format nach dem wir die Nachrichten
+  handeln und versenden, dass allen bekannt ist
+  - Damit koennen wir die message tabelle eventuell auch besser handeln
+
 Refactor:
 - Code formatieren
 - Doku wo moeglich

@@ -2,8 +2,11 @@ package com.memorio.memorio.websocket;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.memorio.memorio.websocket.Match;
+
+import com.memorio.memorio.entities.User;
 import org.java_websocket.WebSocket;
+
+import java.util.Optional;
 import java.util.UUID;
 
 public class Player {
@@ -22,12 +25,15 @@ public class Player {
     private List<Player> subscribers = new ArrayList<>();
     private UUID token;
     private Match match = null;
+    // Verheiraten von Player und User
+    private User user;
 
     /**
      * Playekonstruktor
      * @param conn Websocketverbindung des Spieles
+     * @param user Userpobjekt mit dem der Player verheiratet werden soll
      */
-    public Player(WebSocket conn){
+    public Player(WebSocket conn, Optional<User> user){
         this.token = UUID.randomUUID();
         this.conn = conn;
     }
