@@ -18,7 +18,8 @@ import java.util.List;
 @Setter
 @Entity
 public class Match {
-    //TODO: Rework lobbycode als ID
+    /*TODO: Rework komplett und verschmelzen mit Match aus Websocket
+     */
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

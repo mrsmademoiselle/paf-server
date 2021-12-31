@@ -103,8 +103,8 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	}
 
 	/**
-	 *
-	 * @param m
+	 * Aufloesen des Matches. Gegenseitiges entfernen aller Subscriber und Spieler im Match
+	 * @param m Match das aufgeloest werden soll
 	 */
 	public void dissolveMatch(Match m){
 		// löst ein Match auf.
@@ -116,6 +116,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 		p2.removeSubscriber(p1);
 		p1.getConnection().close();
 		p2.getConnection().close();
+		m.removePlayer();
 		if(matches.contains(m)){matches.remove(m);}
 		System.out.println("match aufgelöst :(");
 	}
