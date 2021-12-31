@@ -25,4 +25,11 @@ public class Match {
     public void setPlayerOne(Player p){this.playerOne = p;}
     public void setPlayerTwo(Player p){this.playerTwo = p;}
 
+    /**
+     * Entfernen der Player aus dem Match fuer Spielende
+     */
+    public void removePlayer(){
+        this.playerOne = null;
+        this.playerTwo = null;
+    }
 }

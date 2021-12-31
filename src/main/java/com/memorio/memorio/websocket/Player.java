@@ -50,5 +50,12 @@ public class Player {
         if(subscribers.contains(player)){subscribers.remove(player);}
     }
 
+    /**
+     * Entfernen der User - Spieler verbindung fuer Spielende
+     */
+    public void clearUser(){
+        this.user = null;
+    }
+
 }
 

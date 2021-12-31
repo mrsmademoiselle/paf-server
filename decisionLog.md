@@ -1,4 +1,5 @@
 
+- dereferenzieren von user aus player und player aus Match fuer Spielende
 
 Verheiraten von User und Spieler:
 - Dazu habe ich die onMessage umgebaut 
