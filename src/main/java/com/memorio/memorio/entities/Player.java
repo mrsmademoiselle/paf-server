@@ -1,23 +1,26 @@
 package com.memorio.memorio.entities;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.java_websocket.WebSocket;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Diese Klasse hält die zugehörige WebSocket
+ * sowie eine Liste anderer Player (subscriber), zu denen alle
+ * eingehenden Nachrichten gesendet werden.
+ * <p>
+ * TODO:
+ * ebenfalls hier gespeichert ist das token. Das muss evtl. noch
+ * angepasst werden und das eigentliche JWTToken enthalten.
+ */
+@Getter
+@Setter
 public class Player {
-    /*
-     *
-     * Diese Klasse hält die zugehörige WebSocket
-     * sowie eine Liste anderer Player (subscriber), zu denen alle
-     * eingehenden Nachrichten gesendet werden.
-     *
-     * TODO:
-     * ebenfalls hier gespeichert ist das token. Das muss evtl. noch
-     * angepasst werden und das eigentliche JWTToken enthalten.
-     *
-     */
-    private WebSocket conn;
+
+    private WebSocket websocketConnection;
     private List<Player> subscribers = new ArrayList<>();
     private String token;
     private Match match = null;
@@ -25,7 +28,7 @@ public class Player {
     private User user;
 
     /**
-     * Playekonstruktor
+     * Playerkonstruktor
      *
      * @param conn Websocketverbindung des Spieles
      * @param user Userpobjekt mit dem der Player verheiratet werden soll
@@ -33,35 +36,7 @@ public class Player {
     public Player(WebSocket conn, User user, String jwt) {
         this.user = user;
         this.token = jwt;
-        this.conn = conn;
-    }
-
-    public WebSocket getConnection() {
-        return this.conn;
-    }
-
-    public void setConnection(WebSocket conn) {
-        this.conn = conn;
-    }
-
-    public Match getMatch() {
-        return this.match;
-    }
-
-    public void setMatch(Match m) {
-        this.match = m;
-    }
-
-    public String getToken() {
-        return this.token;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
-
-    public List<Player> getSubscribers() {
-        return this.subscribers;
+        this.websocketConnection = conn;
     }
 
     public void addSubscriber(Player player) {
