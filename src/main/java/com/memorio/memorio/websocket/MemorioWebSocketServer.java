@@ -1,9 +1,7 @@
 package com.memorio.memorio.websocket;
 
 import com.memorio.memorio.config.jwt.JwtTokenUtil;
-import com.memorio.memorio.entities.Match;
-import com.memorio.memorio.entities.Player;
-import com.memorio.memorio.entities.User;
+import com.memorio.memorio.entities.*;
 import com.memorio.memorio.repositories.UserRepository;
 import com.memorio.memorio.services.GameHandler;
 import com.memorio.memorio.services.MemorioJsonMapper;
@@ -113,7 +111,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
     }
 
     private void verifyAndCreateConnection(WebSocket conn, String jwt) {
-        conn.send("Tokensuchmoodus aktiviert, suche Spieler");
+        conn.send("Tokensuchmoodus aktiviert, suche Spieler.........");
 
         Optional<User> userForToken = userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(jwt));
         // todo exception werfen oder so
@@ -125,7 +123,11 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
         try {
             matchPlayer();
-        } catch (MatchNotFoundException e) {
+            Game game = new Game(player.getUser(), new Board());
+            String message = MemorioJsonMapper.getStringFromObject(game);
+            System.out.println("Match: " + message);
+            conn.send(message);
+        } catch (Exception e) {
             System.out.println(e);
         }
     }

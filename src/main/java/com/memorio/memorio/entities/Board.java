@@ -6,7 +6,8 @@ import lombok.ToString;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
-import javax.persistence.OneToOne;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,13 +23,20 @@ public class Board {
     @ElementCollection
     private List<Card> cardSet;
 
-    public Board(List<Card> cardSet) {
-        this.cardSet = cardSet;
+    public Board() {
+        this.cardSet = createCardSet();
     }
 
-    @Deprecated
-    public Board() {
+    private List<Card> createCardSet() {
+        List<Card> cardset = new ArrayList<>();
+        for (int i = 2; i <= 17; i++) {
+            int pairId = i / 2;
+            System.out.println(pairId);
+            cardset.add(new Card(pairId));
+        }
+        Collections.shuffle(cardset);
 
+        return cardset;
     }
 
 }
