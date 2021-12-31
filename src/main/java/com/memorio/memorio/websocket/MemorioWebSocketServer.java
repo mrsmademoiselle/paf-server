@@ -3,17 +3,17 @@ package com.memorio.memorio.websocket;
 import com.memorio.memorio.config.jwt.JwtTokenUtil;
 import com.memorio.memorio.entities.Match;
 import com.memorio.memorio.entities.Player;
+import com.memorio.memorio.entities.User;
 import com.memorio.memorio.repositories.UserRepository;
+import com.memorio.memorio.services.GameHandler;
+import com.memorio.memorio.services.MemorioJsonMapper;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 
 /**
@@ -22,6 +22,7 @@ import java.util.Queue;
  */
 public class MemorioWebSocketServer extends WebSocketServer {
 
+    public static final GameHandler gameHandler = new GameHandler();
     // Adresse und Port
     private final static InetSocketAddress address = new InetSocketAddress("127.0.0.1", 8888);
     private static MemorioWebSocketServer instance = null;
@@ -66,47 +67,66 @@ public class MemorioWebSocketServer extends WebSocketServer {
      */
     @Override
     public void onMessage(WebSocket conn, String message) {
-        // wird aufgerufen wenn eine WebSocket eine Nachricht sendet.
-        // findet zugehörigen Player und leitet Nachricht an alle Subscriber weiter.
+        try {
+            Map<String, String> jsonMap = MemorioJsonMapper.getMapFromString(message);
+            // exception: falsche größe
+            if (jsonMap.keySet().size() != 1)
+                throw new RuntimeException("Falsche Größe von Json-Keyset: " + jsonMap.keySet().size());
 
-		/*
-		Verarbeiten der Nachricht, durchsuchen nach Flags und entsprechendes Handling der Nachricht
-		 Wenn die Nachricht ein entsprechendes Flag beeinhaltet bricht die Schleife
-		 Durch die Position des Pointers koennen wir im Switch/Case spaeter entsprechend auf die Nachricht reagieren
-		 */
-        int pointer;
-        for (pointer = 0; pointer < messageFlags.length; pointer++) {
-            if (message.contains(messageFlags[pointer])) break;
+            handleMessage(conn, jsonMap);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        // Flaghandling - Hier weitere Messageflags hinzufuegen
-        switch (pointer) {
-            //flag: token
-            case 0: {
-                // wird aufgerufen wenn ein Client in der Nachricht das 'token' flag gesetzt hat
-                // erstellt einen Spieler und versucht ein Game zu finden
-                String jwt = message.substring(message.lastIndexOf(":") + 1);
-                conn.send("Tokensuchmoodus aktiviert, suche Spieler");
-                Player player = new Player(conn, userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(jwt)).get(), jwt);
-                System.out.println("Spieler verbunden: " + player.getUser().getUsername());
-                playerQueue.add(player);
-                try {
-                    matchPlayer();
-                    break;
-                } catch (MatchNotFoundException e) {
-                    System.out.println(e);
-                    break;
-                }
-            }
-            // Wenn kein Flag gesetzt, sende Nachricht an alle Subscriber
-            default: {
+    }
+
+    private void handleMessage(WebSocket conn, Map<String, String> jsonMap) {
+        String keyString = jsonMap.keySet().stream().findFirst().get();
+        MessageKeys messageKey = MessageKeys.getEnumForString(keyString);
+
+        switch (messageKey) {
+            case LOGIN:
+                String jwt = jsonMap.get(keyString);
+                verifyAndCreateConnection(conn, jwt);
+                break;
+            case CANCEL:
+                // abbruchnachricht vom spiel
+                String reason = jsonMap.get(keyString);
+                break;
+            case DISSOLVE:
+                // spieler aus der queue werfen
+                break;
+            case FLIP_CARD:
+                String cardId = jsonMap.get(keyString);
+                gameHandler.flipCard(cardId);
+                break;
+            default:
+                // Ziehe vom Spieler mit der gefundenen Websocket alle Subscriber,
+                // deren Verbindungen und sende Nachricht
+                String message = jsonMap.get(keyString);
                 Player player = findPlayerByConnection(conn);
                 if (player == null) return;
                 for (int i = 0; i < player.getSubscribers().size(); i++) {
-                    // Ziehe vom Spieler mit der gefundenen Websocket alle Subscriber,
-                    // deren Verbindungen und sende Nachricht
                     player.getSubscribers().get(i).getWebsocketConnection().send(message);
                 }
-            }
+                break;
+        }
+    }
+
+    private void verifyAndCreateConnection(WebSocket conn, String jwt) {
+        conn.send("Tokensuchmoodus aktiviert, suche Spieler");
+
+        Optional<User> userForToken = userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(jwt));
+        // todo exception werfen oder so
+        if (userForToken.isEmpty()) return;
+
+        Player player = new Player(conn, userForToken.get(), jwt);
+        System.out.println("Spieler verbunden: " + player.getUser().getUsername());
+        playerQueue.add(player);
+
+        try {
+            matchPlayer();
+        } catch (MatchNotFoundException e) {
+            System.out.println(e);
         }
     }
 
@@ -118,17 +138,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
      */
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
-        // wird aufgerufen wenn sich ein neuer Client verbindet
-        // erstellt einen Spieler und versucht ein Game zu finden
-		/*
-		Player player = new Player(conn);
-		System.out.println("Spieler verbunden: " + player.getToken());
-		playerQueue.add(player);
-		try{
-			matchPlayer();
-		} catch(MatchNotFoundException e){System.out.println(e);}
-		 */
-        System.out.println("foobar");
+        System.out.println("Verbindung geöffnet");
     }
 
     /**
