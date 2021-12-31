@@ -33,7 +33,8 @@ public class Player {
      * @param conn Websocketverbindung des Spieles
      * @param user Userpobjekt mit dem der Player verheiratet werden soll
      */
-    public Player(WebSocket conn, Optional<User> user, String jwt){
+    public Player(WebSocket conn, User user, String jwt){
+        this.user = user;
         this.token = jwt;
         this.conn = conn;
     }

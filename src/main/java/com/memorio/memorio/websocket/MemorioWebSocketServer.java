@@ -19,7 +19,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	/*
      * WebSocketServer: https://github.com/TooTallNate/Java-WebSocket
      *
-     *  Match bezieht sich in diesem Fall auf die Verknüpfung zweier
+     *  Game bezieht sich in diesem Fall auf die Verknüpfung zweier
      *  Player-Instanzen. 
      */
 
@@ -46,19 +46,19 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
 
 	/**
-	 * Wird aufgerufen wenn ein neues Match gefunden wurde
-	 * Teilt den Clients mit das ein Match gefunden wurde und setzt das Match in die Matchliste
+	 * Wird aufgerufen wenn ein neues Game gefunden wurde
+	 * Teilt den Clients mit das ein Game gefunden wurde und setzt das Game in die Matchliste
 	 * @param m Matchobjekt
 	 */
 	public void onNewMatch(Match m){
-		// wird aufgerufen wenn ein Match erfolgreich erstellt wurde
+		// wird aufgerufen wenn ein Game erfolgreich erstellt wurde
 		// Player extrahieren
 		Player p1 = m.getPlayerOne();
 		Player p2 = m.getPlayerTwo();
 		// zueinander subscriben
 		p1.addSubscriber(p2);
 		p2.addSubscriber(p1);
-		// Match initialisieren
+		// Game initialisieren
 		p1.setMatch(m);
 		p2.setMatch(m);
 		// zu matches hinzufügen
@@ -103,13 +103,13 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	}
 
 	/**
-	 * Aufloesen des Matches. Gegenseitiges entfernen aller Subscriber und Spieler im Match
-	 * @param m Match das aufgeloest werden soll
+	 * Aufloesen des Matches. Gegenseitiges entfernen aller Subscriber und Spieler im Game
+	 * @param m Game das aufgeloest werden soll
 	 */
 	public void dissolveMatch(Match m){
-		// löst ein Match auf.
+		// löst ein Game auf.
 		// Momentan werden hier alle subscriber der Player entfernt und alle
-		// zum Match gehörenden Connections beendet.
+		// zum Game gehörenden Connections beendet.
 		Player p1 = m.getPlayerOne();
 		Player p2 = m.getPlayerTwo();
 		p1.removeSubscriber(p2);
@@ -130,7 +130,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake) {
 		// wird aufgerufen wenn sich ein neuer Client verbindet
-		// erstellt einen Spieler und versucht ein Match zu finden
+		// erstellt einen Spieler und versucht ein Game zu finden
 		/*
 		Player player = new Player(conn);
 		System.out.println("Spieler verbunden: " + player.getToken());
@@ -154,7 +154,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 	@Override
 	public void onClose(WebSocket conn, int code, String reason, boolean remote) {
 		// wird aufgerufen wenn ein Client die Verbindung abbricht.
-		// wenn der Player in einem Match ist wird dieses aufgelöst.
+		// wenn der Player in einem Game ist wird dieses aufgelöst.
 		Player player = findPlayerByConnection(conn);
 		if(player == null) return;
 		dissolveMatch(player.getMatch());
@@ -195,10 +195,10 @@ public class MemorioWebSocketServer extends WebSocketServer {
 			//flag: token
 			case 0:{
 				// wird aufgerufen wenn ein Client in der Nachricht das 'token' flag gesetzt hat
-				// erstellt einen Spieler und versucht ein Match zu finden
+				// erstellt einen Spieler und versucht ein Game zu finden
 				String jwt = message.substring(message.lastIndexOf(":") + 1);
 				conn.send("Tokensuchmoodus aktiviert, suche Spieler");
-				Player player = new Player(conn, userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(jwt)), jwt);
+				Player player = new Player(conn, userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(jwt)).get(), jwt);
 				System.out.println("Spieler verbunden: " + player.getUser().getUsername());
 				playerQueue.add(player);
 				try{
@@ -257,5 +257,5 @@ public class MemorioWebSocketServer extends WebSocketServer {
  * Exceptionhandling.
  */
 class MatchNotFoundException extends Exception {
-	public MatchNotFoundException(){super("Kein Match möglich");}
+	public MatchNotFoundException(){super("Kein Game möglich");}
 }

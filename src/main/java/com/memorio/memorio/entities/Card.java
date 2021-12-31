@@ -12,27 +12,23 @@ import javax.persistence.*;
 @Getter
 @ToString
 @Setter
-@Entity(name = "card")
+@Embeddable
 public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    // TODO: isFlipped macht hier keinen Sinn, weil wir Karten auch außerhalb des
-    //  Spielkontexts verwenden können (z.B. Spielerprofil). Alternative?
-    @Transient
-    private boolean isFlipped;
+    private int pairId;
 
-    @Column
-    private String imagePath;
+    private boolean isFlipped;
 
     @Deprecated
     public Card() {
     }
 
-    public Card(String imagePath) {
-        this.imagePath = imagePath;
+    public Card(int pairID) {
+        this.pairId = pairID;
         this.isFlipped = false;
     }
 

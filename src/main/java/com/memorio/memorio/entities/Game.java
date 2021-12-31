@@ -8,17 +8,17 @@ import javax.persistence.*;
 import java.util.List;
 
 /**
- * Ein Match stellt den Zustand eines laufenden Spiels dar.
- * Zur Laufzeit wird ein Match mit den benötigten Informationen erstellt.
- * Nach Abschluss des Spiels wird das Match in der Datenbank persistiert.
- * Außerdem wird das Match in den UserProfilen aller teilnehmenden Usern gespeichert.
+ * Ein Game stellt den Zustand eines laufenden Spiels dar.
+ * Zur Laufzeit wird ein Game mit den benötigten Informationen erstellt.
+ * Nach Abschluss des Spiels wird das Game in der Datenbank persistiert.
+ * Außerdem wird das Game in den UserProfilen aller teilnehmenden Usern gespeichert.
  */
 @ToString
 @Getter
 @Setter
 @Entity
-public class Match {
-    /*TODO: Rework komplett und verschmelzen mit Match aus Websocket
+public class Game {
+    /*TODO: Rework komplett und verschmelzen mit Game aus Websocket
      */
 
     @Id
@@ -34,11 +34,10 @@ public class Match {
     private List<UserScore> userScores;
 
     @Deprecated
-    public Match() {
+    public Game() {
     }
 
-    public Match(Long lobbyCode, User amZug, Board board) {
-        this.lobbyCode = lobbyCode;
+    public Game(User amZug, Board board) {
         this.currentTurn = amZug;
         this.board = board;
     }

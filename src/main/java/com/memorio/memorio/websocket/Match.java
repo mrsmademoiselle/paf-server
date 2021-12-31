@@ -26,7 +26,7 @@ public class Match {
     public void setPlayerTwo(Player p){this.playerTwo = p;}
 
     /**
-     * Entfernen der Player aus dem Match fuer Spielende
+     * Entfernen der Player aus dem Game fuer Spielende
      */
     public void removePlayer(){
         this.playerOne = null;

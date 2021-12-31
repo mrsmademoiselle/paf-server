@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 public class UserScore {
     @OneToOne
     private User user;
+    // moves = Punkte
     private int moves;
 
     @Deprecated
