@@ -32,7 +32,6 @@ public class Board {
         List<Card> cardset = new ArrayList<>();
         for (int i = 2; i <= 17; i++) {
             int pairId = i / 2;
-            System.out.println(pairId);
             cardset.add(new Card(pairId));
         }
         Collections.shuffle(cardset);
