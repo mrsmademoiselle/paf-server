@@ -196,15 +196,15 @@ public class MemorioWebSocketServer extends WebSocketServer {
         // zum Game gehörenden Connections beendet.
         Player p1 = match.getPlayerOne();
         Player p2 = match.getPlayerTwo();
+        /* Zu prüfen ob das notwendig ist
         p1.removeSubscriber(p2);
         p2.removeSubscriber(p1);
+         */
         p1.getWebsocketConnection().close();
         p2.getWebsocketConnection().close();
         match.removeAllPlayers();
 
-        if (matches.contains(match)) {
-            matches.remove(match);
-        }
+        matches.remove(match);
         System.out.println("match aufgelöst :(");
     }
 
@@ -232,7 +232,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 break;
             case CANCEL:
                 String reason = jsonMap.get(keyString);
-                // abbruchnachricht vom spiel ausgeben
+                sendEndscoreToClientsOfConnection(conn);
                 break;
             default:
                 // Ziehe vom Spieler mit der gefundenen Websocket alle Subscriber,
@@ -241,11 +241,32 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 Player player_default = findPlayerByMatchConnection(conn);
                 if (player_default == null) return;
 
-                for (int i = 0; i < player_default.getSubscribers().size(); i++) {
-                    player_default.getSubscribers().get(i).getWebsocketConnection().send(message);
-                }
+                player_default.getSubscriber().getWebsocketConnection().send(message);
                 break;
         }
+    }
+
+    private void sendEndscoreToClientsOfConnection(WebSocket conn) {
+        try {
+            Player player = findPlayerByMatchConnection(conn);
+            if (player == null) return;
+
+            // erstelle Endscore-Objekt aus Game-Objekt
+            Game game = gameHandler.getGame();
+            Endscore endscore = new Endscore(game.getUserScores());
+            String message = MemorioJsonMapper.getStringFromObject(endscore);
+
+            player.getSubscriber().getWebsocketConnection().send(message);
+            System.out.println("sent endscore to " + player.getSubscriber().getUser().getUsername());
+
+            player.getWebsocketConnection().send(message);
+            System.out.println("sent endscore to original User" + player.getUser().getUsername());
+
+            dissolveMatch(player.getMatch());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private Player findPlayerInQueueByConnection(WebSocket connection) {
@@ -262,10 +283,9 @@ public class MemorioWebSocketServer extends WebSocketServer {
             Player player = findPlayerByMatchConnection(conn);
             if (player == null) return;
 
-            for (int i = 0; i < player.getSubscribers().size(); i++) {
-                player.getSubscribers().get(i).getWebsocketConnection().send(message);
-                System.out.println("sent game to " + player.getSubscribers().get(i).getUser().getUsername());
-            }
+            player.getSubscriber().getWebsocketConnection().send(message);
+            System.out.println("sent game to " + player.getSubscriber().getUser().getUsername());
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -285,10 +305,9 @@ public class MemorioWebSocketServer extends WebSocketServer {
             matchPlayer();
             Game game = new Game(player.getUser(), new Board());
             String message = MemorioJsonMapper.getStringFromObject(game);
-            for (int i = 0; i < player.getSubscribers().size(); i++) {
-                player.getSubscribers().get(i).getWebsocketConnection().send(message);
-                System.out.println("sent game to " + player.getSubscribers().get(i).getUser().getUsername());
-            }
+            player.getSubscriber().getWebsocketConnection().send(message);
+            System.out.println("sent game to " + player.getSubscriber().getUser().getUsername());
+
             gameHandler.setGame(game);
             conn.send(message);
             System.out.println("sent game to original player " + player.getUser().getUsername());

@@ -4,9 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.java_websocket.WebSocket;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Diese Klasse hält die zugehörige WebSocket
  * sowie eine Liste anderer Player (subscriber), zu denen alle
@@ -21,7 +18,7 @@ import java.util.List;
 public class Player {
 
     private WebSocket websocketConnection;
-    private List<Player> subscribers = new ArrayList<>();
+    private Player subscriber;
     private String token;
     private Match match = null;
     // Verheiraten von Player und User
@@ -40,13 +37,7 @@ public class Player {
     }
 
     public void addSubscriber(Player player) {
-        subscribers.add(player);
-    }
-
-    public void removeSubscriber(Player player) {
-        if (subscribers.contains(player)) {
-            subscribers.remove(player);
-        }
+        subscriber = player;
     }
 
     /**

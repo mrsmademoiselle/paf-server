@@ -2,7 +2,6 @@ package com.memorio.memorio.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.memorio.memorio.entities.Game;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +18,8 @@ public class MemorioJsonMapper {
         return map;
     }
 
-    public static String getStringFromObject(Game game) throws JsonProcessingException {
+    public static String getStringFromObject(Object object) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(game);
+        return mapper.writeValueAsString(object);
     }
 }
