@@ -24,8 +24,8 @@ public class UserScore {
     public UserScore() {
     }
 
-    public UserScore(User user, int moves) {
+    public UserScore(User user) {
         this.user = user;
-        this.moves = moves;
+        this.moves = 0;
     }
 }

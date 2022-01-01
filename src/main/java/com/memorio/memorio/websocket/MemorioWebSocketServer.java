@@ -302,7 +302,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
         try {
             matchPlayer();
-            Game game = new Game(player.getUser(), new Board());
+            Game game = new Game(player.getUser(), new Board(), player.getUser(), player.getUser(), player.getSubscriber().getUser());
             String message = MemorioJsonMapper.getStringFromObject(game);
             player.getSubscriber().getWebsocketConnection().send(message);
             System.out.println("sent game to " + player.getSubscriber().getUser().getUsername());

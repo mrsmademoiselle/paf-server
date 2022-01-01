@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,8 +38,14 @@ public class Game {
     public Game() {
     }
 
-    public Game(User amZug, Board board) {
+    public Game(User amZug, Board board, User currentTurn, User user1, User user2) {
         this.currentTurn = amZug;
         this.board = board;
+        this.currentTurn = currentTurn;
+
+        UserScore userScore1 = new UserScore(user1);
+        UserScore userScore2 = new UserScore(user2);
+
+        this.userScores = Arrays.asList(userScore1, userScore2);
     }
 }
