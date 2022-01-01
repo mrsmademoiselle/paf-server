@@ -10,7 +10,9 @@ public enum MessageKeys {
     // eine Karte soll umgedreht werden
     FLIP_CARD("FLIP_CARD"),
     // Der Spieler will das laufende Match abbrechen
-    CANCEL("CANCEL");
+    CANCEL("CANCEL"),
+    // wenn kein anderer Key gefunden wurde
+    NONE("NONE");
 
     private String text;
 
@@ -22,6 +24,6 @@ public enum MessageKeys {
         return Arrays.stream(MessageKeys.values())
                 .filter(e -> e.toString().equalsIgnoreCase(s))
                 .findFirst()
-                .orElse(null);
+                .orElse(MessageKeys.NONE);
     }
 }

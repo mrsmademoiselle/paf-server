@@ -9,7 +9,6 @@ import com.memorio.memorio.services.MemorioJsonMapper;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.InetSocketAddress;
@@ -20,6 +19,7 @@ import java.util.*;
  * WebSocketServer: https://github.com/TooTallNate/Java-WebSocket
  * Match = Verknüpfung zweier Player-Instanzen.
  */
+
 public class MemorioWebSocketServer extends WebSocketServer {
 
     public static final GameHandler gameHandler = new GameHandler();
@@ -35,6 +35,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
     private String[] messageFlags = {
             "token",
     };
+    // >> Das wird so nicht funktionieren. Autowired darf man nur in Spring-Components verwenden, hier verwenden wir allerdings vanilla Java.
     // Der Konstruktor darf nicht verändert werden, daher wird der jwtTokenUtil über die injection reingezogen
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -86,8 +87,12 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
         switch (messageKey) {
             case LOGIN:
+                /*
                 String jwt_login = jsonMap.get(keyString);
-                verifyAndCreateConnection(conn, jwt_login);
+                System.out.println("token: " + jwt_login);
+                 */
+                verifyAndCreateConnection(conn);
+
                 break;
             case DISSOLVE:
                 Player player_dissolve = findPlayerByConnection(conn);
@@ -135,10 +140,12 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
     }
 
-    private void verifyAndCreateConnection(WebSocket conn, String jwt) {
+    private void verifyAndCreateConnection(WebSocket conn) {
         conn.send("Tokensuchmoodus aktiviert, suche Spieler.........");
 
-        Player player = getPlayerForJwt(conn, jwt);
+        // Player player = getPlayerForJwt(conn, jwt);
+        Player player = findPlayerByConnection(conn);
+        System.out.println("player: " + player);
         if (player == null) return;
         System.out.println("Spieler verbunden: " + player.getUser().getUsername());
         playerQueue.add(player);
@@ -150,19 +157,21 @@ public class MemorioWebSocketServer extends WebSocketServer {
             System.out.println("Match: " + message);
             conn.send(message);
             gameHandler.setGame(game);
+            System.out.println("message sent: " + game);
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    @Nullable
     private Player getPlayerForJwt(WebSocket conn, String jwt) {
-        Optional<User> userForToken = userRepository.findByUsername(jwtTokenUtil.getUsernameFromToken(jwt));
+        String usernameFromToken = jwtTokenUtil.getUsernameFromToken(jwt);
+        System.out.println("username: " + usernameFromToken);
+        Optional<User> userForToken = userRepository.findByUsername(usernameFromToken);
+        System.out.println("user: " + userForToken);
         // todo exception werfen oder so
         if (userForToken.isEmpty()) return null;
 
-        Player player = new Player(conn, userForToken.get(), jwt);
-        return player;
+        return new Player(conn, userForToken.get(), jwt);
     }
 
     /**
