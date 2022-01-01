@@ -4,17 +4,17 @@ import java.util.Arrays;
 
 public enum MessageKeys {
     // Der Spieler will sich für die Queue registrieren
-    LOGIN("LOGIN"),
+    REGISTER_QUEUE("LOGIN"),
     // Der Spieler befindet sich in der Queue und hat noch kein Match gefunden
-    DISSOLVE("DISSOLVE"),
+    DISSOLVE_QUEUE("DISSOLVE"),
     // eine Karte soll umgedreht werden
     FLIP_CARD("FLIP_CARD"),
     // Der Spieler will das laufende Match abbrechen
-    CANCEL("CANCEL"),
+    CANCEL_GAME("CANCEL"),
     // wenn kein anderer Key gefunden wurde
     NONE("NONE");
 
-    private String text;
+    private final String text;
 
     MessageKeys(String text) {
         this.text = text;
@@ -22,7 +22,7 @@ public enum MessageKeys {
 
     public static MessageKeys getEnumForString(String s) {
         return Arrays.stream(MessageKeys.values())
-                .filter(e -> e.toString().equalsIgnoreCase(s))
+                .filter(messageKey -> messageKey.text.equalsIgnoreCase(s))
                 .findFirst()
                 .orElse(MessageKeys.NONE);
     }

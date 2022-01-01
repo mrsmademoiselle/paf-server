@@ -212,15 +212,14 @@ public class MemorioWebSocketServer extends WebSocketServer {
         // .get() müssen wir hier nicht double-checken, weil wir das vor dem Methodenaufruf abfangen
         String keyString = jsonMap.keySet().stream().findFirst().get();
         MessageKeys messageKey = MessageKeys.getEnumForString(keyString);
-
         switch (messageKey) {
-            case LOGIN:
+            case REGISTER_QUEUE:
                 String jwt_login = jsonMap.get(keyString);
                 System.out.println("login-token erhalten: " + jwt_login);
 
                 verifyAndCreateConnection(conn, jwt_login);
                 break;
-            case DISSOLVE:
+            case DISSOLVE_QUEUE:
                 Player player_dissolve = findPlayerInQueueByConnection(conn);
                 if (player_dissolve == null) return;
                 playerQueue.remove(player_dissolve);
@@ -230,7 +229,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 gameHandler.flipCard(cardId);
                 sendGameToAllClientsOfConnection(conn);
                 break;
-            case CANCEL:
+            case CANCEL_GAME:
                 String reason = jsonMap.get(keyString);
                 sendEndscoreToClientsOfConnection(conn);
                 break;
