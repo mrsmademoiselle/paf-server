@@ -3,7 +3,7 @@ package com.memorio.memorio.websocket;
 import java.util.Arrays;
 
 public enum MessageKeys {
-    // Der Spieler will sich für die Websocketverbindung authentifizieren
+    // Der Spieler will sich für die Queue registrieren
     LOGIN("LOGIN"),
     // Der Spieler befindet sich in der Queue und hat noch kein Match gefunden
     DISSOLVE("DISSOLVE"),

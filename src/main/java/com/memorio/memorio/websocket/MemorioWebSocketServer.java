@@ -88,7 +88,6 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 System.out.println("login-token erhalten: " + jwt_login);
 
                 verifyAndCreateConnection(conn, jwt_login);
-
                 break;
             case DISSOLVE:
                 Player player_dissolve = findPlayerByConnection(conn);
@@ -140,7 +139,10 @@ public class MemorioWebSocketServer extends WebSocketServer {
         Player player = getPlayerForJwt(conn, jwt);
         if (player == null) return;
         System.out.println("Spieler verbunden: " + player.getUser().getUsername());
-        playerQueue.add(player);
+
+        if (!playerQueue.contains(player)) {
+            playerQueue.add(player);
+        }
 
         try {
             matchPlayer();
