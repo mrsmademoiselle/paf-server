@@ -4,12 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.memorio.memorio.config.jwt.JwtTokenUtil;
 import com.memorio.memorio.entities.*;
 import com.memorio.memorio.repositories.UserRepository;
+import com.memorio.memorio.services.BeanUtil;
 import com.memorio.memorio.services.GameHandler;
 import com.memorio.memorio.services.MemorioJsonMapper;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.InetSocketAddress;
 import java.util.*;
@@ -37,10 +37,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
     };
     // >> Das wird so nicht funktionieren. Autowired darf man nur in Spring-Components verwenden, hier verwenden wir allerdings vanilla Java.
     // Der Konstruktor darf nicht verändert werden, daher wird der jwtTokenUtil über die injection reingezogen
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    private UserRepository userRepository;
+
 
     /**
      * Super Konstruktor zum Erstellen des Websocketservers
@@ -87,11 +84,10 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
         switch (messageKey) {
             case LOGIN:
-                /*
                 String jwt_login = jsonMap.get(keyString);
                 System.out.println("token: " + jwt_login);
-                 */
-                verifyAndCreateConnection(conn);
+
+                verifyAndCreateConnection(conn, jwt_login);
 
                 break;
             case DISSOLVE:
@@ -140,11 +136,10 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
     }
 
-    private void verifyAndCreateConnection(WebSocket conn) {
+    private void verifyAndCreateConnection(WebSocket conn, String jwt) {
         conn.send("Tokensuchmoodus aktiviert, suche Spieler.........");
 
-        // Player player = getPlayerForJwt(conn, jwt);
-        Player player = findPlayerByConnection(conn);
+        Player player = getPlayerForJwt(conn, jwt);
         System.out.println("player: " + player);
         if (player == null) return;
         System.out.println("Spieler verbunden: " + player.getUser().getUsername());
@@ -164,6 +159,9 @@ public class MemorioWebSocketServer extends WebSocketServer {
     }
 
     private Player getPlayerForJwt(WebSocket conn, String jwt) {
+        JwtTokenUtil jwtTokenUtil = BeanUtil.getBean(JwtTokenUtil.class);
+        UserRepository userRepository = BeanUtil.getBean(UserRepository.class);
+
         String usernameFromToken = jwtTokenUtil.getUsernameFromToken(jwt);
         System.out.println("username: " + usernameFromToken);
         Optional<User> userForToken = userRepository.findByUsername(usernameFromToken);
