@@ -10,7 +10,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.event.EventHandler;
 
@@ -59,16 +58,13 @@ public class GameController extends PapaController {
                 card.setStyle("-fx-cursor: hand");
                 card.setOnMouseClicked((new EventHandler<MouseEvent>() {
                     @Override
-                    public void handle(MouseEvent event) {
-                        card.setFill(Color.CORAL);
-                    }
+                    public void handle(MouseEvent event) {onCardFlip(card, event);}
                 }));
                 Image pic = FileManager.getPic("cardPattern.jpg");
                 card.setFill(new ImagePattern(pic));
                 gameGrid.add(card, x, y);
             }
         }
-
         updateScore(0, 0);
         setTurn("Niemand ist dran!");
         newSysMessage("Field initialized hahaha");
@@ -80,11 +76,7 @@ public class GameController extends PapaController {
         logBox.getItems().add(text);
     }
 
-    public void setTurn(String msg){
-        turn.setText(msg);
-    }
-
-    public void updateScore(int score1, int score2){
-        score.setText(score1 + " : " + score2);
-    }
+    public void setTurn(String msg){turn.setText(msg);}
+    public void updateScore(int score1, int score2){score.setText(score1 + " : " + score2);}
+    public void onCardFlip(Card card, MouseEvent event){card.setFill(Color.CORAL);}
 }

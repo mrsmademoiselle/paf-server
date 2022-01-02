@@ -10,11 +10,29 @@ import org.java_websocket.handshake.ServerHandshake;
  */
 public class WebSocketConnection extends WebSocketClient {
 
-    public WebSocketConnection(URI address) {super(address);}
+    private SceneManager sceneManager = null;
+
+    public WebSocketConnection(URI address, SceneManager sceneManager) {
+        super(address);
+        this.sceneManager = sceneManager;
+    }
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         System.out.println("connection established...");
+        /*
+        Ausfuehren des JavaFX UI Render im Mainthread ueber Runlater. vgl Decision Log
+        Das muessen wir machen weil der JavaFX Kontext im Mainthread ist. Wenn die Aenderungen in einem
+        Childthread machen weis der Mainthread mit dem Kontext nichts darueber. Ueber runLater() fuehren wir die Aufgabe im
+        Mainthread aus, sobald er Zeit dafuer hat.
+         */
+        try {
+            javafx.application.Platform.runLater(()->{
+                sceneManager.loadGame();
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

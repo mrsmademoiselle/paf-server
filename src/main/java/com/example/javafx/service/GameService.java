@@ -24,8 +24,10 @@ public class GameService implements Runnable {
     public void lookForGame() throws URISyntaxException {
         thread = new Thread(getInstance());
         thread.start();
-        //sceneManager.loadLobby();
-        sceneManager.loadGame();
+        javafx.application.Platform.runLater(()->{
+            this.sceneManager.loadLobby();
+        });
+        //sceneManager.loadGame();
     }
 
     public void stopLookingForGame() {
@@ -46,7 +48,7 @@ public class GameService implements Runnable {
 
     public void run() {
         try {
-            connection = new WebSocketConnection(new URI("ws://127.0.0.1:8888"));
+            connection = new WebSocketConnection(new URI("ws://127.0.0.1:8888"), sceneManager);
             connection.connect();
         } catch(Exception e){System.out.println(e);}
     }
