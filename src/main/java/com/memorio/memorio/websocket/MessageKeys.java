@@ -11,6 +11,10 @@ public enum MessageKeys {
     FLIP_CARD("FLIPPED"),
     // Der Spieler will das laufende Match abbrechen
     CANCEL_GAME("CANCEL"),
+    // Heartbeat
+    HEARTBEAT("HEARTBEAT"),
+    // jwt
+    JWT("JWT"),
     // wenn kein anderer Key gefunden wurde
     NONE("NONE");
 

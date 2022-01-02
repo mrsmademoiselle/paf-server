@@ -26,11 +26,11 @@ public class MemorioWebSocketServer extends WebSocketServer {
     // Adresse und Port
     private final static InetSocketAddress address = new InetSocketAddress("127.0.0.1", 8888);
     private static MemorioWebSocketServer instance = null;
+    List<String> lostConnectionJwt = new ArrayList<>();
     // hier kommt jeder neue Player rein.
     private Queue<Player> playerQueue = new LinkedList<>();
     // Diese Liste enthält alle erfolgreichen Matches.
     private List<Match> matches = new ArrayList<>();
-
     // Nachrichten Flags nach denen gesucht werden kann
     private String[] messageFlags = {
             "token",
@@ -65,13 +65,11 @@ public class MemorioWebSocketServer extends WebSocketServer {
      */
     @Override
     public void onMessage(WebSocket conn, String message) {
-        System.out.println(message);
         try {
             Map<String, String> jsonMap = MemorioJsonMapper.getMapFromString(message);
-            // exception: falsche größe
-            if (jsonMap.keySet().size() != 1) {
-                System.out.println(jsonMap.keySet().size());
-                throw new RuntimeException("Falsche Größe von Json-Keyset: " + jsonMap.keySet().size());
+
+            if (jsonMap.keySet().size() != 2) {
+                throw new RuntimeException("JSON-Keyset muss aus 2 Elementen bestehen..");
             }
 
             handleMessage(conn, jsonMap);
@@ -218,32 +216,57 @@ public class MemorioWebSocketServer extends WebSocketServer {
     }
 
     private void handleMessage(WebSocket conn, Map<String, String> jsonMap) {
-        // .get() müssen wir hier nicht double-checken, weil wir das vor dem Methodenaufruf abfangen
-        String keyString = jsonMap.keySet().stream().findFirst().get();
-        MessageKeys messageKey = MessageKeys.getEnumForString(keyString);
+        List<String> keySetList = new ArrayList<>(jsonMap.keySet());
+
+        // Wir holen uns unser ActionFlag sowie das JWT Token aus dem ehemaligen JSON Objekt vom Client
+        String actionFlag = keySetList.get(0); // .get(0) müssen wir hier nicht double-checken, weil wir das vor dem Methodenaufruf abfangen
+        MessageKeys messageKey = MessageKeys.getEnumForString(actionFlag);
+
+        System.out.println("flag: " + actionFlag);
+        if (!jsonMap.containsKey(MessageKeys.JWT.toString())) {
+            throw new RuntimeException("Es wurde kein JWT Token mitgeschickt");
+        }
+        String jwt = jsonMap.get(MessageKeys.JWT.toString());
+
         switch (messageKey) {
             case REGISTER_QUEUE:
-                String jwt_login = jsonMap.get(keyString);
-                verifyAndCreateConnection(conn, jwt_login);
+                verifyAndCreateConnection(conn, jwt);
                 break;
             case DISSOLVE_QUEUE:
+                // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
+                conn = checkIfConnectionHasChanged(conn, jwt);
+
                 Player player_dissolve = findPlayerInQueueByConnection(conn);
                 if (player_dissolve == null) return;
                 playerQueue.remove(player_dissolve);
                 break;
             case FLIP_CARD:
-                String cardId = jsonMap.get(keyString);
+                // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
+                conn = checkIfConnectionHasChanged(conn, jwt);
+
+                String cardId = jsonMap.get(actionFlag);
                 gameHandler.flipCard(cardId);
                 sendGameToAllClientsOfConnection(conn);
                 break;
             case CANCEL_GAME:
-                String reason = jsonMap.get(keyString);
+                // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
+                conn = checkIfConnectionHasChanged(conn, jwt);
+
+                String reason = jsonMap.get(actionFlag);
                 sendEndscoreToClientsOfConnection(conn);
                 break;
+            case HEARTBEAT:
+                // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
+                conn = checkIfConnectionHasChanged(conn, jwt);
+                // ???
+                break;
             default:
+                // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
+                conn = checkIfConnectionHasChanged(conn, jwt);
+
                 // Ziehe vom Spieler mit der gefundenen Websocket alle Subscriber,
                 // deren Verbindungen und sende Nachricht
-                String message = jsonMap.get(keyString);
+                String message = jsonMap.get(actionFlag);
                 Player player_default = findPlayerByMatchConnection(conn);
                 if (player_default == null) return;
 
@@ -251,6 +274,67 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 break;
         }
     }
+
+    /**
+     * Prüft, ob sich die Adresse zu einem Client geändert hat oder nicht.
+     * Wenn ja, wird sie im entsprechenden Objekt des Spielers aktualisiert.
+     */
+    private WebSocket checkIfConnectionHasChanged(WebSocket conn, String jwt_heartbeat) {
+
+        // suche nach Spieler zur Verbindung
+        Player player = findPlayerOfTokenIngameOrInQueue(jwt_heartbeat);
+
+        // wenn es keinen Spieler in unseren Listen mit diesem Token gibt, ist uns die Connection auch egal
+        if (player == null) throw new RuntimeException("Es existiert kein Spieler mit diesem Token.");
+
+        // wenn kein Spieler gefunden, setze sein Token, damit wir die nächste Message an den Client
+        // zwischenspeichern können bis zum nächsten Heartbeat
+        lostConnectionJwt.add(jwt_heartbeat);
+
+        // neues Setzen der WebsocketConnection, wenn sie sich unterscheidet
+        if (player.getWebsocketConnection().equals(conn)) {
+            System.out.println("Connection has changed. Setting new connection...");
+            player.setWebsocketConnection(conn);
+            return conn;
+        }
+        return player.getWebsocketConnection();
+    }
+
+    /**
+     * Sucht in unseren bestehenden Listen (Warteliste und Match-Liste) nach dem User mit diesem JWT.
+     * Wenn es ihn gibt, wird der Spieler zurückgegeben, ansonsten null.
+     */
+    private Player findPlayerOfTokenIngameOrInQueue(String jwt) {
+        // User von Jwt holen
+        Optional<User> userForToken = getUserForJwtOrNull(jwt);
+
+        // wenns keinen User mit diesem Jwt Token gibt, Abbruch
+        if (userForToken.isEmpty()) throw new RuntimeException("Für dieses JWT ist kein User registriert");
+
+        // suchen nach Spielern in Warteschlange
+        Player playerOfJwt = playerQueue.stream()
+                .filter(player -> player.getToken().equals(jwt))
+                .findFirst().orElse(null);
+
+        if (playerOfJwt != null) return playerOfJwt;
+
+        // suchen nach Spielern Ingame
+        playerOfJwt = matches.stream()
+                .flatMap(e -> e.getBothPlayers().stream())
+                .filter(playerConn -> playerConn.getToken().equals(jwt))
+                .findFirst().orElse(null);
+
+        return playerOfJwt;
+    }
+
+    private Optional<User> getUserForJwtOrNull(String jwt) {
+        JwtTokenUtil jwtTokenUtil = BeanUtil.getBean(JwtTokenUtil.class);
+        UserRepository userRepository = BeanUtil.getBean(UserRepository.class);
+
+        String usernameFromToken = jwtTokenUtil.getUsernameFromToken(jwt);
+        return userRepository.findByUsername(usernameFromToken);
+    }
+
 
     private void sendEndscoreToClientsOfConnection(WebSocket conn) {
         try {
@@ -275,12 +359,18 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
     }
 
+    /**
+     * Versucht, einen Spieler in der Warteschlange zu finden. Falls er nicht existiert, wird null zurückgegeben.
+     */
     private Player findPlayerInQueueByConnection(WebSocket connection) {
         return playerQueue.stream()
                 .filter(player -> player.getWebsocketConnection() == connection)
                 .findFirst().orElse(null);
     }
 
+    /**
+     * Sendet Game-Instanz an alle Clients einer Verbindung
+     */
     private void sendGameToAllClientsOfConnection(WebSocket conn) {
         try {
             Game game = gameHandler.getGame();
@@ -299,6 +389,10 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
     }
 
+    /**
+     * Verifiziert das JWT eines Spielers, setzt ihn in die Warteschlange für ein Spiel und schickt das Game-Objekt
+     * zurück, wenn ein zweiter Spieler in der Warteschlange ist.
+     */
     private void verifyAndCreateConnection(WebSocket conn, String jwt) {
         Player player = getPlayerForJwt(conn, jwt);
         if (player == null) return;
@@ -310,26 +404,28 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
         try {
             matchPlayer();
+            // Game-Objekt erstellen
             Game game = new Game(player.getUser(), new Board(), player.getUser(), player.getUser(), player.getSubscriber().getUser());
             String message = MemorioJsonMapper.getStringFromObject(game);
+
+            // und an alle Teilnehmer des Matches schicken
             player.getSubscriber().getWebsocketConnection().send(message);
             System.out.println("sent game to " + player.getSubscriber().getUser().getUsername());
-
-            gameHandler.setGame(game);
             conn.send(message);
             System.out.println("sent game to original player " + player.getUser().getUsername());
+
+            // ganz am Schluss im GameHandlersetzen, wenn alles andere durchgelaufen ist
+            gameHandler.setGame(game);
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
+    /**
+     * Gibt den passenden Spieler zum Jwt zurück, falls er existiert. Existiert er nicht, wird null zurückgegeben.
+     */
     private Player getPlayerForJwt(WebSocket conn, String jwt) {
-        JwtTokenUtil jwtTokenUtil = BeanUtil.getBean(JwtTokenUtil.class);
-        UserRepository userRepository = BeanUtil.getBean(UserRepository.class);
-
-        String usernameFromToken = jwtTokenUtil.getUsernameFromToken(jwt);
-        System.out.println("username: " + usernameFromToken);
-        Optional<User> userForToken = userRepository.findByUsername(usernameFromToken);
+        Optional<User> userForToken = getUserForJwtOrNull(jwt);
         System.out.println("user: " + userForToken);
         // todo exception werfen oder so
         if (userForToken.isEmpty()) return null;

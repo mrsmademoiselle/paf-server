@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Diese Klasse enthält zwei Player-Instanzen die erfolgreich gematched wurden.
  */
@@ -26,5 +29,9 @@ public class Match {
     public void removeAllPlayers() {
         this.playerOne = null;
         this.playerTwo = null;
+    }
+
+    public List<Player> getBothPlayers() {
+        return Arrays.asList(playerOne, playerTwo);
     }
 }

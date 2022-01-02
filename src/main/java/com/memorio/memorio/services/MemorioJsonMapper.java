@@ -3,7 +3,7 @@ package com.memorio.memorio.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -15,7 +15,8 @@ public class MemorioJsonMapper {
         ObjectMapper mapper = new ObjectMapper();
 
         System.out.println(s);
-        HashMap<String, String> map = mapper.readValue(s, HashMap.class);
+        // das muss eine LinkedHashMap bleiben, damit die Reihenfolge der JSON-Werte nicht variiert!
+        LinkedHashMap<String, String> map = mapper.readValue(s, LinkedHashMap.class);
         return map;
     }
 
