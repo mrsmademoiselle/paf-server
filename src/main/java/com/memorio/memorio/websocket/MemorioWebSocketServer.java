@@ -65,11 +65,14 @@ public class MemorioWebSocketServer extends WebSocketServer {
      */
     @Override
     public void onMessage(WebSocket conn, String message) {
+        System.out.println(message);
         try {
             Map<String, String> jsonMap = MemorioJsonMapper.getMapFromString(message);
             // exception: falsche größe
-            if (jsonMap.keySet().size() != 1)
+            if (jsonMap.keySet().size() != 1) {
+                System.out.println(jsonMap.keySet().size());
                 throw new RuntimeException("Falsche Größe von Json-Keyset: " + jsonMap.keySet().size());
+            }
 
             handleMessage(conn, jsonMap);
         } catch (Exception e) {
@@ -161,6 +164,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
         p2.setMatch(match);
         // zu matches hinzufügen
         matches.add(match);
+        System.out.println("added match: " + match);
 
         System.out.println("-------------------------------------------");
         System.out.println("MATCH GEFUNDEN!!!!");
@@ -175,10 +179,15 @@ public class MemorioWebSocketServer extends WebSocketServer {
      * @return Gefundener Spieler oder null
      */
     public Player findPlayerByMatchConnection(WebSocket websocketConnection) {
+        System.out.println("toFind: " + websocketConnection.getLocalSocketAddress().toString() + ", " + websocketConnection.getRemoteSocketAddress().toString() + ", " + websocketConnection.getReadyState().toString());
+
         // findet einen Player in bestehenden Matches anhand seiner WebSocket
         for (Match match : matches) {
             Player p1 = match.getPlayerOne();
             Player p2 = match.getPlayerTwo();
+            System.out.println("p1: " + p1.getWebsocketConnection().getLocalSocketAddress().toString() + ", " + p1.getWebsocketConnection().getRemoteSocketAddress().toString() + ", " + p1.getWebsocketConnection().getReadyState().toString());
+            System.out.println("p2: " + p2.getWebsocketConnection().getLocalSocketAddress().toString() + ", " + p2.getWebsocketConnection().getRemoteSocketAddress().toString() + ", " + p2.getWebsocketConnection().getReadyState().toString());
+
             if (websocketConnection == p1.getWebsocketConnection()) return p1;
             if (websocketConnection == p2.getWebsocketConnection()) return p2;
         }
@@ -215,8 +224,6 @@ public class MemorioWebSocketServer extends WebSocketServer {
         switch (messageKey) {
             case REGISTER_QUEUE:
                 String jwt_login = jsonMap.get(keyString);
-                System.out.println("login-token erhalten: " + jwt_login);
-
                 verifyAndCreateConnection(conn, jwt_login);
                 break;
             case DISSOLVE_QUEUE:
@@ -280,7 +287,8 @@ public class MemorioWebSocketServer extends WebSocketServer {
             String message = MemorioJsonMapper.getStringFromObject(game);
 
             Player player = findPlayerByMatchConnection(conn);
-            if (player == null) return;
+            if (player == null)
+                throw new RuntimeException("Es konnte kein Spieler mit der Websocketverbindung gefunden werden.");
 
             player.getSubscriber().getWebsocketConnection().send(message);
             System.out.println("sent game to " + player.getSubscriber().getUser().getUsername());

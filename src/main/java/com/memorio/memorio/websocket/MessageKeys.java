@@ -8,7 +8,7 @@ public enum MessageKeys {
     // Der Spieler befindet sich in der Queue und hat noch kein Match gefunden
     DISSOLVE_QUEUE("DISSOLVE"),
     // eine Karte soll umgedreht werden
-    FLIP_CARD("FLIP_CARD"),
+    FLIP_CARD("FLIPPED"),
     // Der Spieler will das laufende Match abbrechen
     CANCEL_GAME("CANCEL"),
     // wenn kein anderer Key gefunden wurde

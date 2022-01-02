@@ -45,7 +45,6 @@ public class Board {
      */
     public void flipCard(String cardId) {
         List<Card> cardSet = getCardSet();
-        System.out.println("karten davor: " + cardSet.toString());
 
         // hole die Karte, die geflippt werden soll
         Card currentCard = cardSet.stream()
@@ -77,7 +76,5 @@ public class Board {
         } else {
             allCardsWaitingToBeFlipped.forEach(Card::unflipCard);
         }
-
-        System.out.println("karten danach: " + getCardSet().toString());
     }
 }

@@ -2,10 +2,12 @@ package com.memorio.memorio.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Diese Klasse enthält zwei Player-Instanzen die erfolgreich gematched wurden.
  */
+@ToString
 @Getter
 @Setter
 public class Match {

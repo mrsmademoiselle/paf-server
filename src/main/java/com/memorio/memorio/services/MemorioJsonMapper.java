@@ -14,6 +14,7 @@ public class MemorioJsonMapper {
     public static Map<String, String> getMapFromString(String s) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
 
+        System.out.println(s);
         HashMap<String, String> map = mapper.readValue(s, HashMap.class);
         return map;
     }
