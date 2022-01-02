@@ -78,5 +78,19 @@ public class GameController extends PapaController {
 
     public void setTurn(String msg){turn.setText(msg);}
     public void updateScore(int score1, int score2){score.setText(score1 + " : " + score2);}
-    public void onCardFlip(Card card, MouseEvent event){card.setFill(Color.CORAL);}
+    public void onCardFlip(Card card, MouseEvent event){
+        if(card.getFlipped()){
+            card.setFlipped(false);
+            renderBackSide(card);
+        } else {
+            card.setFlipped(true);
+            card.setFill(new ImagePattern(new Image(card.getCardSource())));
+            newSysMessage(card.getCardSource());
+        }
+    }
+
+    public void renderBackSide(Card card){
+        Image pic = FileManager.getPic("cardPattern.jpg");
+        card.setFill(new ImagePattern(pic));
+    }
 }

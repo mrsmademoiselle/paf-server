@@ -4,14 +4,15 @@ import javafx.scene.shape.Rectangle;
 
 public class Card extends Rectangle {
 
-    private byte[] cardImage;
     private String cardId;
     private int[][] cardPosition;
+    private String cardSource;
+    private boolean flipped = false;
 
-    public void setImage(byte[] image) {this.cardImage = image;}
+    public void setFlipped(boolean val){this.flipped=val;}
+    public boolean getFlipped(){return this.flipped;}
     public void setCardId(String id) {this.cardId = id;}
     public void setPosition(int[][] position) {this.cardPosition = position;}
-    public byte[] getCardImage() {return cardImage;}
     public String getCardId() {return cardId;}
     public int[][] getCardPosition() {return cardPosition;}
 }
