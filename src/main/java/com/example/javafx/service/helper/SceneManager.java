@@ -30,23 +30,29 @@ public class SceneManager {
         return instance;
     }
 
+    public String getCurrentScene(){return this.currentScene;}
+
     public void loadLogin() {
         this.loadScene(this.loginScene);
     }
 
     public void loadRegistration() {
+        this.currentScene = "registration";
         this.loadScene(this.registerScene);
     }
 
     public void loadLobby() {
+        this.currentScene = "lobby";
         this.loadScene(this.lobbyScene);
     }
 
     public void loadProfile() {
+        this.currentScene = "profile";
         this.loadScene(this.profile);
     }
 
     public void loadHistory() {
+        this.currentScene = "history";
     }
 
     public void setStage(Stage stage) {

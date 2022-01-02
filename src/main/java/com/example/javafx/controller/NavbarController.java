@@ -57,10 +57,12 @@ public class NavbarController extends PapaController {
     }
 
     public void redirectToProfile() {
+        gameService.stop();
         sceneManager.loadProfile();
     }
 
     public void redirectToHistory() {
+        gameService.stop();
         sceneManager.loadHistory();
     }
 
