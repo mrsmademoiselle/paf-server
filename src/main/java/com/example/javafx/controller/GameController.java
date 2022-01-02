@@ -1,5 +1,4 @@
 package com.example.javafx.controller;
-
 import com.example.javafx.model.Card;
 import com.example.javafx.service.GameService;
 import com.example.javafx.service.helper.FileManager;
@@ -38,6 +37,14 @@ public class GameController extends PapaController {
 
     @FXML
     public void initialize() {
+        //TODO: DOKUMENTATION
+        // Verschmelzen von Gamecontroller instanz mit GameService singleton
+        GameService gameService = GameService.getInstance();
+        gameService.setGameController(this);
+        gameService.testActivatedGameController();
+
+        // Pointer zum laden der Bilder
+        int poointer = 1;
 
         final double cardY = (getHeightWithOffset() / CARDS_Y) - WIGGLE;
         final double cardX = cardY;
@@ -62,9 +69,11 @@ public class GameController extends PapaController {
                     @Override
                     public void handle(MouseEvent event) {onCardFlip(card, event);}
                 }));
-                Image pic = FileManager.getPic("cardPattern.jpg");
-                card.setFill(new ImagePattern(pic));
+                renderBackSide(card);
+                if(poointer > 8) {poointer = 1;}
+                card.setCardSource("http://localhost:9090/public/"+poointer+".jpg");
                 gameGrid.add(card, x, y);
+                poointer++;
             }
         }
         updateScore(0, 0);

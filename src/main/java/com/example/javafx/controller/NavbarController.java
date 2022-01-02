@@ -30,6 +30,12 @@ public class NavbarController extends PapaController {
     protected void initialize() {
         setLogoPic();
         setLogoutButtonPic();
+
+        //Buttons deaktivieren wenn in der game oder lobby view
+        if (this.sceneManager.getCurrentScene().contains("game") ||
+                this.sceneManager.getCurrentScene().contains("lobby")){
+            startGameButton.setDisable(true);
+        }
     }
 
     private void setLogoutButtonPic() {
@@ -50,6 +56,7 @@ public class NavbarController extends PapaController {
 
     // TODO evtl verschieben
     public void logout() {
+        gameService.stop();
         TokenManager tokenManager = TokenManager.getInstance();
         SceneManager sceneManager = SceneManager.getInstance();
         tokenManager.clearToken();

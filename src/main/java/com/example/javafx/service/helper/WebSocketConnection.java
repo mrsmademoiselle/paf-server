@@ -52,4 +52,11 @@ public class WebSocketConnection extends WebSocketClient {
 
     @Override
     public void onError(Exception e){System.out.println(e);}
+
+    //TODO: DOKUMENTATIUON
+    public void activateGameController(){
+        GameController controller = gameService.getGameController();
+        System.out.println("Teste Verschmelzung FUSSSSION");
+        controller.newSysMessage("hi from socket");
+    }
 }

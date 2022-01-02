@@ -88,3 +88,12 @@ die GameView laden. Ebenfalls implementiert sind eine stop-methode und eine stop
 die Connection schließt und den Thread beendet, stopLookingForGames ruft stop auf und läd außerdem die HomeView (Profil).
 
 Die GameController Klasse kann nun ein Spielfeld mit CARD_X * CARD_Y Karten rendern. Es existieren ebenfalls Methoden um Score und "turn" zu updaten.
+
+### Bug-Ladeanimation
+Immer wenn JavaFX bezogene Dinge in einem Thread passieren, der NICHT der JavaFX Main Thread ist, kommt es zu einer Exception.
+Das Liegt daran, dass der Hauptthread, der den JavaFX Kontext hat, nicht ueber die Aenderungen informiert wird.
+das bedeutet, dass wenn in einem Childthread irgendwelche Scene wechsel passieren sollen, der Mainthread darueber informiert werden muss.
+Hierzu gibt es zwei Methoden:
+1. Den Wechsel der Scene, Rerender etc. in Mainthread ausfuerhren. Dazu muss aber ein Event oder die Information dorch hochbubblen.
+2. Die gewuenschte Funktion SPAETER ueber den Mainthread ausfuehren lassen. Dazu gibt es in javafx.application.Plattform die runLater() Methode
+die Methode Queued die Gewunschte Funktion und lasst sie im Mainthread mit dem JavaFX Kontext laufen, sobald der Mainthread dafuer zeit hat.

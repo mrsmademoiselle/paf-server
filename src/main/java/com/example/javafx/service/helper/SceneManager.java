@@ -22,6 +22,9 @@ public class SceneManager {
     private URL gameScene;
     private static final SceneManager instance = new SceneManager();
 
+    // Aktuelle Scene
+    private String currentScene;
+
     private SceneManager() {
     }
 
@@ -32,6 +35,7 @@ public class SceneManager {
     public String getCurrentScene(){return this.currentScene;}
 
     public void loadLogin() {
+        this.currentScene = "login";
         this.loadScene(this.loginScene);
     }
 
@@ -79,6 +83,7 @@ public class SceneManager {
     }
 
     public void loadGame() {
+        this.currentScene ="game";
         this.loadScene(this.gameScene);
     }
 

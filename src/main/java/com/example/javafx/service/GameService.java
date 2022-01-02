@@ -3,6 +3,8 @@ package com.example.javafx.service;
 import com.example.javafx.controller.GameController;
 import com.example.javafx.service.helper.SceneManager;
 import com.example.javafx.service.helper.WebSocketConnection;
+import javafx.scene.Scene;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -51,9 +53,11 @@ public class GameService implements Runnable {
         if(connection != null){
             try{
                 connection.close();
+                System.out.print("Connection abgebaut - Thread noch am leben");
             } catch (Exception e){System.out.println(e);}
         }
         if(thread != null) {
+            System.out.println("Thread beendet - Connection abgebaut");
             thread.interrupt();
         }
     }
@@ -63,5 +67,11 @@ public class GameService implements Runnable {
             connection = new WebSocketConnection(new URI("ws://127.0.0.1:8888"), sceneManager);
             connection.connect();
         } catch(Exception e){System.out.println(e);}
+    }
+
+    //TODO: DOKUMENTATION
+    //Testen der verheiratung von GameController und Gameservice sowie Websocket
+    public void testActivatedGameController(){
+        connection.activateGameController();
     }
 }

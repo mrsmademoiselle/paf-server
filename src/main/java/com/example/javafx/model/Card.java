@@ -15,4 +15,8 @@ public class Card extends Rectangle {
     public void setPosition(int[][] position) {this.cardPosition = position;}
     public String getCardId() {return cardId;}
     public int[][] getCardPosition() {return cardPosition;}
+    public void setCardSource(String src){this.cardSource = src;}
+    public String getCardSource(){
+        return this.cardSource;
+    }
 }
