@@ -4,7 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 
@@ -118,7 +117,6 @@ public class SceneManager {
     private void loadView(URL path) throws IOException {
         Parent view;
         view = FXMLLoader.load(path);
-
         Scene scene = new Scene(view, this.APPLICATION_WIDTH, this.APPLICATION_HEIGHT);
         scene.getStylesheets().add(generalCSS.toExternalForm());
         stage.setScene(scene);

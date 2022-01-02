@@ -1,6 +1,7 @@
 package com.example.javafx.controller;
 
 import com.example.javafx.model.Card;
+import com.example.javafx.service.GameService;
 import com.example.javafx.service.helper.FileManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -40,6 +41,7 @@ public class GameController extends PapaController {
 
         final double cardY = (getHeightWithOffset() / CARDS_Y) - WIGGLE;
         final double cardX = cardY;
+
 
         gameGrid.setHgap(10);
         gameGrid.setVgap(10);

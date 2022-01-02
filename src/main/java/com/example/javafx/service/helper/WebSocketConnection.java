@@ -2,6 +2,10 @@ package com.example.javafx.service.helper;
 
 import java.net.URI;
 
+import com.example.javafx.controller.GameController;
+import com.example.javafx.controller.PapaController;
+import com.example.javafx.service.GameService;
+import javafx.fxml.FXMLLoader;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -11,6 +15,7 @@ import org.java_websocket.handshake.ServerHandshake;
 public class WebSocketConnection extends WebSocketClient {
 
     private SceneManager sceneManager = null;
+    private GameService gameService = GameService.getInstance();
 
     public WebSocketConnection(URI address, SceneManager sceneManager) {
         super(address);
@@ -19,7 +24,7 @@ public class WebSocketConnection extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        System.out.println("connection established...");
+
         /*
         Ausfuehren des JavaFX UI Render im Mainthread ueber Runlater. vgl Decision Log
         Das muessen wir machen weil der JavaFX Kontext im Mainthread ist. Wenn die Aenderungen in einem
@@ -42,7 +47,7 @@ public class WebSocketConnection extends WebSocketClient {
 
     @Override
     public void onMessage(String message){
-       System.out.println(message);
+    System.out.println(message);
     }
 
     @Override
