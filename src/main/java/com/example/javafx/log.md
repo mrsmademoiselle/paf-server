@@ -97,3 +97,13 @@ Hierzu gibt es zwei Methoden:
 1. Den Wechsel der Scene, Rerender etc. in Mainthread ausfuerhren. Dazu muss aber ein Event oder die Information dorch hochbubblen.
 2. Die gewuenschte Funktion SPAETER ueber den Mainthread ausfuehren lassen. Dazu gibt es in javafx.application.Plattform die runLater() Methode
 die Methode Queued die Gewunschte Funktion und lasst sie im Mainthread mit dem JavaFX Kontext laufen, sobald der Mainthread dafuer zeit hat.
+3. 
+
+### Nachrichtenuebermittling - Kommunikation vom WS zum Controller
+Damit wir aenderungen im Controller durchnehmen koennen muss er, entsprechend den Nachrichten aus dem WS, auktualisiert werde.
+Dazu wurde der Gameservice erweitert. 
+Er hat nun ein Attribut fuer den GameController, in dem die GameController instanz, ist die gerade gerendert ist
+Im GameController wird in der initialize() der GameService reingeholt und dort direkt die aktuelle Instanz des GameControllers ubergeben
+Im WebSocketConnection kann dann uber das Feld im GameService auf die Instanz des GameControllers zugegriffen werden
+Dadurch koennen wir nun die GameController view aktualisieren und uber den GameService mit dem Socket reden
+

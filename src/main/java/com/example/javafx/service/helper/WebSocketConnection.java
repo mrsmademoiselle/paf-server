@@ -53,8 +53,9 @@ public class WebSocketConnection extends WebSocketClient {
     @Override
     public void onError(Exception e){System.out.println(e);}
 
-    //TODO: DOKUMENTATIUON
+    //Testmethode zum testen der Verbindung vom Socket zum Gamecontroller
     public void activateGameController(){
+        // Herausholen des GameControler aus dem Service
         GameController controller = gameService.getGameController();
         System.out.println("Teste Verschmelzung FUSSSSION");
         controller.newSysMessage("hi from socket");

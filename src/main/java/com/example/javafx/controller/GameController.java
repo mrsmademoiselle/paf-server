@@ -37,10 +37,13 @@ public class GameController extends PapaController {
 
     @FXML
     public void initialize() {
-        //TODO: DOKUMENTATION
         // Verschmelzen von Gamecontroller instanz mit GameService singleton
         GameService gameService = GameService.getInstance();
+        // Uebergeben der eigenen GameController instanz
         gameService.setGameController(this);
+        /* Aufrufen einer Testmethode im Gameservice
+        In der Testmethode wird der Websocket aufgerufen
+         */
         gameService.testActivatedGameController();
 
         // Pointer zum laden der Bilder
@@ -89,17 +92,29 @@ public class GameController extends PapaController {
 
     public void setTurn(String msg){turn.setText(msg);}
     public void updateScore(int score1, int score2){score.setText(score1 + " : " + score2);}
+
+    /**
+     * Flippen der karte
+     * @param card Karte die gedreht werden soll
+     * @param event Event
+     */
     public void onCardFlip(Card card, MouseEvent event){
         if(card.getFlipped()){
             card.setFlipped(false);
+            // Rueckseite anzeigen
             renderBackSide(card);
         } else {
+            // Bild vom Server anzeigen
             card.setFlipped(true);
             card.setFill(new ImagePattern(new Image(card.getCardSource())));
             newSysMessage(card.getCardSource());
         }
     }
 
+    /**
+     * Rendert die leere Rueckseite einer Karte
+     * @param card Karte deren Rueckseite angezeigt werden soll
+     */
     public void renderBackSide(Card card){
         Image pic = FileManager.getPic("cardPattern.jpg");
         card.setFill(new ImagePattern(pic));

@@ -13,17 +13,28 @@ public class GameService implements Runnable {
     SceneManager sceneManager = SceneManager.getInstance();
     WebSocketConnection connection = null;
     Thread thread = null;
+    // GameController instanz - wird reingezogen wenn User in der GameView
     GameController gameController = null;
 
     //TODO:DOKUMENTATION - ENSCHTEIDUNGSLOG PFELGEn
     // Singleton pattern. Dadurch haben wir eine zentrale Verbindung gebunden an einen Service
     private static GameService instance;
 
+    /**
+     * Setzen der aktuellen GameController Instanz. Geschieht im GameController selber
+     * Damit soll sichergestellt werden, dass immer die aktuellste GameController Instanz im GameService ist
+     * @param controller Aktueller GameController
+     */
     public void setGameController(GameController controller){
         this.gameController = controller;
     }
 
+    /**
+     * Methode zum extrahieren der aktuellen GameController instanz - wird im Websocket verwendet
+     * @return Aktuelle GameController instanz
+     */
     public GameController getGameController() {
+        // Retuniert aktuellen GameController
         return gameController;
     }
 
@@ -72,6 +83,7 @@ public class GameService implements Runnable {
     //TODO: DOKUMENTATION
     //Testen der verheiratung von GameController und Gameservice sowie Websocket
     public void testActivatedGameController(){
+        // Aufrufen der Testmethode im WS, dort wird der GameController aus dem Service gezogen
         connection.activateGameController();
     }
 }
