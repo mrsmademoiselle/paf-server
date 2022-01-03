@@ -409,7 +409,8 @@ public class MemorioWebSocketServer extends WebSocketServer {
         if (player == null) return;
         System.out.println("Spieler verbunden: " + player.getUser().getUsername());
 
-        if (!playerQueue.contains(player)) {
+        // Wenn noch kein Spieler mit dem Token vorhanden ist, füge Token hinzu
+        if (playerQueue.stream().noneMatch(p -> p.getToken().equals(player.getToken()))) {
             playerQueue.add(player);
         }
 
