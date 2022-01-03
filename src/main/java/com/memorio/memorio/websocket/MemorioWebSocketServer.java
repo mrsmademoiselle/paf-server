@@ -247,7 +247,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 String cardId = jsonMap.get(actionFlag);
                 boolean hasAnyUnflippedCardsLeft = gameHandler.flipCard(cardId);
 
-                if (!hasAnyUnflippedCardsLeft) {
+                if (hasAnyUnflippedCardsLeft) {
                     sendGameToAllClientsOfConnection(conn);
                 } else {
                     System.out.println("sending endscore");
