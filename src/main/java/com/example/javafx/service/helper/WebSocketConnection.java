@@ -97,4 +97,15 @@ public class WebSocketConnection extends WebSocketClient {
         System.out.println("Teste Verschmelzung FUSSSSION");
         controller.newSysMessage("hi from socket");
     }
+
+    /**
+     * Nachrichtenhandlen
+     * @param payload
+     */
+    public void handleMessage(Map<String, String> payload){
+        /* Message handling
+        switch(){
+
+        }*/
+    }
 }
