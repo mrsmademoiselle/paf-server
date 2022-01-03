@@ -157,6 +157,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
         // zueinander subscriben
         p1.addSubscriber(p2);
         p2.addSubscriber(p1);
+
         // Match initialisieren
         p1.setMatch(match);
         p2.setMatch(match);
@@ -183,8 +184,6 @@ public class MemorioWebSocketServer extends WebSocketServer {
         for (Match match : matches) {
             Player p1 = match.getPlayerOne();
             Player p2 = match.getPlayerTwo();
-            System.out.println("p1: " + p1.getWebsocketConnection().getLocalSocketAddress().toString() + ", " + p1.getWebsocketConnection().getRemoteSocketAddress().toString() + ", " + p1.getWebsocketConnection().getReadyState().toString());
-            System.out.println("p2: " + p2.getWebsocketConnection().getLocalSocketAddress().toString() + ", " + p2.getWebsocketConnection().getRemoteSocketAddress().toString() + ", " + p2.getWebsocketConnection().getReadyState().toString());
 
             if (websocketConnection == p1.getWebsocketConnection()) return p1;
             if (websocketConnection == p2.getWebsocketConnection()) return p2;
