@@ -28,4 +28,8 @@ public class UserScore {
         this.user = user;
         this.moves = 0;
     }
+
+    public void increaseScore() {
+        this.moves++;
+    }
 }

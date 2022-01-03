@@ -256,6 +256,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 sendEndscoreToClientsOfConnection(conn);
                 break;
             case HEARTBEAT:
+                System.out.println("Heartbeat");
                 // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
                 conn = checkIfConnectionHasChanged(conn, jwt);
                 // ???

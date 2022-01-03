@@ -1,6 +1,8 @@
 package com.memorio.memorio.services;
 
 import com.memorio.memorio.entities.Game;
+import com.memorio.memorio.entities.User;
+import com.memorio.memorio.entities.UserScore;
 
 /**
  * Dient der Persistierung und Verarbeitung eines einzigen Game-Objekts zur Laufzeit.
@@ -19,7 +21,16 @@ public class GameHandler {
     }
 
     public void flipCard(String cardId) {
-        gameInstance.getBoard().flipCard(cardId);
+        boolean foundMatchingPair = gameInstance.getBoard().flipCard(cardId);
+
+        // update user score, wenn ein matchendes Kartenpaar gefunden wurde
+        if (foundMatchingPair) {
+            User currentTurn = gameInstance.getCurrentTurn();
+            UserScore userScoreToUpdate = gameInstance.getUserScores().stream()
+                    .filter(userScore -> userScore.getUser().equals(currentTurn))
+                    .findFirst().orElseThrow(RuntimeException::new);
+            userScoreToUpdate.increaseScore();
+        }
     }
 
     public Game getGame() {
