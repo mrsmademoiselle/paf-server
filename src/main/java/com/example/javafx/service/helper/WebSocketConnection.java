@@ -38,6 +38,8 @@ public class WebSocketConnection extends WebSocketClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        // Senden der Loginnachricht im WS Thread
+        mSend(MessageKeys.LOGIN, "");
     }
 
     /**

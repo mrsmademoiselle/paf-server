@@ -6,6 +6,8 @@ module com.example.javafx {
     requires json;
     requires coresearch.cvurl.io;
     requires Java.WebSocket;
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
 
     opens com.example.javafx to javafx.fxml;
     exports com.example.javafx;

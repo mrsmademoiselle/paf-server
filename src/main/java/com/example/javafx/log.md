@@ -107,3 +107,6 @@ Im GameController wird in der initialize() der GameService reingeholt und dort d
 Im WebSocketConnection kann dann uber das Feld im GameService auf die Instanz des GameControllers zugegriffen werden
 Dadurch koennen wir nun die GameController view aktualisieren und uber den GameService mit dem Socket reden
 
+### Fragen
+- Enumkonstellation auf dem Server so gewaehlt um Nachrichten besser zu verarbeiten?
+- Im Client gibt es ebenfalls Enums, die wir verwendet wollten, allerdings bekommen wir dort nur Enumobjekte
