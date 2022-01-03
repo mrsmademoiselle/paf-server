@@ -40,6 +40,16 @@ public class WebSocketConnection extends WebSocketClient {
         }
     }
 
+    /**
+     * Methode zum senden einer Nachricht
+     * @param messageKey Nachrichtenflag - siehe Nachrichtentabelle oder Messagekeyenum
+     * @param payload - DIe Payload zur entsprechenden Nachricht
+     */
+    public void mSend(MessageKeys messageKey, String payload){
+        send("{\"" + messageKey + "\":\"" + payload + "\"" +
+                ",\"JWT\":" + "\"" + TokenManager.getInstance().getToken() + "\"}");
+    }
+
     @Override
     public void onClose(int code, String reason, boolean remote){
         System.out.println("closed with exit code " + code + " additional info: " + reason);
