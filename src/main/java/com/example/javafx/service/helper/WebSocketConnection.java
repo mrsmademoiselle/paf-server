@@ -1,10 +1,12 @@
 package com.example.javafx.service.helper;
 
 import java.net.URI;
+import java.util.Map;
 
 import com.example.javafx.controller.GameController;
 import com.example.javafx.controller.PapaController;
 import com.example.javafx.service.GameService;
+import com.example.javafx.service.MemorioJsonMapper;
 import javafx.fxml.FXMLLoader;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -22,6 +24,10 @@ public class WebSocketConnection extends WebSocketClient {
         this.sceneManager = sceneManager;
     }
 
+    /**
+     * Wird aufgerufen wenn der Socketserver gestartet wird - sendet das Login SIgnal an den Server
+     * @param handshakedata - Vorgegeben, verwendetn wir gerade nicht
+     */
     @Override
     public void onOpen(ServerHandshake handshakedata) {
 
@@ -52,13 +58,32 @@ public class WebSocketConnection extends WebSocketClient {
                 ",\"JWT\":" + "\"" + TokenManager.getInstance().getToken() + "\"}");
     }
 
+    /**
+     * Senden des beendensignals an den Server
+     * @param code Unbenutzt
+     * @param reason Unbenutzt
+     * @param remote Unbenutzt
+     */
     @Override
     public void onClose(int code, String reason, boolean remote){
-        System.out.println("closed with exit code " + code + " additional info: " + reason);
+        //TODO: Checken ob noch was gesendet wird this.mSend(MessageKeys.DISSOLVE, "");
+        //System.out.println("closed with exit code " + code + " additional info: " + reason);
     }
 
     @Override
     public void onMessage(String message){
+        try {
+            Map<String, String> jsonMap = MemorioJsonMapper.getMapFromString(message);
+            //Check
+            if (jsonMap.keySet().size() != 2) {
+                throw new RuntimeException("JSON-Keyset muss aus 2 Elementen bestehen..");
+            }
+
+            handleMessage(jsonMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //Testing
     System.out.println(message);
     }
 
