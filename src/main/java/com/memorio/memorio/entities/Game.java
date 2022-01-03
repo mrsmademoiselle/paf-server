@@ -48,4 +48,16 @@ public class Game {
 
         this.userScores = Arrays.asList(userScore1, userScore2);
     }
+
+    /**
+     * Setzt den User als "User am Zug", der als letztes *nicht* am Zug war.
+     */
+    public void switchUser() {
+        User jetztAmZug = this.getUserScores().stream()
+                .filter(userScore -> !userScore.getUser().equals(currentTurn))
+                // es gibt immer mindestens 2 User, die Bedingung muss also immer etwas zurückliefern, es sei denn es gibt große Probleme
+                .findFirst().get().getUser();
+
+        setCurrentTurn(jetztAmZug);
+    }
 }
