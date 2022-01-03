@@ -381,7 +381,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 throw new RuntimeException("Es konnte kein Spieler mit der Websocketverbindung gefunden werden.");
 
             player.getSubscriber().getWebsocketConnection().send(message);
-            System.out.println("sent game to " + player.getSubscriber().getUser().getUsername());
+            player.getWebsocketConnection().send(message);
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
