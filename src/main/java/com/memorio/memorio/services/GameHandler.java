@@ -21,7 +21,7 @@ public class GameHandler {
     public GameHandler() {
     }
 
-    public void flipCard(String cardId) {
+    public boolean flipCard(String cardId) {
         boolean foundMatchingPair = gameInstance.getBoard().flipCard(cardId);
 
         if (foundMatchingPair) {
@@ -29,7 +29,15 @@ public class GameHandler {
         } else {
             switchCurrentTurnIfNeeded();
         }
+        return hasAnyUnflippedCardsLeft();
 
+    }
+
+    private boolean hasAnyUnflippedCardsLeft() {
+        boolean hasAnyUnflippedCards = gameInstance.getBoard().getCardSet().stream()
+                .anyMatch(card -> card.getFlipStatus().equals(FlipStatus.NOT_FLIPPED));
+
+        return hasAnyUnflippedCards;
     }
 
     /**

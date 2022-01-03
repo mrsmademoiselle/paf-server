@@ -245,8 +245,14 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 conn = checkIfConnectionHasChanged(conn, jwt);
 
                 String cardId = jsonMap.get(actionFlag);
-                gameHandler.flipCard(cardId);
-                sendGameToAllClientsOfConnection(conn);
+                boolean hasAnyUnflippedCardsLeft = gameHandler.flipCard(cardId);
+
+                if (!hasAnyUnflippedCardsLeft) {
+                    sendGameToAllClientsOfConnection(conn);
+                } else {
+                    System.out.println("sending endscore");
+                    sendEndscoreToClientsOfConnection(conn);
+                }
                 break;
             case CANCEL_GAME:
                 // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
@@ -347,13 +353,17 @@ public class MemorioWebSocketServer extends WebSocketServer {
             Endscore endscore = new Endscore(game.getUserScores());
             String message = MemorioJsonMapper.getStringFromObject(endscore);
 
+            // sende Endscore an Clients
             player.getSubscriber().getWebsocketConnection().send(message);
-            System.out.println("sent endscore to " + player.getSubscriber().getUser().getUsername());
-
             player.getWebsocketConnection().send(message);
-            System.out.println("sent endscore to original User" + player.getUser().getUsername());
 
+            System.out.println("sent endscore!");
+            System.out.println("dissolving match..." + matches.contains(player.getMatch()));
+
+            // ende das Match
             dissolveMatch(player.getMatch());
+            System.out.println("dissolved match: " + matches.contains(player.getMatch()));
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

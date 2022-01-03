@@ -1,10 +1,17 @@
 package com.memorio.memorio.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.util.List;
 
 /**
  * Das Endscore Objekt
  */
+@ToString
+@Getter
+@Setter
 public class Endscore {
     private User winner;
 
