@@ -76,10 +76,10 @@ public class WebSocketConnection extends WebSocketClient {
         try {
             Map<String, String> jsonMap = MemorioJsonMapper.getMapFromString(message);
             //Check
+         /*
             if (jsonMap.keySet().size() != 2) {
                 throw new RuntimeException("JSON-Keyset muss aus 2 Elementen bestehen..");
-            }
-
+            }*/
             handleMessage(jsonMap);
         } catch (Exception e) {
             e.printStackTrace();
