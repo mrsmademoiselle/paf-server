@@ -31,13 +31,6 @@ public class MemorioWebSocketServer extends WebSocketServer {
     private Queue<Player> playerQueue = new LinkedList<>();
     // Diese Liste enthält alle erfolgreichen Matches.
     private List<Match> matches = new ArrayList<>();
-    // Nachrichten Flags nach denen gesucht werden kann
-    private String[] messageFlags = {
-            "token",
-    };
-    // >> Das wird so nicht funktionieren. Autowired darf man nur in Spring-Components verwenden, hier verwenden wir allerdings vanilla Java.
-    // Der Konstruktor darf nicht verändert werden, daher wird der jwtTokenUtil über die injection reingezogen
-
 
     /**
      * Super Konstruktor zum Erstellen des Websocketservers
@@ -69,7 +62,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
             Map<String, String> jsonMap = MemorioJsonMapper.getMapFromString(message);
 
             if (jsonMap.keySet().size() != 2) {
-                throw new RuntimeException("JSON-Keyset muss aus 2 Elementen bestehen..");
+                throw new RuntimeException("JSON-Keyset muss aus 2 Elementen bestehen.");
             }
 
             handleMessage(conn, jsonMap);
@@ -233,7 +226,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 break;
             case DISSOLVE_QUEUE:
                 // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
-                conn = checkIfConnectionHasChanged(conn, jwt);
+                conn = updateConnectionIfChanged(conn, jwt);
 
                 Player player_dissolve = findPlayerInQueueByConnection(conn);
                 if (player_dissolve == null) return;
@@ -241,8 +234,15 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 break;
             case FLIP_CARD:
                 // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
-                conn = checkIfConnectionHasChanged(conn, jwt);
+                conn = updateConnectionIfChanged(conn, jwt);
 
+                Player player = findPlayerByMatchConnection(conn);
+                if (player == null)
+                    throw new RuntimeException("Es konnte kein Spieler mit der Websocketverbindung gefunden werden.");
+
+                if (!gameHandler.getGame().getCurrentTurn().equals(player.getUser()))
+                    throw new RuntimeException("Dieser Spieler ist gerade nicht am Zug.");
+                
                 String cardId = jsonMap.get(actionFlag);
                 boolean hasAnyUnflippedCardsLeft = gameHandler.flipCard(cardId);
 
@@ -255,7 +255,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 break;
             case CANCEL_GAME:
                 // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
-                conn = checkIfConnectionHasChanged(conn, jwt);
+                conn = updateConnectionIfChanged(conn, jwt);
 
                 String reason = jsonMap.get(actionFlag);
                 sendEndscoreToClientsOfConnection(conn);
@@ -263,12 +263,12 @@ public class MemorioWebSocketServer extends WebSocketServer {
             case HEARTBEAT:
                 System.out.println("Heartbeat");
                 // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
-                conn = checkIfConnectionHasChanged(conn, jwt);
+                conn = updateConnectionIfChanged(conn, jwt);
                 // ???
                 break;
             default:
                 // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
-                conn = checkIfConnectionHasChanged(conn, jwt);
+                conn = updateConnectionIfChanged(conn, jwt);
 
                 // Ziehe vom Spieler mit der gefundenen Websocket alle Subscriber,
                 // deren Verbindungen und sende Nachricht
@@ -284,8 +284,10 @@ public class MemorioWebSocketServer extends WebSocketServer {
     /**
      * Prüft, ob sich die Adresse zu einem Client geändert hat oder nicht.
      * Wenn ja, wird sie im entsprechenden Objekt des Spielers aktualisiert.
+     * <p>
+     * Gibt die aktuelle Connection zurück
      */
-    private WebSocket checkIfConnectionHasChanged(WebSocket conn, String jwt_heartbeat) {
+    private WebSocket updateConnectionIfChanged(WebSocket conn, String jwt_heartbeat) {
 
         // suche nach Spieler zur Verbindung
         Player player = findPlayerOfTokenIngameOrInQueue(jwt_heartbeat);
@@ -409,7 +411,9 @@ public class MemorioWebSocketServer extends WebSocketServer {
         System.out.println("Spieler verbunden: " + player.getUser().getUsername());
 
         // Wenn noch kein Spieler mit dem Token vorhanden ist, füge Token hinzu
-        if (playerQueue.stream().noneMatch(p -> p.getToken().equals(player.getToken()))) {
+        boolean playerNotYetInMatch = playerQueue.stream().noneMatch(p -> p.getToken().equals(player.getToken()));
+        System.out.println("player not yet in match?" + playerNotYetInMatch);
+        if (playerNotYetInMatch) {
             playerQueue.add(player);
         }
 
