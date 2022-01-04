@@ -72,6 +72,7 @@ public class WebSocketConnection extends WebSocketClient {
 
     @Override
     public void onMessage(String message){
+
         try {
             Map<String, String> jsonMap = MemorioJsonMapper.getMapFromString(message);
             //Check
@@ -84,7 +85,7 @@ public class WebSocketConnection extends WebSocketClient {
             e.printStackTrace();
         }
         //Testing
-    System.out.println(message);
+    System.out.println("On Message " + message);
     }
 
     @Override
@@ -103,9 +104,41 @@ public class WebSocketConnection extends WebSocketClient {
      * @param payload
      */
     public void handleMessage(Map<String, String> payload){
-        /* Message handling
-        switch(){
+        System.out.println("Ouput in handle message " + payload);
+        if(payload.containsKey("board")){
+            System.out.println("Foobar");
+            System.out.println(payload.values());
 
-        }*/
+        }
+        //Map<String, String> board = payload.get("board")[2];
+        System.out.println();
+        /* Message handling
+        1. Checken ob gameDto oder Enscore dto
+            - instanceOf
+        2. Wenn game dto
+            - checken ob bereits gameDto existiert
+            - wenn nicht, lege game an mit infos aus Dto
+                - userscore
+                - Board
+                - wer ist am zug
+             - wenn dto bereits vorhanden
+                - dann muss das spiel ja bereits laufen
+                - durchwandern des bekommen dtos und abgleichen des vorhandenen gamedtos
+                - aenderungen umsetzen
+         3. WEnn endscore dto,
+            - mache endscore dinge
+            */
+
+        /*
+
+        MatchDTO kommt rein
+
+        Dto durch iterieren:
+            // payload = setBoard
+            gameController.setBoard(payload.getBoard());
+            gameController.setScore(payload.getScore());
+            gameController.setTurn(payload.setTurn());
+         */
+
     }
 }

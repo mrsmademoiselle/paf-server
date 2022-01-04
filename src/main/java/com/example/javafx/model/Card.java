@@ -11,6 +11,7 @@ public class Card extends Rectangle {
 
     public void setFlipped(boolean val){this.flipped=val;}
     public boolean getFlipped(){return this.flipped;}
+    // cardId = PairID
     public void setCardId(String id) {this.cardId = id;}
     public void setPosition(int[][] position) {this.cardPosition = position;}
     public String getCardId() {return cardId;}

@@ -1,5 +1,8 @@
 package com.example.javafx.controller;
+import com.example.javafx.model.BoardDto;
 import com.example.javafx.model.Card;
+import com.example.javafx.model.PlayerDto;
+import com.example.javafx.model.ScoreDto;
 import com.example.javafx.service.GameService;
 import com.example.javafx.service.helper.FileManager;
 import javafx.fxml.FXML;

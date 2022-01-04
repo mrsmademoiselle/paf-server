@@ -14,7 +14,7 @@ public class MemorioJsonMapper {
     public static Map<String, String> getMapFromString(String s) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
 
-        System.out.println(s);
+        System.out.println("JsonMapper " + s);
         // das muss eine LinkedHashMap bleiben, damit die Reihenfolge der JSON-Werte nicht variiert!
         LinkedHashMap<String, String> map = mapper.readValue(s, LinkedHashMap.class);
         return map;
