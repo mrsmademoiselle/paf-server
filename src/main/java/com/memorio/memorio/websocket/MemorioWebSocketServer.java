@@ -96,8 +96,6 @@ public class MemorioWebSocketServer extends WebSocketServer {
         // wird aufgerufen wenn ein Client die Verbindung abbricht.
         // wenn der Player in einem Game ist wird dieses aufgelöst.
         Player player = findPlayerByMatchConnection(conn);
-
-        if (player == null) return;
         dissolveMatch(player.getMatch());
         System.out.println("Spieler getrennt: " + player.getUser().getUsername());
     }
@@ -171,7 +169,6 @@ public class MemorioWebSocketServer extends WebSocketServer {
      * @return Gefundener Spieler oder null
      */
     public Player findPlayerByMatchConnection(WebSocket websocketConnection) {
-        System.out.println("toFind: " + websocketConnection.getLocalSocketAddress().toString() + ", " + websocketConnection.getRemoteSocketAddress().toString() + ", " + websocketConnection.getReadyState().toString());
 
         // findet einen Player in bestehenden Matches anhand seiner WebSocket
         for (Match match : matches) {
@@ -181,7 +178,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
             if (websocketConnection == p1.getWebsocketConnection()) return p1;
             if (websocketConnection == p2.getWebsocketConnection()) return p2;
         }
-        return null;
+        throw new RuntimeException("Es konnte kein Spieler mit der Websocketverbindung gefunden werden.");
     }
 
     /**
@@ -237,12 +234,10 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 conn = updateConnectionIfChanged(conn, jwt);
 
                 Player player = findPlayerByMatchConnection(conn);
-                if (player == null)
-                    throw new RuntimeException("Es konnte kein Spieler mit der Websocketverbindung gefunden werden.");
 
                 if (!gameHandler.getGame().getCurrentTurn().equals(player.getUser()))
                     throw new RuntimeException("Dieser Spieler ist gerade nicht am Zug.");
-                
+
                 String cardId = jsonMap.get(actionFlag);
                 boolean hasAnyUnflippedCardsLeft = gameHandler.flipCard(cardId);
 
@@ -274,7 +269,6 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 // deren Verbindungen und sende Nachricht
                 String message = jsonMap.get(actionFlag);
                 Player player_default = findPlayerByMatchConnection(conn);
-                if (player_default == null) return;
 
                 player_default.getSubscriber().getWebsocketConnection().send(message);
                 break;
@@ -347,7 +341,6 @@ public class MemorioWebSocketServer extends WebSocketServer {
     private void sendEndscoreToClientsOfConnection(WebSocket conn) {
         try {
             Player player = findPlayerByMatchConnection(conn);
-            if (player == null) return;
 
             // erstelle Endscore-Objekt aus Game-Objekt
             Game game = gameHandler.getGame();
@@ -389,9 +382,6 @@ public class MemorioWebSocketServer extends WebSocketServer {
             String message = MemorioJsonMapper.getStringFromObject(game);
 
             Player player = findPlayerByMatchConnection(conn);
-            if (player == null)
-                throw new RuntimeException("Es konnte kein Spieler mit der Websocketverbindung gefunden werden.");
-
             player.getSubscriber().getWebsocketConnection().send(message);
             player.getWebsocketConnection().send(message);
 
