@@ -15,7 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 
 /**
  * Filterklasse, die HttpRequest durchkämmt und auf ein valides Token prüft.
@@ -61,7 +60,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // Sobald ein User gefunden wurde
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            logger.info("User gefunden: " + username);
             UserDetails userDetails = this.userService.loadUserByUsername(username);
 
             // Laden des Users und validieren

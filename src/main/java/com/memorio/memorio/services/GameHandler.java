@@ -4,6 +4,8 @@ import com.memorio.memorio.entities.FlipStatus;
 import com.memorio.memorio.entities.Game;
 import com.memorio.memorio.entities.User;
 import com.memorio.memorio.entities.UserScore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Dient der Persistierung und Verarbeitung eines einzigen Game-Objekts zur Laufzeit.
@@ -13,6 +15,7 @@ import com.memorio.memorio.entities.UserScore;
  */
 public class GameHandler {
     private Game gameInstance;
+    private Logger logger = LoggerFactory.getLogger(GameHandler.class);
 
     public GameHandler(Game game) {
         this.gameInstance = game;
@@ -60,7 +63,7 @@ public class GameHandler {
                 .filter(userScore -> userScore.getUser().equals(currentTurn))
                 .findFirst().orElseThrow(RuntimeException::new);
         userScoreToUpdate.increaseScore();
-
+        logger.info("User Scores wurden erfolgreich geupdated.");
     }
 
     public Game getGame() {

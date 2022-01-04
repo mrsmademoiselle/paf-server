@@ -3,6 +3,8 @@ package com.memorio.memorio.websocket;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.memorio.memorio.config.jwt.JwtTokenUtil;
 import com.memorio.memorio.entities.*;
+import com.memorio.memorio.exception.MatchNotFoundException;
+import com.memorio.memorio.exception.MemorioRuntimeException;
 import com.memorio.memorio.repositories.UserRepository;
 import com.memorio.memorio.services.BeanUtil;
 import com.memorio.memorio.services.GameHandler;
@@ -10,6 +12,8 @@ import com.memorio.memorio.services.MemorioJsonMapper;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 import java.util.*;
@@ -26,6 +30,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
     // Adresse und Port
     private final static InetSocketAddress address = new InetSocketAddress("127.0.0.1", 8888);
     private static MemorioWebSocketServer instance = null;
+    Logger logger = LoggerFactory.getLogger(MemorioWebSocketServer.class);
     List<String> lostConnectionJwt = new ArrayList<>();
     // hier kommt jeder neue Player rein.
     private Queue<Player> playerQueue = new LinkedList<>();
@@ -62,12 +67,12 @@ public class MemorioWebSocketServer extends WebSocketServer {
             Map<String, String> jsonMap = MemorioJsonMapper.getMapFromString(message);
 
             if (jsonMap.keySet().size() != 2) {
-                throw new RuntimeException("JSON-Keyset muss aus 2 Elementen bestehen.");
+                throw new MemorioRuntimeException("JSON-Keyset muss aus 2 Elementen bestehen.");
             }
 
             handleMessage(conn, jsonMap);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -92,12 +97,11 @@ public class MemorioWebSocketServer extends WebSocketServer {
      */
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-        System.out.println("Verbindung wird geschlossen.........");
         // wird aufgerufen wenn ein Client die Verbindung abbricht.
         // wenn der Player in einem Game ist wird dieses aufgelöst.
         Player player = findPlayerByMatchConnection(conn);
         dissolveMatch(player.getMatch());
-        System.out.println("Spieler getrennt: " + player.getUser().getUsername());
+        logger.info("Verbindung geschlossen: " + player.getUser().getUsername());
     }
 
     /**
@@ -105,7 +109,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
      */
     @Override
     public void onError(WebSocket conn, Exception ex) {
-        System.out.println(ex);
+        logger.error(ex.getMessage());
     }
 
     /**
@@ -122,7 +126,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
      *
      * @throws MatchNotFoundException
      */
-    public Match matchPlayer() throws MatchNotFoundException {
+    public void matchPlayer() throws MatchNotFoundException {
         // versucht sich zwei Player-Instanzen aus der playerQueue zu holen und diese
         // zu matchen
         if (playerQueue.size() < 2) {
@@ -132,7 +136,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
         Player playerTwo = playerQueue.remove();
         Match match = new Match(playerOne, playerTwo);
         onNewMatch(match);
-        return match;
+
     }
 
     /**
@@ -154,12 +158,8 @@ public class MemorioWebSocketServer extends WebSocketServer {
         p2.setMatch(match);
         // zu matches hinzufügen
         matches.add(match);
-        System.out.println("added match: " + match);
 
-        System.out.println("-------------------------------------------");
-        System.out.println("MATCH GEFUNDEN!!!!");
-        System.out.println("Spieler: " + p1.getUser().getUsername() + " VS " + p2.getUser().getUsername());
-        System.out.println("-------------------------------------------");
+        logger.info("Match gefunden:::: " + p1.getUser().getUsername() + " VS " + p2.getUser().getUsername());
     }
 
     /**
@@ -178,7 +178,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
             if (websocketConnection == p1.getWebsocketConnection()) return p1;
             if (websocketConnection == p2.getWebsocketConnection()) return p2;
         }
-        throw new RuntimeException("Es konnte kein Spieler mit der Websocketverbindung gefunden werden.");
+        throw new MemorioRuntimeException("Es konnte kein Spieler mit der Websocketverbindung gefunden werden.");
     }
 
     /**
@@ -192,16 +192,13 @@ public class MemorioWebSocketServer extends WebSocketServer {
         // zum Game gehörenden Connections beendet.
         Player p1 = match.getPlayerOne();
         Player p2 = match.getPlayerTwo();
-        /* Zu prüfen ob das notwendig ist
-        p1.removeSubscriber(p2);
-        p2.removeSubscriber(p1);
-         */
+
         p1.getWebsocketConnection().close();
         p2.getWebsocketConnection().close();
         match.removeAllPlayers();
 
         matches.remove(match);
-        System.out.println("match aufgelöst :(");
+        logger.info("Spieler-Match wurde aufgelöst.");
     }
 
     private void handleMessage(WebSocket conn, Map<String, String> jsonMap) {
@@ -211,9 +208,8 @@ public class MemorioWebSocketServer extends WebSocketServer {
         String actionFlag = keySetList.get(0); // .get(0) müssen wir hier nicht double-checken, weil wir das vor dem Methodenaufruf abfangen
         MessageKeys messageKey = MessageKeys.getEnumForString(actionFlag);
 
-        System.out.println("flag: " + actionFlag);
         if (!jsonMap.containsKey(MessageKeys.JWT.toString())) {
-            throw new RuntimeException("Es wurde kein JWT Token mitgeschickt");
+            throw new MemorioRuntimeException("Es wurde kein JWT Token mitgeschickt");
         }
         String jwt = jsonMap.get(MessageKeys.JWT.toString());
 
@@ -226,25 +222,30 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 conn = updateConnectionIfChanged(conn, jwt);
 
                 Player player_dissolve = findPlayerInQueueByConnection(conn);
-                if (player_dissolve == null) return;
+                if (player_dissolve == null)
+                    throw new MemorioRuntimeException("Der zu entfernende Spieler wurde nicht in der Queue gefunden.");
+
                 playerQueue.remove(player_dissolve);
+                logger.info("Der Spieler wurde erfolgreich aus der Queue entfernt.");
+
                 break;
             case FLIP_CARD:
                 // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
                 conn = updateConnectionIfChanged(conn, jwt);
 
+                // Prüfen, ob der User überhaupt ziehen darf
                 Player player = findPlayerByMatchConnection(conn);
-
                 if (!gameHandler.getGame().getCurrentTurn().equals(player.getUser()))
-                    throw new RuntimeException("Dieser Spieler ist gerade nicht am Zug.");
+                    throw new MemorioRuntimeException("Dieser Spieler ist gerade nicht am Zug.");
 
+                // Flip-Logik
                 String cardId = jsonMap.get(actionFlag);
                 boolean hasAnyUnflippedCardsLeft = gameHandler.flipCard(cardId);
 
+                // Response an Client senden, Game oder Endscore
                 if (hasAnyUnflippedCardsLeft) {
                     sendGameToAllClientsOfConnection(conn);
                 } else {
-                    System.out.println("sending endscore");
                     sendEndscoreToClientsOfConnection(conn);
                 }
                 break;
@@ -256,7 +257,6 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 sendEndscoreToClientsOfConnection(conn);
                 break;
             case HEARTBEAT:
-                System.out.println("Heartbeat");
                 // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
                 conn = updateConnectionIfChanged(conn, jwt);
                 // ???
@@ -287,7 +287,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
         Player player = findPlayerOfTokenIngameOrInQueue(jwt_heartbeat);
 
         // wenn es keinen Spieler in unseren Listen mit diesem Token gibt, ist uns die Connection auch egal
-        if (player == null) throw new RuntimeException("Es existiert kein Spieler mit diesem Token.");
+        if (player == null) throw new MemorioRuntimeException("Es existiert kein Spieler mit diesem Token.");
 
         // wenn kein Spieler gefunden, setze sein Token, damit wir die nächste Message an den Client
         // zwischenspeichern können bis zum nächsten Heartbeat
@@ -295,8 +295,9 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
         // neues Setzen der WebsocketConnection, wenn sie sich unterscheidet
         if (player.getWebsocketConnection().equals(conn)) {
-            System.out.println("Connection has changed. Setting new connection...");
+            logger.warn("Connection has changed. Setting new connection...");
             player.setWebsocketConnection(conn);
+
             return conn;
         }
         return player.getWebsocketConnection();
@@ -311,7 +312,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
         Optional<User> userForToken = getUserForJwtOrNull(jwt);
 
         // wenns keinen User mit diesem Jwt Token gibt, Abbruch
-        if (userForToken.isEmpty()) throw new RuntimeException("Für dieses JWT ist kein User registriert");
+        if (userForToken.isEmpty()) throw new MemorioRuntimeException("Für dieses JWT ist kein User registriert");
 
         // suchen nach Spielern in Warteschlange
         Player playerOfJwt = playerQueue.stream()
@@ -350,13 +351,10 @@ public class MemorioWebSocketServer extends WebSocketServer {
             // sende Endscore an Clients
             player.getSubscriber().getWebsocketConnection().send(message);
             player.getWebsocketConnection().send(message);
-
-            System.out.println("sent endscore!");
-            System.out.println("dissolving match..." + matches.contains(player.getMatch()));
+            logger.info("Endscore-Objekt erfolgreich an alle Clients gesendet.");
 
             // ende das Match
             dissolveMatch(player.getMatch());
-            System.out.println("dissolved match: " + matches.contains(player.getMatch()));
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -384,7 +382,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
             Player player = findPlayerByMatchConnection(conn);
             player.getSubscriber().getWebsocketConnection().send(message);
             player.getWebsocketConnection().send(message);
-
+            logger.info("Game Objekt erfolgreich an alle Clients gesendet.");
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -398,31 +396,28 @@ public class MemorioWebSocketServer extends WebSocketServer {
     private void verifyAndCreateConnection(WebSocket conn, String jwt) {
         Player player = getPlayerForJwt(conn, jwt);
         if (player == null) return;
-        System.out.println("Spieler verbunden: " + player.getUser().getUsername());
+        logger.info("Spieler verbunden: " + player.getUser().getUsername());
 
         // Wenn noch kein Spieler mit dem Token vorhanden ist, füge Token hinzu
         boolean playerNotYetInMatch = playerQueue.stream().noneMatch(p -> p.getToken().equals(player.getToken()));
-        System.out.println("player not yet in match?" + playerNotYetInMatch);
-        if (playerNotYetInMatch) {
-            playerQueue.add(player);
-        }
+        if (playerNotYetInMatch) playerQueue.add(player);
 
         try {
             matchPlayer();
+
             // Game-Objekt erstellen
             Game game = new Game(player.getUser(), new Board(), player.getUser(), player.getUser(), player.getSubscriber().getUser());
             String message = MemorioJsonMapper.getStringFromObject(game);
 
             // und an alle Teilnehmer des Matches schicken
             player.getSubscriber().getWebsocketConnection().send(message);
-            System.out.println("sent game to " + player.getSubscriber().getUser().getUsername());
             conn.send(message);
-            System.out.println("sent game to original player " + player.getUser().getUsername());
+            logger.info("Game Objekt erfolgreich an alle Spieler gesendet.");
 
             // ganz am Schluss im GameHandlersetzen, wenn alles andere durchgelaufen ist
             gameHandler.setGame(game);
         } catch (Exception e) {
-            System.out.println(e);
+            logger.error(e.getMessage());
         }
     }
 
@@ -431,20 +426,10 @@ public class MemorioWebSocketServer extends WebSocketServer {
      */
     private Player getPlayerForJwt(WebSocket conn, String jwt) {
         Optional<User> userForToken = getUserForJwtOrNull(jwt);
-        System.out.println("user: " + userForToken);
         // todo exception werfen oder so
         if (userForToken.isEmpty()) return null;
 
         return new Player(conn, userForToken.get(), jwt);
     }
 
-}
-
-/**
- * Exceptionhandling.
- */
-class MatchNotFoundException extends Exception {
-    public MatchNotFoundException() {
-        super("Kein Game möglich");
-    }
 }

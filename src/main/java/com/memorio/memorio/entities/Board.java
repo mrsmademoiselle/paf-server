@@ -74,6 +74,7 @@ public class Board {
         } else if (allCardsWaitingToBeFlipped.size() == 1) {
             // Wenn es eine Karte gibt die auf das flippen wartet und sie mit unserer Karte matcht, flippe beide
             Card cardWaitingToBeFlipped = allCardsWaitingToBeFlipped.get(0);
+            
             if (cardWaitingToBeFlipped.getPairId() == currentCard.getPairId()) {
                 currentCard.flipCard();
                 cardWaitingToBeFlipped.flipCard();
