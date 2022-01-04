@@ -140,5 +140,14 @@ public class WebSocketConnection extends WebSocketClient {
             gameController.setTurn(payload.setTurn());
          */
 
+        //Gedankenblog 04.01 22:30
+        // Wen nachricht GameDto, uebergabe an GameController (wobei das sogar vermutlich egal ist)
+        // Dort ziehen wir einfach die DInge aus dem DTO in das UI, z.b. Karten
+        // NachrichtMitGameDTO->Websocket->Gameservice->Gamecontroller->Ui daraus mit Dingen befuellen
+
+        //ggf. als Attribut ansetzen wenn oefter benoetigt
+        GameController controller = gameService.getGameController();
+        controller.digestGame(payload);
+
     }
 }

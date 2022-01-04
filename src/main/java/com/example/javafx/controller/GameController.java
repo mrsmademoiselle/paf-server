@@ -16,6 +16,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Text;
 import javafx.event.EventHandler;
 
+import java.util.Map;
+
 
 public class GameController extends PapaController {
 
@@ -148,4 +150,9 @@ public class GameController extends PapaController {
     public void setTurn(PlayerDto playerDto){}
     public void setScore(ScoreDto scoreDto){}
 
+    //Testing 22:30
+    public void digestGame(Map<String, String> payload){
+        //ggf umbenen von digestGame zu digestGameMessage
+        // ggf. umbauen das GameDTO empfangen wird
+    }
 }

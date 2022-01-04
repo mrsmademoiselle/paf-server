@@ -107,6 +107,12 @@ Im GameController wird in der initialize() der GameService reingeholt und dort d
 Im WebSocketConnection kann dann uber das Feld im GameService auf die Instanz des GameControllers zugegriffen werden
 Dadurch koennen wir nun die GameController view aktualisieren und uber den GameService mit dem Socket reden
 
+### UI Update ueber GameDTO
+Eine Idee das UI ueber z.B. Databinding zu aktualiesieren ist es, das gameDto aus dem WS in den Controller zu bekommen
+Dazu wurde der GameService erweitert. Dieser uebernimmt das "Data-juggling" in den Controller, wo wir, so die Idee, auf die Felder des GameDtos
+zugreifen koennen. Darueber kann man dan via Binding arbeiten oder direkt die Felder aktualisieren, aber so waere zumindest schonmal
+das DTO an einer Stelle wo es fuer weitere Gamelogik/UI Dinge genutzt werden kann.
+
 ### Fragen
 - Im Client gibt es ebenfalls Enums, die wir verwendet wollten, allerdings bekommen wir dort nur Enumobjekte
 - Warum matchdto im state???
