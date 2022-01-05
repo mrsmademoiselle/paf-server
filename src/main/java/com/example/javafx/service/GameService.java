@@ -87,4 +87,17 @@ public class GameService implements Runnable {
         // Aufrufen der Testmethode im WS, dort wird der GameController aus dem Service gezogen
         connection.activateGameController();
     }
+
+    /**
+     * Herausziehen des Usernamens durch den Token
+     * @return Username des Users
+     */
+    public String getUsernamebyToken(){
+        // Request an /info Endpunkt
+        String username = HttpConnector.get("user/info").getBody();
+        // JSONifizieren der Response
+        JSONObject jsonObject = new JSONObject(username);
+        // Herausziehen des Benutzernamens und returnieren von diesem
+        return jsonObject.getString("username");
+    }
 }

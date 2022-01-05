@@ -52,6 +52,8 @@ public class GameController extends PapaController {
         In der Testmethode wird der Websocket aufgerufen
          */
         gameService.testActivatedGameController();
+        // Herauslesen des Usernamen um zu pruefen ob der User zuerst dran ist
+        username = gameService.getUsernamebyToken();
 
         //setBoard();
 
@@ -130,7 +132,11 @@ public class GameController extends PapaController {
                 //Handeln der Kartenturns - wenn user nicht dran passiert bei Klick auf Karten nichts
                 card.setOnMouseClicked((new EventHandler<MouseEvent>() {
                     @Override
-                    public void handle(MouseEvent event) {onCardFlip(card, event);}
+                    public void handle(MouseEvent event) {
+                        if(isThisUserTurn){
+                            onCardFlip(card, event);
+                        }
+                    }
                 }));
 
                 // Setzen der Farben - wir ziehen uns die Pair ID und verarbeiten sie in die CardSource
@@ -177,6 +183,17 @@ public class GameController extends PapaController {
         // Herauslesen des Scores und des aktuellen Zuges
         JSONObject turn = (JSONObject)message.get("currentTurn");
         JSONArray scores = (JSONArray)message.get("userScores");
+
+        //Handeln des ersten zuges und blockieren der Karten
+        if(turn.get("username").toString().equals(this.username)){
+            System.out.println("User ist dran: " + turn.get("username"));
+            System.out.println(this.username);
+            this.isThisUserTurn = true;
+        } else {
+            System.out.println("User ist nicht dran: " + turn.get("username"));
+            System.out.println(this.username);
+            this.isThisUserTurn = false;
+        }
 
         // Unterscheidung Spiel und Endscore
         if(message.has("board")){
