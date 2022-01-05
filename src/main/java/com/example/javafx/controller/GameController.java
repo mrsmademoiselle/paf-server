@@ -131,11 +131,12 @@ public class GameController extends PapaController {
 
                 // Setzen der Farben - wir ziehen uns die Pair ID und verarbeiten sie in die CardSource
                 JSONObject jCard = (JSONObject) cardSet.get(counter);
-                // Setzend er Cardsource, muss hier passieren
+                // Setzend er Cardsource, muss hier passieren da wir jedes mal das Board rendern sonst ist das Feld leer
                 card.setCardSource("http://localhost:9090/public/"+ jCard.get("pairId") +".jpg");
                 // Setzen des Flipped Status
                 String flipped = jCard.get("flipStatus").toString();
-                //Debugging
+
+                //TODO: Entfernen - Debugging
                 System.out.println("Counter: " + counter);
                 System.out.println("FlipStatus:" + jCard.get("flipStatus").toString() + " " + jCard.get("pairId") );
                 switch(flipped) {
@@ -167,7 +168,7 @@ public class GameController extends PapaController {
     public void setTurn(PlayerDto playerDto){}
     public void setScore(ScoreDto scoreDto){}
 
-    //Testing 22:30
+
     public void digestGame(JSONObject message){
         //ggf umbenen von digestGame zu digestGameMessage
         // ggf. umbauen das GameDTO empfangen wird
