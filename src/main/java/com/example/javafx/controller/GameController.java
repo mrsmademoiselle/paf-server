@@ -128,8 +128,10 @@ public class GameController extends PapaController {
                 renderBackSide(card);
                 // Setzen der Farben - wir ziehen uns die Pair ID und verarbeiten sie in die CardSource
                 JSONObject jCard = (JSONObject) cardSet.get(counter);
+                // Setzend er Cardsource, muss hier passieren
                 card.setCardSource("http://localhost:9090/public/"+ jCard.get("pairId") +".jpg");
                 gameGrid.add(card, x, y);
+                card.setCardId("" + jCard.get("pairId"));
                 counter++;
             }
         }
