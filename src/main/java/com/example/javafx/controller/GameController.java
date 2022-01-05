@@ -168,8 +168,7 @@ public class GameController extends PapaController {
     public void digestGame(JSONObject message){
         System.out.println(message);
         JSONObject turn = (JSONObject)message.get("currentTurn");
-        JSONObject scores = (JSONObject)message.get("currentTurn");
-
+        JSONArray scores = (JSONArray)message.get("userScores");
         if(message.has("board")){
             //do the board stuff
             JSONObject board = (JSONObject)message.get("board");
@@ -178,7 +177,11 @@ public class GameController extends PapaController {
             // uebergen der Karten auf das Board
             setBoard(cardset);
             setTurn("Spieler: " + turn.get("username") + " ist dran!");
-            //updateScore();
+
+            JSONObject s1 = (JSONObject)scores.get(0);
+            JSONObject s2 = (JSONObject)scores.get(1);
+            System.out.println(((Integer) s1.get("moves")) + " " + (Integer) s2.get("moves"));
+            updateScore(((Integer) s1.get("moves")), (Integer) s2.get("moves"));
 
         }else if (message.has("endscore")) {
             //do the endscorestuff
