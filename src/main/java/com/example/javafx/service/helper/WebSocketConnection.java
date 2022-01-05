@@ -77,24 +77,10 @@ public class WebSocketConnection extends WebSocketClient {
 
     @Override
     public void onMessage(String message){
+        // Nachrichtenhandling - Die Nachricht wird zum JSON und weiter an handlemessag uebergeben
         JSONObject jo = new JSONObject(message);
         handleMessage(jo);
-    /*Versuch mit mapper
-        try {
-            Map<String, String> jsonMap = MemorioJsonMapper.getMapFromString(message);
-            //ObjectMapper om = new ObjectMapper();
-            //GameDto game = om.readValue(message, GameDto.class);
-            //Check
-            handleMessage(jsonMap);
-            //System.out.println(game);
-            //System.out.println(game.getClass());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-     */
-        //Testing
-    System.out.println("Message wurde verarbeitet " + message);
+        System.out.println("Message wurde verarbeitet " + message);
     }
 
     @Override
@@ -109,47 +95,12 @@ public class WebSocketConnection extends WebSocketClient {
     }
 
     /**
-     * Nachrichtenhandlen
+     * Nachrichtenhandlen Zwischenstation im Websocket fuer das behandeln der Nachrichten
      * @param message
      */
     public void handleMessage(JSONObject message){
-        /* Message handling
-        1. Checken ob gameDto oder Enscore dto
-            - instanceOf
-        2. Wenn game dto
-            - checken ob bereits gameDto existiert
-            - wenn nicht, lege game an mit infos aus Dto
-                - userscore
-                - Board
-                - wer ist am zug
-             - wenn dto bereits vorhanden
-                - dann muss das spiel ja bereits laufen
-                - durchwandern des bekommen dtos und abgleichen des vorhandenen gamedtos
-                - aenderungen umsetzen
-         3. WEnn endscore dto,
-            - mache endscore dinge
-            */
-
-        /*
-
-        MatchDTO kommt rein
-
-        Dto durch iterieren:
-            // payload = setBoard
-            gameController.setBoard(payload.getBoard());
-            gameController.setScore(payload.getScore());
-            gameController.setTurn(payload.setTurn());
-         */
-
-        //Gedankenblog 04.01 22:30
-        // Wen nachricht GameDto, uebergabe an GameController (wobei das sogar vermutlich egal ist)
-        // Dort ziehen wir einfach die DInge aus dem DTO in das UI, z.b. Karten
-        // NachrichtMitGameDTO->Websocket->Gameservice->Gamecontroller->Ui daraus mit Dingen befuellen
-
-        //ggf. als Attribut ansetzen wenn oefter benoetigt
-
         //Dafuer sorgen das die Nachricht nicht abgehandelt wird BEVOR der Gamecontroller durch den
-        //Mainthread gerendert wird
+        //Mainthread gerendert wird, sonst kommt es zu einer Exception
         while (gameService.getGameController() == null){
             try {
                 Thread.sleep(500);
@@ -159,6 +110,7 @@ public class WebSocketConnection extends WebSocketClient {
         }
         // Reinziehen des Gamecontrollers
         GameController controller = gameService.getGameController();
+
         // Update des Ui wieder in den Mainthread lagern
         try {
             javafx.application.Platform.runLater(()->{
@@ -167,7 +119,6 @@ public class WebSocketConnection extends WebSocketClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
     }
 }

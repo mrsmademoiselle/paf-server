@@ -16,7 +16,6 @@ public class GameService implements Runnable {
     // GameController instanz - wird reingezogen wenn User in der GameView
     GameController gameController = null;
 
-    //TODO:DOKUMENTATION - ENSCHTEIDUNGSLOG PFELGEn
     // Singleton pattern. Dadurch haben wir eine zentrale Verbindung gebunden an einen Service
     private static GameService instance;
 

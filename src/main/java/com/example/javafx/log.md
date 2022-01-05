@@ -113,6 +113,11 @@ Dazu wurde der GameService erweitert. Dieser uebernimmt das "Data-juggling" in d
 zugreifen koennen. Darueber kann man dan via Binding arbeiten oder direkt die Felder aktualisieren, aber so waere zumindest schonmal
 das DTO an einer Stelle wo es fuer weitere Gamelogik/UI Dinge genutzt werden kann.
 
+## Gamelogik
+Das meiste geschieht in digestGame und setBoard. In Setboard rendern wir die Karten auf Grundlade des Boards
+was aus der Nachricht vom Server gezogen wird. Vorher wird der Score und der Turn gesetzt.
+Dannach wird geschaut was es fuer eine Nachricht ist. Entsprechend kommt das Handling
+
 ### Fragen
 - Im Client gibt es ebenfalls Enums, die wir verwendet wollten, allerdings bekommen wir dort nur Enumobjekte
 - Warum matchdto im state???
