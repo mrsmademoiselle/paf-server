@@ -1,9 +1,11 @@
 package com.example.javafx.service;
 
 import com.example.javafx.controller.GameController;
+import com.example.javafx.service.helper.HttpConnector;
 import com.example.javafx.service.helper.SceneManager;
 import com.example.javafx.service.helper.WebSocketConnection;
 import javafx.scene.Scene;
+import org.json.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;

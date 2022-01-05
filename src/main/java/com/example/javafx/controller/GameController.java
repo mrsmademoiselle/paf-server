@@ -38,6 +38,8 @@ public class GameController extends PapaController {
     private int CARDS_X = 4;
     private int CARDS_Y = 4;
     private int WIGGLE = 30;
+    private String username;
+    private boolean isThisUserTurn = false;
 
 
     @FXML
@@ -124,6 +126,8 @@ public class GameController extends PapaController {
                 card.setArcWidth(50);
                 card.setStyle("-fx-cursor: hand");
                 // styling end
+
+                //Handeln der Kartenturns - wenn user nicht dran passiert bei Klick auf Karten nichts
                 card.setOnMouseClicked((new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {onCardFlip(card, event);}
@@ -165,8 +169,8 @@ public class GameController extends PapaController {
     }
 
     /**
-     *
-     * @param message
+     * Verarbeiten der Gamenachricht und vorbereiten fuer weiteres Handling
+     * @param message Nachricht aus WS
      */
     public void digestGame(JSONObject message){
         System.out.println(message);
@@ -187,8 +191,6 @@ public class GameController extends PapaController {
             // Setzen der Scores
             JSONObject s1 = (JSONObject)scores.get(0);
             JSONObject s2 = (JSONObject)scores.get(1);
-            //TODO: ENtfernen - Debugiing
-            System.out.println(((Integer) s1.get("moves")) + " " + (Integer) s2.get("moves"));
             updateScore(((Integer) s1.get("moves")), (Integer) s2.get("moves"));
 
         }else if (message.has("endscore")) {
