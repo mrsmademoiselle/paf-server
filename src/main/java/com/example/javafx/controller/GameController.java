@@ -106,16 +106,12 @@ public class GameController extends PapaController {
         gameGrid.setHgap(10);
         gameGrid.setVgap(10);
 
-        // Pointer zum laden der Bilder
-        int poointer = 1;
-
         final double cardY = (getHeightWithOffset() / CARDS_Y) - WIGGLE;
         final double cardX = cardY;
 
         int counter = 0;
-        // schleifen herumdrehen damit von links nach rechts
-        for(int x = 0; x < CARDS_X; x++){
-            for(int y = 0; y < CARDS_Y; y++) {
+        for(int y = 0; y < CARDS_Y; y++){
+            for(int x = 0; x < CARDS_X; x++) {
                 Card card = new Card();
                 // styling
                 card.setHeight(cardX);
@@ -130,12 +126,10 @@ public class GameController extends PapaController {
                     public void handle(MouseEvent event) {onCardFlip(card, event);}
                 }));
                 renderBackSide(card);
-                // Setzen der Farben
-                if(poointer > 8) {poointer = 1;}
+                // Setzen der Farben - wir ziehen uns die Pair ID und verarbeiten sie in die CardSource
                 JSONObject jCard = (JSONObject) cardSet.get(counter);
                 card.setCardSource("http://localhost:9090/public/"+ jCard.get("pairId") +".jpg");
                 gameGrid.add(card, x, y);
-                poointer++;
                 counter++;
             }
         }
