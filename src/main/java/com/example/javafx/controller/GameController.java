@@ -82,9 +82,7 @@ public class GameController extends PapaController {
             renderBackSide(card);
         } else {
             // Bild vom Server anzeigen
-            card.setFlipped(true);
-            card.setFill(new ImagePattern(new Image(card.getCardSource())));
-            newSysMessage(card.getCardSource());
+            renderFront(card);
         }
     }
 
@@ -93,8 +91,14 @@ public class GameController extends PapaController {
      * @param card Karte deren Rueckseite angezeigt werden soll
      */
     public void renderBackSide(Card card){
+        card.setFlipped(false);
         Image pic = FileManager.getPic("cardPattern.jpg");
         card.setFill(new ImagePattern(pic));
+    }
+    public void renderFront(Card card){
+        card.setFlipped(true);
+        card.setFill(new ImagePattern(new Image(card.getCardSource())));
+        newSysMessage(card.getCardSource());
     }
 
     /**
@@ -118,18 +122,40 @@ public class GameController extends PapaController {
                 card.setWidth(cardY);
                 card.setArcHeight(50);
                 card.setArcWidth(50);
-                card.setFill(Color.GRAY);
                 card.setStyle("-fx-cursor: hand");
                 // styling end
                 card.setOnMouseClicked((new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {onCardFlip(card, event);}
                 }));
-                renderBackSide(card);
+
                 // Setzen der Farben - wir ziehen uns die Pair ID und verarbeiten sie in die CardSource
                 JSONObject jCard = (JSONObject) cardSet.get(counter);
                 // Setzend er Cardsource, muss hier passieren
                 card.setCardSource("http://localhost:9090/public/"+ jCard.get("pairId") +".jpg");
+                // Setzen des Flipped Status
+                String flipped = jCard.get("flipStatus").toString();
+                //Debugging
+                System.out.println("Counter: " + counter);
+                System.out.println("FlipStatus:" + jCard.get("flipStatus").toString() + " " + jCard.get("pairId") );
+                switch(flipped) {
+                    case "NOT_FLIPPED":
+                        renderBackSide(card);
+                        break;
+                    case "FLIPPED":
+                        renderFront(card);
+                        break;
+                    case "WAITING_TO_FLIP":
+                        System.out.println("Ich flibbe jetzt: " + card.getCardSource());
+                        //renderBackSide(card);
+                        renderFront(card);
+                        break;
+                    default:
+                        card.setFill(Color.GRAY);
+                        break;
+                }
+
+                // Hinzufuegen der Karte auf dem Grid
                 gameGrid.add(card, x, y);
                 card.setCardId("" + jCard.get("pairId"));
                 counter++;
