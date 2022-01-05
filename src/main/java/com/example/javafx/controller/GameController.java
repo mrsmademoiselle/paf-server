@@ -1,8 +1,5 @@
 package com.example.javafx.controller;
-import com.example.javafx.model.BoardDto;
-import com.example.javafx.model.Card;
-import com.example.javafx.model.PlayerDto;
-import com.example.javafx.model.ScoreDto;
+import com.example.javafx.model.*;
 import com.example.javafx.service.GameService;
 import com.example.javafx.service.helper.FileManager;
 import javafx.fxml.FXML;
@@ -15,6 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Text;
 import javafx.event.EventHandler;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -151,8 +150,32 @@ public class GameController extends PapaController {
     public void setScore(ScoreDto scoreDto){}
 
     //Testing 22:30
-    public void digestGame(Map<String, String> payload){
+    public void digestGame(JSONObject jsonObjectdecode){
         //ggf umbenen von digestGame zu digestGameMessage
         // ggf. umbauen das GameDTO empfangen wird
+        // 1. Wie kommen wir an die Informationen ran
+        // 2. wie bringen wir die informationen in das ui
+
+        /*
+        System.out.println(payload.getClass());
+        System.out.println(payload);
+        String _key = "board";
+        System.out.println("board is drin: " + payload.containsKey(_key));
+        System.out.println(payload.get(_key));
+        System.out.println("Printe Keys:" + payload.keySet());
+        for(Object key : payload.keySet()){
+            System.out.println(key.getClass());
+            }
+         */
+
+        if(message.has("board")){
+            //do the board stuff
+            JSONObject board = (JSONObject)message.get("board");
+            JSONArray cardset = (JSONArray)board.get("cardSet");
+        }else if (message.has("endscore")){
+            //do the endscorestuff
+
+
+
     }
 }

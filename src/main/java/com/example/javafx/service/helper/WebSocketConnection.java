@@ -7,6 +7,8 @@ import com.example.javafx.controller.GameController;
 import com.example.javafx.controller.PapaController;
 import com.example.javafx.service.GameService;
 import com.example.javafx.service.MemorioJsonMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import javafx.fxml.FXMLLoader;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -72,20 +74,24 @@ public class WebSocketConnection extends WebSocketClient {
 
     @Override
     public void onMessage(String message){
-
+        JSONObject jo = new JSONObject(message);
+        handleMessage(jo);
+    /*Versuch mit mapper
         try {
             Map<String, String> jsonMap = MemorioJsonMapper.getMapFromString(message);
+            //ObjectMapper om = new ObjectMapper();
+            //GameDto game = om.readValue(message, GameDto.class);
             //Check
-         /*
-            if (jsonMap.keySet().size() != 2) {
-                throw new RuntimeException("JSON-Keyset muss aus 2 Elementen bestehen..");
-            }*/
             handleMessage(jsonMap);
+            //System.out.println(game);
+            //System.out.println(game.getClass());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+     */
         //Testing
-    System.out.println("On Message " + message);
+    System.out.println("Message wurde verarbeitet " + message);
     }
 
     @Override
@@ -101,17 +107,9 @@ public class WebSocketConnection extends WebSocketClient {
 
     /**
      * Nachrichtenhandlen
-     * @param payload
+     * @param message
      */
-    public void handleMessage(Map<String, String> payload){
-        System.out.println("Ouput in handle message " + payload);
-        if(payload.containsKey("board")){
-            System.out.println("Foobar");
-            System.out.println(payload.values());
-
-        }
-        //Map<String, String> board = payload.get("board")[2];
-        System.out.println();
+    public void handleMessage(JSONObject message){
         /* Message handling
         1. Checken ob gameDto oder Enscore dto
             - instanceOf
@@ -146,8 +144,18 @@ public class WebSocketConnection extends WebSocketClient {
         // NachrichtMitGameDTO->Websocket->Gameservice->Gamecontroller->Ui daraus mit Dingen befuellen
 
         //ggf. als Attribut ansetzen wenn oefter benoetigt
+
+        //Dafuer sorgen das die Nachricht nicht abgehandelt wird BEVOR der Gamecontroller durch den
+        //Mainthread gerendert wird
+        while (gameService.getGameController() == null){
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         GameController controller = gameService.getGameController();
-        controller.digestGame(payload);
+        //controller.digestGame(jsonObjectdecode);
 
     }
 }
