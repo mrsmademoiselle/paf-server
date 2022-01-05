@@ -157,7 +157,9 @@ public class WebSocketConnection extends WebSocketClient {
                 e.printStackTrace();
             }
         }
+        // Reinziehen des Gamecontrollers
         GameController controller = gameService.getGameController();
+        // Update des Ui wieder in den Mainthread lagern
         try {
             javafx.application.Platform.runLater(()->{
                 controller.digestGame(message);
