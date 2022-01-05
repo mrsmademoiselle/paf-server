@@ -2,6 +2,7 @@ package com.example.javafx.controller;
 import com.example.javafx.model.*;
 import com.example.javafx.service.GameService;
 import com.example.javafx.service.helper.FileManager;
+import com.example.javafx.service.helper.MessageKeys;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -14,8 +15,6 @@ import javafx.scene.text.Text;
 import javafx.event.EventHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.Map;
 
 
 public class GameController extends PapaController {
@@ -87,6 +86,12 @@ public class GameController extends PapaController {
         } else {
             // Bild vom Server anzeigen
             renderFront(card);
+            // Senden der geflippten Card auf dem Server
+            GameService gameService = GameService.getInstance();
+            gameService.getWebSocketConnection().mSend(
+                    MessageKeys.FLIPPED, card.getCardId()
+            );
+            System.out.println("Nachricht wurde gesendet");
         }
     }
 
@@ -146,9 +151,6 @@ public class GameController extends PapaController {
                 // Setzen des Flipped Status
                 String flipped = jCard.get("flipStatus").toString();
 
-                //TODO: Entfernen - Debugging
-                System.out.println("Counter: " + counter);
-                System.out.println("FlipStatus:" + jCard.get("flipStatus").toString() + " " + jCard.get("pairId") );
                 switch(flipped) {
                     case "NOT_FLIPPED":
                         renderBackSide(card);
@@ -168,7 +170,9 @@ public class GameController extends PapaController {
 
                 // Hinzufuegen der Karte auf dem Grid
                 gameGrid.add(card, x, y);
-                card.setCardId("" + jCard.get("pairId"));
+                card.setPairId("" + jCard.get("pairId"));
+                // setzen der CardID fuer den Server
+                card.setCardId("" + jCard.get("id"));
                 counter++;
             }
         }
@@ -214,6 +218,5 @@ public class GameController extends PapaController {
             //do the endscorestuff
             System.out.println("Ich bekam ein Endscore");
         }
-
     }
 }

@@ -39,6 +39,14 @@ public class GameService implements Runnable {
         return gameController;
     }
 
+    /**
+     * Methode zum extrahieren der Websocketconnection um darueber zu kommunizieren
+     * @return Die Websocketconnection
+     */
+    public WebSocketConnection getWebSocketConnection(){
+        return connection;
+    }
+
     public static GameService getInstance(){
         if(instance == null){
             instance = new GameService();
