@@ -164,34 +164,21 @@ public class GameController extends PapaController {
         }
     }
 
-    //TODO: remove methods or do stuff
-    public void setTurn(PlayerDto playerDto){}
-    public void setScore(ScoreDto scoreDto){}
-
 
     public void digestGame(JSONObject message){
-        //ggf umbenen von digestGame zu digestGameMessage
-        // ggf. umbauen das GameDTO empfangen wird
-        // 1. Wie kommen wir an die Informationen ran
-        // 2. wie bringen wir die informationen in das ui
-
-        /*
-        System.out.println(payload.getClass());
-        System.out.println(payload);
-        String _key = "board";
-        System.out.println("board is drin: " + payload.containsKey(_key));
-        System.out.println(payload.get(_key));
-        System.out.println("Printe Keys:" + payload.keySet());
-        for(Object key : payload.keySet()){
-            System.out.println(key.getClass());
-            }
-         */
+        System.out.println(message);
+        JSONObject turn = (JSONObject)message.get("currentTurn");
+        JSONObject scores = (JSONObject)message.get("currentTurn");
 
         if(message.has("board")){
             //do the board stuff
             JSONObject board = (JSONObject)message.get("board");
             JSONArray cardset = (JSONArray)board.get("cardSet");
+
+            // uebergen der Karten auf das Board
             setBoard(cardset);
+            setTurn("Spieler: " + turn.get("username") + " ist dran!");
+            //updateScore();
 
         }else if (message.has("endscore")) {
             //do the endscorestuff
