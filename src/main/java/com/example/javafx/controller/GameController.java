@@ -99,7 +99,7 @@ public class GameController extends PapaController {
 
     /**
      * Setzen und updaten des Boards
-     * @param boardDto
+     * @param
      */
     public void setBoard(BoardDto boardDto){
 
@@ -138,6 +138,7 @@ public class GameController extends PapaController {
                     public void handle(MouseEvent event) {onCardFlip(card, event);}
                 }));
                 renderBackSide(card);
+                // Setzen der Farben
                 if(poointer > 8) {poointer = 1;}
                 card.setCardSource("http://localhost:9090/public/"+poointer+".jpg");
                 gameGrid.add(card, x, y);
@@ -146,11 +147,12 @@ public class GameController extends PapaController {
         }
     }
 
+    //TODO: remove methods or do stuff
     public void setTurn(PlayerDto playerDto){}
     public void setScore(ScoreDto scoreDto){}
 
     //Testing 22:30
-    public void digestGame(JSONObject jsonObjectdecode){
+    public void digestGame(JSONObject message){
         //ggf umbenen von digestGame zu digestGameMessage
         // ggf. umbauen das GameDTO empfangen wird
         // 1. Wie kommen wir an die Informationen ran

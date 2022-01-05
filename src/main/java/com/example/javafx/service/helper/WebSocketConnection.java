@@ -158,7 +158,14 @@ public class WebSocketConnection extends WebSocketClient {
             }
         }
         GameController controller = gameService.getGameController();
-        //controller.digestGame(jsonObjectdecode);
+        try {
+            javafx.application.Platform.runLater(()->{
+                controller.digestGame(message);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 }
