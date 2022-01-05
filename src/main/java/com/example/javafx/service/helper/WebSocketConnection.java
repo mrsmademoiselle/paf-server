@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.example.javafx.controller.GameController;
 import com.example.javafx.controller.PapaController;
+import com.example.javafx.model.GameDto;
 import com.example.javafx.service.GameService;
 import com.example.javafx.service.MemorioJsonMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,8 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import javafx.fxml.FXMLLoader;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Klasse für Websocket-Kommunikation.
