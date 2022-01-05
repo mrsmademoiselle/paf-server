@@ -101,7 +101,7 @@ public class GameController extends PapaController {
      * Setzen und updaten des Boards
      * @param
      */
-    public void setBoard(BoardDto boardDto){
+    public void setBoard(JSONArray cardSet){
 
         gameGrid.setHgap(10);
         gameGrid.setVgap(10);
@@ -111,28 +111,20 @@ public class GameController extends PapaController {
 
         final double cardY = (getHeightWithOffset() / CARDS_Y) - WIGGLE;
         final double cardX = cardY;
-                /*
-            Bevor das Board generiert werden kann brauchen wir das BoardDto aus dem
-            MatchDto vom Server.
 
-            Das müssen wir irgendwie hier abspeichern
-         */
-
+        int counter = 0;
+        // schleifen herumdrehen damit von links nach rechts
         for(int x = 0; x < CARDS_X; x++){
             for(int y = 0; y < CARDS_Y; y++) {
-                /*
-                    Hier muss eine Karte erstellt werden.
-                    Die Karte muss zusätzlich noch die Attribute des CardDtos besitzen.
-                    Dann checken wir in dem vorher abgespeicherten BoardDto-dingens was für eine
-                    Karte in dieser Iteration erstellt werden muss und erstellen diese.
-                 */
                 Card card = new Card();
+                // styling
                 card.setHeight(cardX);
                 card.setWidth(cardY);
                 card.setArcHeight(50);
                 card.setArcWidth(50);
                 card.setFill(Color.GRAY);
                 card.setStyle("-fx-cursor: hand");
+                // styling end
                 card.setOnMouseClicked((new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {onCardFlip(card, event);}
@@ -140,9 +132,11 @@ public class GameController extends PapaController {
                 renderBackSide(card);
                 // Setzen der Farben
                 if(poointer > 8) {poointer = 1;}
-                card.setCardSource("http://localhost:9090/public/"+poointer+".jpg");
+                JSONObject jCard = (JSONObject) cardSet.get(counter);
+                card.setCardSource("http://localhost:9090/public/"+ jCard.get("pairId") +".jpg");
                 gameGrid.add(card, x, y);
                 poointer++;
+                counter++;
             }
         }
     }
@@ -174,10 +168,12 @@ public class GameController extends PapaController {
             //do the board stuff
             JSONObject board = (JSONObject)message.get("board");
             JSONArray cardset = (JSONArray)board.get("cardSet");
-        }else if (message.has("endscore")){
+            setBoard(cardset);
+
+        }else if (message.has("endscore")) {
             //do the endscorestuff
-
-
+            System.out.println("Ich bekam ein Endscore");
+        }
 
     }
 }
