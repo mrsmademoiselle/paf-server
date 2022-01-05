@@ -59,6 +59,7 @@ public class WebSocketConnection extends WebSocketClient {
      * @param payload - DIe Payload zur entsprechenden Nachricht
      */
     public void mSend(MessageKeys messageKey, String payload){
+        System.out.println("mSend: " + messageKey + " " + payload);
         send("{\"" + messageKey + "\":\"" + payload + "\"" +
                 ",\"JWT\":" + "\"" + TokenManager.getInstance().getToken() + "\"}");
     }
