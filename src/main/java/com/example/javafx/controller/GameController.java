@@ -184,23 +184,24 @@ public class GameController extends PapaController {
      */
     public void digestGame(JSONObject message){
         System.out.println(message);
-        // Herauslesen des Scores und des aktuellen Zuges
-        JSONObject turn = (JSONObject)message.get("currentTurn");
-        JSONArray scores = (JSONArray)message.get("userScores");
-
-        //Handeln des ersten zuges und blockieren der Karten
-        if(turn.get("username").toString().equals(this.username)){
-            System.out.println("User ist dran: " + turn.get("username"));
-            System.out.println(this.username);
-            this.isThisUserTurn = true;
-        } else {
-            System.out.println("User ist nicht dran: " + turn.get("username"));
-            System.out.println(this.username);
-            this.isThisUserTurn = false;
-        }
-
         // Unterscheidung Spiel und Endscore
-        if(message.has("board")){
+
+        // Wenn die Nachricht ein Board enthaelt ist es entweder die aller erste Nachricht oder eine Gamenachricht
+        // Es muss also der User bestimmt werden der dran ist und das Board aktualisiert werden
+        if(message.has("board")) {
+
+            // Herauslesen des Scores und des aktuellen Zuges
+            JSONObject turn = (JSONObject)message.get("currentTurn");
+            JSONArray scores = (JSONArray)message.get("userScores");
+
+            //Handeln des ersten zuges und blockieren der Karten
+            if(turn.get("username").toString().equals(this.username)){
+                this.isThisUserTurn = true;
+            } else {
+                System.out.println("User ist nicht dran: " + turn.get("username"));
+                this.isThisUserTurn = false;
+            }
+
             //do the board stuff
             JSONObject board = (JSONObject)message.get("board");
             JSONArray cardset = (JSONArray)board.get("cardSet");
@@ -214,9 +215,12 @@ public class GameController extends PapaController {
             JSONObject s2 = (JSONObject)scores.get(1);
             updateScore(((Integer) s1.get("moves")), (Integer) s2.get("moves"));
 
-        }else if (message.has("endscore")) {
+            // handling vom Endscore objekt
+        } else if (message.has("winner")) {
             //do the endscorestuff
-            System.out.println("Ich bekam ein Endscore");
+            JSONObject winner = (JSONObject)message.get("winner");
+            // Setzen des Siegers
+            setTurn("Sieger ist: " + (String) winner.get("username"));
         }
     }
 }

@@ -118,6 +118,15 @@ Das meiste geschieht in digestGame und setBoard. In Setboard rendern wir die Kar
 was aus der Nachricht vom Server gezogen wird. Vorher wird der Score und der Turn gesetzt.
 Dannach wird geschaut was es fuer eine Nachricht ist. Entsprechend kommt das Handling
 
+## Endscore
+Aktuell wird der
+
+
 ### Fragen
 - Im Client gibt es ebenfalls Enums, die wir verwendet wollten, allerdings bekommen wir dort nur Enumobjekte
 - Warum matchdto im state???
+- Wie machen wir das mit dem Endscore?
+Fuer Chris und mich ist es okay das einfach auf eine weitere View zu leiten
+  Wo wir nur den GEwinner ausgeben und das wars, mehr steht da nicht
+  Damit koennen wir dann die Socketverbindung noch beenden und das SPiel komplett
+  beenden

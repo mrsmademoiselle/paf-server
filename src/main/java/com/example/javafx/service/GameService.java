@@ -2,6 +2,7 @@ package com.example.javafx.service;
 
 import com.example.javafx.controller.GameController;
 import com.example.javafx.service.helper.HttpConnector;
+import com.example.javafx.service.helper.MessageKeys;
 import com.example.javafx.service.helper.SceneManager;
 import com.example.javafx.service.helper.WebSocketConnection;
 import javafx.scene.Scene;
@@ -72,6 +73,8 @@ public class GameService implements Runnable {
     public void stop(){
         if(connection != null){
             try{
+                // Dissolven der Verbindung wenn die die Verbindung geschlossen wird
+                connection.mSend(MessageKeys.DISSOLVE,"");
                 connection.close();
                 System.out.print("Connection abgebaut - Thread noch am leben");
             } catch (Exception e){System.out.println(e);}
