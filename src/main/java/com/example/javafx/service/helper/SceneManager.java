@@ -20,6 +20,7 @@ public class SceneManager {
     private URL profile;
     private URL generalCSS;
     private URL gameScene;
+    private URL endScreen;
     private static final SceneManager instance = new SceneManager();
 
     // Aktuelle Scene
@@ -72,6 +73,8 @@ public class SceneManager {
     public void setProfileScene(URL stage) {
         this.profile = stage;
     }
+
+    public void setEndScreen(URL stage) {this.endScreen = stage;}
 
     public Stage loadStage() {
         return this.stage;

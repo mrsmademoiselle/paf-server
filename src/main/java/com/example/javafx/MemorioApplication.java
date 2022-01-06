@@ -39,7 +39,7 @@ public class MemorioApplication extends javafx.application.Application {
         sceneManager.setGameScene(getClass().getResource("view/game.fxml"));
         sceneManager.setProfileScene(getClass().getResource("view/profile.fxml"));
         sceneManager.setGeneralCSS(getClass().getResource("css/general.css"));
-
+        sceneManager.setEndScreen(getClass().getResource("view/endscreen.fxml"));
 
         // Fenster zentrieren
         stage.setX((primaryScreen.getWidth() - applicationWidth) / 2);

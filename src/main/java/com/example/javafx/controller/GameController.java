@@ -80,6 +80,7 @@ public class GameController extends PapaController {
      * @param event Event
      */
     public void onCardFlip(Card card, MouseEvent event){
+        /*
         if(card.getFlipped()){
             card.setFlipped(false);
             // Rueckseite anzeigen
