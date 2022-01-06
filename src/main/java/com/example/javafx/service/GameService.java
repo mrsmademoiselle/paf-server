@@ -48,7 +48,7 @@ public class GameService implements Runnable {
         return connection;
     }
 
-    public static GameService getInstance(){
+    public static GameService getInstance() {
         if(instance == null){
             instance = new GameService();
         }
@@ -70,7 +70,7 @@ public class GameService implements Runnable {
         sceneManager.loadProfile();
     }
 
-    public void stop(){
+    public void stop() {
         if(connection != null){
             try{
                 // Dissolven der Verbindung wenn die die Verbindung geschlossen wird
@@ -103,7 +103,7 @@ public class GameService implements Runnable {
      * Herausziehen des Usernamens durch den Token
      * @return Username des Users
      */
-    public String getUsernamebyToken(){
+    public String getUsernamebyToken() {
         // Request an /info Endpunkt
         String username = HttpConnector.get("user/info").getBody();
         // JSONifizieren der Response
