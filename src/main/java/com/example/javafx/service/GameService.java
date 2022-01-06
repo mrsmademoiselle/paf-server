@@ -12,12 +12,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class GameService implements Runnable {
+    // Gameservice der Threadbaren Websocket startet
 
     SceneManager sceneManager = SceneManager.getInstance();
     WebSocketConnection connection = null;
     Thread thread = null;
     // GameController instanz - wird reingezogen wenn User in der GameView
     GameController gameController = null;
+    // Gewinner persistieren
+    String winner;
 
     // Singleton pattern. Dadurch haben wir eine zentrale Verbindung gebunden an einen Service
     private static GameService instance;
@@ -70,6 +73,7 @@ public class GameService implements Runnable {
         sceneManager.loadProfile();
     }
 
+    // Beenden WS Verbindung und beendet Thread
     public void stop() {
         if(connection != null){
             try{
@@ -85,6 +89,7 @@ public class GameService implements Runnable {
         }
     }
 
+    // Startet den Thread
     public void run() {
         try {
             connection = new WebSocketConnection(new URI("ws://127.0.0.1:8888"), sceneManager);
@@ -110,5 +115,13 @@ public class GameService implements Runnable {
         JSONObject jsonObject = new JSONObject(username);
         // Herausziehen des Benutzernamens und returnieren von diesem
         return jsonObject.getString("username");
+    }
+
+    public void setWinner(String winner){
+        this.winner = winner;
+    }
+
+    public String getWinner(){
+        return this.winner;
     }
 }

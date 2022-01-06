@@ -3,6 +3,7 @@ import com.example.javafx.model.*;
 import com.example.javafx.service.GameService;
 import com.example.javafx.service.helper.FileManager;
 import com.example.javafx.service.helper.MessageKeys;
+import com.example.javafx.service.helper.SceneManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -84,6 +85,17 @@ public class GameController extends PapaController {
             // Rueckseite anzeigen
             renderBackSide(card);
         } else {
+            // Bild vom Server anzeigen
+            renderFront(card);
+            // Senden der geflippten Card auf dem Server
+            GameService gameService = GameService.getInstance();
+            gameService.getWebSocketConnection().mSend(
+                    MessageKeys.FLIPPED, card.getCardId()
+            );
+            System.out.println("Nachricht wurde gesendet");
+        }*/
+
+        if(!card.getFlipped()){
             // Bild vom Server anzeigen
             renderFront(card);
             // Senden der geflippten Card auf dem Server
@@ -221,6 +233,11 @@ public class GameController extends PapaController {
             JSONObject winner = (JSONObject)message.get("winner");
             // Setzen des Siegers
             setTurn("Sieger ist: " + (String) winner.get("username"));
+            // Beenden der WS-Verbindung und Thread beenden
+            GameService gameService = GameService.getInstance();
+            gameService.stop();
+            // Weiterleiten auf Endgamescreen
+            SceneManager.getInstance().loadEdscreen();
         }
     }
 }

@@ -34,6 +34,7 @@ public class SceneManager {
 
     public String getCurrentScene(){return this.currentScene;}
 
+    // Laden von Scenen/Views
     public void loadLogin() {
         this.currentScene = "login";
         this.loadScene(this.loginScene);
@@ -54,6 +55,11 @@ public class SceneManager {
         this.loadScene(this.profile);
     }
 
+    public void loadEdscreen(){
+        this.currentScene = "edscreen";
+        this.loadScene(this.endScreen);
+    }
+
     public void loadHistory() {
         this.currentScene = "history";
     }
@@ -62,6 +68,7 @@ public class SceneManager {
         this.stage = stage;
     }
 
+    // Setzen der Scenen/Views
     public void setProfileScene(URL stage) {
         this.profile = stage;
     }
