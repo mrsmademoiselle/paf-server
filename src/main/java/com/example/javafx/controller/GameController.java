@@ -237,6 +237,8 @@ public class GameController extends PapaController {
             // Beenden der WS-Verbindung und Thread beenden
             GameService gameService = GameService.getInstance();
             gameService.stop();
+            // Winner im Gameservice setzen
+            gameService.setWinner((String) winner.get("username"));
             // Weiterleiten auf Endgamescreen
             SceneManager.getInstance().loadEdscreen();
         }
