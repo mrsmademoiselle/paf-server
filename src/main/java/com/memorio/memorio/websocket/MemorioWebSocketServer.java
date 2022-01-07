@@ -23,7 +23,6 @@ import java.util.*;
  * WebSocketServer: https://github.com/TooTallNate/Java-WebSocket
  * Match = Verknüpfung zweier Player-Instanzen.
  */
-
 public class MemorioWebSocketServer extends WebSocketServer {
 
     public static final GameHandler gameHandler = new GameHandler();
@@ -294,7 +293,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
         lostConnectionJwt.add(jwt_heartbeat);
 
         // neues Setzen der WebsocketConnection, wenn sie sich unterscheidet
-        if (player.getWebsocketConnection().equals(conn)) {
+        if (!player.getWebsocketConnection().equals(conn)) {
             logger.warn("Connection has changed. Setting new connection...");
             player.setWebsocketConnection(conn);
 
