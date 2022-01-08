@@ -199,6 +199,7 @@ public class UserController {
         Optional<User> userOptional = userRepository.findByUsername(username);
         User user = userOptional.orElseThrow(NotFoundException::new);
 
+        logger.info("Schicke GameHistory an Client " + user.getUsername() + " zurück...");
         return ResponseEntity.ok(gameHistoryService.getGameHistoryForUser(user));
     }
 

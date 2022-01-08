@@ -1,3 +1,21 @@
+# Sprint 4
+
+Von: Franzi
+
+TODO:
+
+- Brainstorming Architektur
+- WebsocketServer, speichern des Spiels ausprobieren
+- Controller-Methode testen
+
+- UserScores in Game sind nun eine eigene Entity, weil Embeddables keine Liste von Usern haben darf, da User selbst eine
+  eigene Entity ist.
+    - Lösungsansatz 1: Wir speichern alle UserScores separat ab und holen uns die aus der Datenbank, statt des
+      GameObjekts
+    - Lösungsansatz 2: Wir speichern statt der User nur die Userreferenz (ID oder Usernamen) im UserScore ab, damit darf
+      UserScore dann wieder ein Embeddable sein
+    - Lösungsansatz 3: ???
+
 # Sprint 3
 
 Von: Franzi

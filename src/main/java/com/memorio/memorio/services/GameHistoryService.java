@@ -20,8 +20,11 @@ public class GameHistoryService {
         this.gameRepository = gameRepository;
     }
 
+    /**
+     * Baut für diesen User eine GameHistory zusammen und gibt sie zurück.
+     */
     public GameHistory getGameHistoryForUser(User user) {
-        List<Game> gamesOfUser = gameRepository.findByUserScoresUser(user);
+        List<Game> gamesOfUser = gameRepository.findByUserScoresUserUsername(user.getUsername());
 
         int winCount = calculateWinCount(gamesOfUser, user);
         int averageMoves = calculateAverageMoves(gamesOfUser, user);
@@ -40,6 +43,7 @@ public class GameHistoryService {
                     .max(Comparator.comparingInt(UserScore::getMoves))
                     .orElse(userScores.get(0));
 
+            // Wenn unser User den höchsten Spielwert hat, erhöhe den Counter
             if (user.getUsername().equals(highestUserScore.getUser().getUsername())) totalWins++;
         }
 

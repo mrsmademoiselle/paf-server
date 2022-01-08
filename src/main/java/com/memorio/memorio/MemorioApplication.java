@@ -41,16 +41,6 @@ public class MemorioApplication implements CommandLineRunner {
         System.out.println("Startup successful");
     }
 
-    private void increaseScoresOfGameBy(Game game1, int userToTestScore, int otherScore) {
-        for (UserScore userScore : game1.getUserScores()) {
-            if (userScore.getUser().equals(userToTest)) {
-                userScore.increaseScoreBy(userToTestScore);
-            } else {
-                userScore.increaseScoreBy(otherScore);
-            }
-        }
-    }
-
     @Override
     public void run(String... args) throws Exception {
         createDummyData();
@@ -117,6 +107,16 @@ public class MemorioApplication implements CommandLineRunner {
 
         GameHistory gameHistoryForUser = gameHistoryService.getGameHistoryForUser(user4);
         System.out.println(gameHistoryForUser);
+    }
+
+    private void increaseScoresOfGameBy(Game game1, int userToTestScore, int otherScore) {
+        for (UserScore userScore : game1.getUserScores()) {
+            if (userScore.getUser().equals(userToTest)) {
+                userScore.increaseScoreBy(userToTestScore);
+            } else {
+                userScore.increaseScoreBy(otherScore);
+            }
+        }
     }
 
     /* Exponiert alles was in /public/ drin ist nach aussen

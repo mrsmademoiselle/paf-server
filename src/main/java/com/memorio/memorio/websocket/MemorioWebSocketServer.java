@@ -356,6 +356,8 @@ public class MemorioWebSocketServer extends WebSocketServer {
             logger.info("Endscore-Objekt erfolgreich an alle Clients gesendet.");
 
             gameRepository.save(game);
+            logger.info("Game-Objekt erfolgreich in der Datenbank gespeichert.");
+            
             // ende das Match
             dissolveMatch(player.getMatch());
 
