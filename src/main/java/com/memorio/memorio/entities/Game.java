@@ -19,27 +19,29 @@ import java.util.List;
 @Setter
 @Entity
 public class Game {
-    /*TODO: Rework komplett und verschmelzen mit Game aus Websocket
-     */
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long lobbyCode;
     @Transient
     private User currentTurn;
-    /* Embedded/Embeddable benutzt man, wenn man ein Objekt in einem Objekt persistieren will,
-    das selbst keine Tabelle in der Datenbank hat. */
-    @Embedded
+    @Transient
     private Board board;
-    @ElementCollection
+    /**
+     * Dieses Feld darf kein Embeddable sein wie ursprünglich angedacht, weil es eine Collection von
+     * Usern enthält und User eine DB-Entity ist. Daher ist UserScore jetzt bei uns (der Einfachheit halber) auch
+     * eine Entität in der Datenbank und wird erst einmal separat abgespeichert. Ich versuche, das später noch einmal
+     * zu fixen.
+     */
+    // FetchType.Eager muss sein, damit die Collection zum Zeitpunkt der Initialisierung da ist
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<UserScore> userScores;
+
 
     @Deprecated
     public Game() {
     }
 
-    public Game(User amZug, Board board, User currentTurn, User user1, User user2) {
-        this.currentTurn = amZug;
+    public Game(Board board, User currentTurn, User user1, User user2) {
         this.board = board;
         this.currentTurn = currentTurn;
 

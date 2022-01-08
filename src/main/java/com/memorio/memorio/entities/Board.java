@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,10 +16,9 @@ import java.util.stream.Collectors;
 @ToString
 @Getter
 @Setter
-@Embeddable
 public class Board {
 
-    @ElementCollection
+    // https://stackoverflow.com/questions/22126397/embeddable-and-elementcollection-nesting
     private List<Card> cardSet;
 
     public Board() {
@@ -74,7 +71,7 @@ public class Board {
         } else if (allCardsWaitingToBeFlipped.size() == 1) {
             // Wenn es eine Karte gibt die auf das flippen wartet und sie mit unserer Karte matcht, flippe beide
             Card cardWaitingToBeFlipped = allCardsWaitingToBeFlipped.get(0);
-            
+
             if (cardWaitingToBeFlipped.getPairId() == currentCard.getPairId()) {
                 currentCard.flipCard();
                 cardWaitingToBeFlipped.flipCard();

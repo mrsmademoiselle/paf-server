@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Embeddable;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 /**
  * Das UserScore Objekt stellt zur Laufzeit einen User mit seinen Zügen dar.
@@ -13,11 +12,15 @@ import javax.persistence.OneToOne;
 @ToString
 @Getter
 @Setter
-@Embeddable
+@Entity
 public class UserScore {
-    @OneToOne
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @ManyToOne
     private User user;
-    // moves = Punkte
+    @Column
     private int moves;
 
     @Deprecated

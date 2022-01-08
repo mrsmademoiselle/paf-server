@@ -5,6 +5,7 @@ import com.memorio.memorio.config.jwt.JwtTokenUtil;
 import com.memorio.memorio.entities.*;
 import com.memorio.memorio.exception.MatchNotFoundException;
 import com.memorio.memorio.exception.MemorioRuntimeException;
+import com.memorio.memorio.repositories.GameRepository;
 import com.memorio.memorio.repositories.UserRepository;
 import com.memorio.memorio.services.BeanUtil;
 import com.memorio.memorio.services.GameHandler;
@@ -340,6 +341,8 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
     private void sendEndscoreToClientsOfConnection(WebSocket conn) {
         try {
+            GameRepository gameRepository = BeanUtil.getBean(GameRepository.class);
+
             Player player = findPlayerByMatchConnection(conn);
 
             // erstelle Endscore-Objekt aus Game-Objekt
@@ -352,6 +355,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
             player.getWebsocketConnection().send(message);
             logger.info("Endscore-Objekt erfolgreich an alle Clients gesendet.");
 
+            gameRepository.save(game);
             // ende das Match
             dissolveMatch(player.getMatch());
 
@@ -405,7 +409,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
             matchPlayer();
 
             // Game-Objekt erstellen
-            Game game = new Game(player.getUser(), new Board(), player.getUser(), player.getUser(), player.getSubscriber().getUser());
+            Game game = new Game(new Board(), player.getUser(), player.getUser(), player.getSubscriber().getUser());
             String message = MemorioJsonMapper.getStringFromObject(game);
 
             // und an alle Teilnehmer des Matches schicken
