@@ -26,6 +26,7 @@ public class Game {
     private User currentTurn;
     @Transient
     private Board board;
+
     /**
      * Dieses Feld darf kein Embeddable sein wie ursprünglich angedacht, weil es eine Collection von
      * Usern enthält und User eine DB-Entity ist. Daher ist UserScore jetzt bei uns (der Einfachheit halber) auch

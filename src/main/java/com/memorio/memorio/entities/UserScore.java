@@ -38,6 +38,10 @@ public class UserScore {
         this.moves += new Random().nextInt(10 - 1) + 1;
     }
 
+    public void increaseScoreBy(int i) {
+        this.moves += i;
+    }
+
     public void increaseScore() {
         this.moves++;
     }
