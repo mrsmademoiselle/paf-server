@@ -1,8 +1,10 @@
 package com.memorio.memorio.web.controller;
 
 import com.memorio.memorio.config.jwt.JwtTokenUtil;
+import com.memorio.memorio.entities.GameHistory;
 import com.memorio.memorio.entities.User;
 import com.memorio.memorio.repositories.UserRepository;
+import com.memorio.memorio.services.GameHistoryService;
 import com.memorio.memorio.services.UserService;
 import com.memorio.memorio.web.dto.JwtResponse;
 import com.memorio.memorio.web.dto.UserAuthDto;
@@ -43,15 +45,17 @@ public class UserController {
     private final UserRepository userRepository;
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
+    private final GameHistoryService gameHistoryService;
     private final JwtTokenUtil jwtTokenUtil;
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    public UserController(UserRepository userRepository, UserService userService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
+    public UserController(GameHistoryService gameHistoryService, UserRepository userRepository, UserService userService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.gameHistoryService = gameHistoryService;
     }
 
     @GetMapping("/all")
@@ -159,7 +163,6 @@ public class UserController {
         return ResponseEntity.ok("");
     }
 
-
     @GetMapping("/image/remove")
     public ResponseEntity<?> removeImage(@RequestHeader(name = "Authorization") String jwtToken) {
         String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
@@ -189,6 +192,16 @@ public class UserController {
         logger.info("Benutzer ist autorisiert.");
         return ResponseEntity.ok("");
     }
+
+    @GetMapping("/history")
+    public ResponseEntity<GameHistory> getUserHistory(@RequestHeader(name = "Authorization") String jwtToken) {
+        String username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        User user = userOptional.orElseThrow(NotFoundException::new);
+
+        return ResponseEntity.ok(gameHistoryService.getGameHistoryForUser(user));
+    }
+
 
     private void authenticate(String username, String password) throws Exception {
         try {
