@@ -31,6 +31,8 @@ public class Game {
      * Usern enthält und User eine DB-Entity ist. Daher ist UserScore jetzt bei uns (der Einfachheit halber) auch
      * eine Entität in der Datenbank und wird erst einmal separat abgespeichert. Ich versuche, das später noch einmal
      * zu fixen.
+     * <p>
+     * https://stackoverflow.com/questions/22126397/embeddable-and-elementcollection-nesting
      */
     // FetchType.Eager muss sein, damit die Collection zum Zeitpunkt der Initialisierung da ist
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

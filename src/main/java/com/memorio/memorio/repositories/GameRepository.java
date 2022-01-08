@@ -10,5 +10,8 @@ import java.util.List;
 public interface GameRepository extends CrudRepository<Game, Long> {
     List<Game> findAll();
 
+    /**
+     * holt alle Games, in denen ein UserScore vom User mit diesem Namen vorhanden ist
+     */
     List<Game> findByUserScoresUserUsername(String username);
 }

@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Random;
 
 /**
  * Das UserScore Objekt stellt zur Laufzeit einen User mit seinen Zügen dar.
@@ -30,6 +31,11 @@ public class UserScore {
     public UserScore(User user) {
         this.user = user;
         this.moves = 0;
+    }
+
+    public void increaseScoreByRandomAmount() {
+        // random number 1-10
+        this.moves += new Random().nextInt(10 - 1) + 1;
     }
 
     public void increaseScore() {
