@@ -200,7 +200,21 @@ public class UserController {
         User user = userOptional.orElseThrow(NotFoundException::new);
 
         logger.info("Schicke GameHistory an Client " + user.getUsername() + " zurück...");
-        return ResponseEntity.ok(gameHistoryService.getGameHistoryForUser(user));
+        return ResponseEntity.ok(gameHistoryService.getGameHistoryForUser(user.getUsername()));
+    }
+
+    /**
+     * Dieser Endpunkt ist öffentlich (ohne JWT) zugänglich und nur für Testzwecke da.
+     * Er kann nach dem Spielhistorie-Sprint wieder ausgebaut werden.
+     * <p>
+     * Da wir uns in MemorioApplication.java Testdaten anlegen, können hiermit diese Testdaten
+     * vom Server abgerufen werden, ohne dass das Spiel erst komplett durchgespielt werden muss. ;-)
+     */
+    @GetMapping("/history/test")
+    public ResponseEntity<GameHistory> getUserHistoryTest(@RequestHeader(name = "Username") String username) {
+        GameHistory gameHistory = gameHistoryService.getGameHistoryForUser(username);
+        logger.info("Returning game history for user " + username + ": " + gameHistory);
+        return ResponseEntity.ok(gameHistory);
     }
 
 

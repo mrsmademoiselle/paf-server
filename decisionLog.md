@@ -7,6 +7,7 @@ TODO:
 - Brainstorming Architektur
 - WebsocketServer, speichern des Spiels ausprobieren
 - Controller-Methode testen
+- Null Safety prüfen
 
 - UserScores in Game sind nun eine eigene Entity, weil Embeddables keine Liste von Usern haben darf, da User selbst eine
   eigene Entity ist.

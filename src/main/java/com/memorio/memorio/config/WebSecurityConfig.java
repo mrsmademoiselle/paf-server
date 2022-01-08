@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -52,9 +51,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         // csrf aus machen, da nicht benoetigt bzw keine anforderung
         httpSecurity.csrf().disable()
-	    	.cors().and()
+                .cors().and()
                 // auth-header check fuer folgende Endpunkte deaktivieren
-                .authorizeRequests().antMatchers("/user/login", "/user/register", "/user/all","/image/**","/resources/**","/public/**").permitAll().
+                .authorizeRequests().antMatchers("/user/login", "/user/register", "/user/history/test", "/user/all", "/image/**", "/resources/**", "/public/**").permitAll().
                 // Alle Anfragen an anderen Endpunkten werden ueberprueft
                         anyRequest().authenticated().and().
                 // Entrypoint fuer authmanagement angeben und Sessionmanagement deaktivieren

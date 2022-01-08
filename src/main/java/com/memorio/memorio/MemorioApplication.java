@@ -70,8 +70,7 @@ public class MemorioApplication implements CommandLineRunner {
         int losses = 0;
         int wins = 2;
 
-        // act
-        GameHistory gameHistory = gameHistoryService.getGameHistoryForUser(userToTest);
+        GameHistory gameHistory = gameHistoryService.getGameHistoryForUser(userToTest.getUsername());
         System.out.println(gameHistory);
 
         System.out.println("average Moves: " + (gameHistory.getAverageMoves() == averagePoints));
@@ -80,14 +79,19 @@ public class MemorioApplication implements CommandLineRunner {
         System.out.println("wins: " + (gameHistory.getWins() == wins));
     }
 
+
     private void createDummyData() {
+
+        // Testuser
         User user1 = new User("usi", "usi");
         User user2 = new User("busi", "busi");
         User user3 = new User("kusi", "kusi");
         User user4 = new User("lusi", "lusi");
 
         userRepository.saveAll(Arrays.asList(user1, user2, user3, user4));
-        System.out.println("Registered basic users");
+        System.out.println("----------");
+        System.out.println("Registered basic users: " + user1.getUsername() + ", " + user2.getUsername() + ", " + user3.getUsername() + ", " + user4.getUsername());
+        System.out.println("----------");
 
         Game game1 = new Game(new Board(), user1, user1, user2);
         game1.getUserScores().get(0).increaseScoreByRandomAmount();
@@ -95,18 +99,13 @@ public class MemorioApplication implements CommandLineRunner {
         Game game2 = new Game(new Board(), user2, user2, user3);
         game2.getUserScores().get(0).increaseScoreByRandomAmount();
         game2.getUserScores().get(1).increaseScoreByRandomAmount();
-        Game game3 = new Game(new Board(), user2, user1, user3);
-        Game game4 = new Game(new Board(), user4, user4, user2);
-        game4.getUserScores().get(0).increaseScoreByRandomAmount();
-        game4.getUserScores().get(1).increaseScoreByRandomAmount();
+        Game game3 = new Game(new Board(), user4, user4, user2);
+        game3.getUserScores().get(0).increaseScoreByRandomAmount();
+        game3.getUserScores().get(1).increaseScoreByRandomAmount();
 
-        List<Game> entities = Arrays.asList(game1, game2, game3, game4);
-        System.out.println(game4.getUserScores());
+        List<Game> entities = Arrays.asList(game1, game2, game3);
         gameRepository.saveAll(entities);
-        System.out.println("Registered games");
-
-        GameHistory gameHistoryForUser = gameHistoryService.getGameHistoryForUser(user4);
-        System.out.println(gameHistoryForUser);
+        System.out.println("Registered games: " + entities);
     }
 
     private void increaseScoresOfGameBy(Game game1, int userToTestScore, int otherScore) {
