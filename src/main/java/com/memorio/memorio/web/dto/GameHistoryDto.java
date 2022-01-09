@@ -20,10 +20,10 @@ public class GameHistoryDto {
     public GameHistoryDto() {
     }
 
-    public GameHistoryDto(int totalGames, int wins, int losses, int averageMoves) {
+    public GameHistoryDto(int totalGames, int wins, int averageMoves) {
         this.totalGames = totalGames;
         this.wins = wins;
-        this.losses = losses;
+        this.losses = totalGames - wins;
         this.averageMoves = averageMoves;
     }
 }

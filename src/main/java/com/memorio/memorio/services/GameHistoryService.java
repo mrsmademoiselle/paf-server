@@ -30,9 +30,8 @@ public class GameHistoryService {
 
         int winCount = calculateWinCount(gamesOfUser, username);
         int averageMoves = calculateAverageMoves(gamesOfUser, username);
-        int losses = gamesOfUser.size() - winCount;
 
-        return new GameHistoryDto(gamesOfUser.size(), winCount, losses, averageMoves);
+        return new GameHistoryDto(gamesOfUser.size(), winCount, averageMoves);
     }
 
     private GameHistoryDto createGameHistoryWithRandomValues() {
@@ -40,8 +39,8 @@ public class GameHistoryService {
         int maxGames = random.nextInt(20);
         int averageMoves = random.nextInt(40);
         int winCount = random.nextInt(maxGames);
-        int losses = maxGames - winCount;
-        return new GameHistoryDto(maxGames, winCount, losses, averageMoves);
+
+        return new GameHistoryDto(maxGames, winCount, averageMoves);
     }
 
     private int calculateWinCount(List<Game> allGames, String username) {
