@@ -1,5 +1,7 @@
-package com.memorio.memorio.entities;
+package com.memorio.memorio.web.dto;
 
+import com.memorio.memorio.entities.User;
+import com.memorio.memorio.entities.UserScore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -7,21 +9,21 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- * Das Endscore Objekt
+ * Das EndscoreDto Objekt
  */
 @ToString
 @Getter
 @Setter
-public class Endscore {
+public class EndscoreDto {
     private User winner;
 
     private List<UserScore> scoreListe;
 
     @Deprecated
-    public Endscore() {
+    public EndscoreDto() {
     }
 
-    public Endscore(List<UserScore> scoreListe) {
+    public EndscoreDto(List<UserScore> scoreListe) {
         //Zum identifiezieren des Gewinners werden die Punkte abgeglichen
         this.scoreListe = scoreListe;
 

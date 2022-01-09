@@ -11,6 +11,7 @@ import com.memorio.memorio.services.helper.BeanUtil;
 import com.memorio.memorio.services.helper.GameHandler;
 import com.memorio.memorio.services.helper.MemorioJsonMapper;
 import com.memorio.memorio.valueobjects.MessageKeys;
+import com.memorio.memorio.web.dto.EndscoreDto;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -243,7 +244,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 String cardId = jsonMap.get(actionFlag);
                 boolean hasAnyUnflippedCardsLeft = gameHandler.flipCard(cardId);
 
-                // Response an Client senden, Game oder Endscore
+                // Response an Client senden, Game oder EndscoreDto
                 if (hasAnyUnflippedCardsLeft) {
                     sendGameToAllClientsOfConnection(conn);
                 } else {
@@ -346,15 +347,15 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
             Player player = findPlayerByMatchConnection(conn);
 
-            // erstelle Endscore-Objekt aus Game-Objekt
+            // erstelle EndscoreDto-Objekt aus Game-Objekt
             Game game = gameHandler.getGame();
-            Endscore endscore = new Endscore(game.getUserScores());
-            String message = MemorioJsonMapper.getStringFromObject(endscore);
+            EndscoreDto endscoreDto = new EndscoreDto(game.getUserScores());
+            String message = MemorioJsonMapper.getStringFromObject(endscoreDto);
 
-            // sende Endscore an Clients
+            // sende EndscoreDto an Clients
             player.getSubscriber().getWebsocketConnection().send(message);
             player.getWebsocketConnection().send(message);
-            logger.info("Endscore-Objekt erfolgreich an alle Clients gesendet.");
+            logger.info("EndscoreDto-Objekt erfolgreich an alle Clients gesendet.");
 
             gameRepository.save(game);
             logger.info("Game-Objekt erfolgreich in der Datenbank gespeichert.");
