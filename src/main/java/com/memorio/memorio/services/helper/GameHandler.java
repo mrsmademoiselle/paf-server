@@ -1,4 +1,4 @@
-package com.memorio.memorio.services;
+package com.memorio.memorio.services.helper;
 
 import com.memorio.memorio.entities.FlipStatus;
 import com.memorio.memorio.entities.Game;

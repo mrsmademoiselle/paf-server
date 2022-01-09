@@ -1,4 +1,4 @@
-package com.memorio.memorio.services;
+package com.memorio.memorio.services.helper;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
