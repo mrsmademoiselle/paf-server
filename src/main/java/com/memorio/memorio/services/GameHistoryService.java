@@ -1,9 +1,9 @@
 package com.memorio.memorio.services;
 
 import com.memorio.memorio.entities.Game;
-import com.memorio.memorio.entities.GameHistory;
 import com.memorio.memorio.entities.UserScore;
 import com.memorio.memorio.repositories.GameRepository;
+import com.memorio.memorio.web.dto.GameHistoryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +21,9 @@ public class GameHistoryService {
     }
 
     /**
-     * Baut für diesen User eine GameHistory zusammen und gibt sie zurück.
+     * Baut für diesen User eine GameHistoryDto zusammen und gibt sie zurück.
      */
-    public GameHistory getGameHistoryForUser(String username) {
+    public GameHistoryDto getGameHistoryForUser(String username) {
         List<Game> gamesOfUser = gameRepository.findByUserScoresUserUsername(username);
 
         if (gamesOfUser.size() == 0) return createGameHistoryWithRandomValues();
@@ -32,16 +32,16 @@ public class GameHistoryService {
         int averageMoves = calculateAverageMoves(gamesOfUser, username);
         int losses = gamesOfUser.size() - winCount;
 
-        return new GameHistory(gamesOfUser.size(), winCount, losses, averageMoves);
+        return new GameHistoryDto(gamesOfUser.size(), winCount, losses, averageMoves);
     }
 
-    private GameHistory createGameHistoryWithRandomValues() {
+    private GameHistoryDto createGameHistoryWithRandomValues() {
         Random random = new Random();
         int maxGames = random.nextInt(20);
         int averageMoves = random.nextInt(40);
         int winCount = random.nextInt(maxGames);
         int losses = maxGames - winCount;
-        return new GameHistory(maxGames, winCount, losses, averageMoves);
+        return new GameHistoryDto(maxGames, winCount, losses, averageMoves);
     }
 
     private int calculateWinCount(List<Game> allGames, String username) {

@@ -1,4 +1,4 @@
-package com.memorio.memorio.entities;
+package com.memorio.memorio.web.dto;
 
 
 import lombok.EqualsAndHashCode;
@@ -10,17 +10,17 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class GameHistory {
+public class GameHistoryDto {
     private int totalGames;
     private int wins;
     private int losses;
     private int averageMoves;
 
     @Deprecated
-    public GameHistory() {
+    public GameHistoryDto() {
     }
 
-    public GameHistory(int totalGames, int wins, int losses, int averageMoves) {
+    public GameHistoryDto(int totalGames, int wins, int losses, int averageMoves) {
         this.totalGames = totalGames;
         this.wins = wins;
         this.losses = losses;

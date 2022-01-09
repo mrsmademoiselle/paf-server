@@ -1,9 +1,13 @@
 package com.memorio.memorio;
 
-import com.memorio.memorio.entities.*;
+import com.memorio.memorio.entities.Board;
+import com.memorio.memorio.entities.Game;
+import com.memorio.memorio.entities.User;
+import com.memorio.memorio.entities.UserScore;
 import com.memorio.memorio.repositories.GameRepository;
 import com.memorio.memorio.repositories.UserRepository;
 import com.memorio.memorio.services.GameHistoryService;
+import com.memorio.memorio.web.dto.GameHistoryDto;
 import com.memorio.memorio.websocket.MemorioWebSocketServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -70,13 +74,13 @@ public class MemorioApplication implements CommandLineRunner {
         int losses = 0;
         int wins = 2;
 
-        GameHistory gameHistory = gameHistoryService.getGameHistoryForUser(userToTest.getUsername());
-        System.out.println(gameHistory);
+        GameHistoryDto gameHistoryDto = gameHistoryService.getGameHistoryForUser(userToTest.getUsername());
+        System.out.println(gameHistoryDto);
 
-        System.out.println("average Moves: " + (gameHistory.getAverageMoves() == averagePoints));
-        System.out.println("total games: " + (gameHistory.getTotalGames() == totalGames));
-        System.out.println("losses: " + (gameHistory.getLosses() == losses));
-        System.out.println("wins: " + (gameHistory.getWins() == wins));
+        System.out.println("average Moves: " + (gameHistoryDto.getAverageMoves() == averagePoints));
+        System.out.println("total games: " + (gameHistoryDto.getTotalGames() == totalGames));
+        System.out.println("losses: " + (gameHistoryDto.getLosses() == losses));
+        System.out.println("wins: " + (gameHistoryDto.getWins() == wins));
     }
 
 

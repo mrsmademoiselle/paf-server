@@ -39,12 +39,4 @@ public class Player {
     public void addSubscriber(Player player) {
         subscriber = player;
     }
-
-    /**
-     * Entfernen der User - Spieler verbindung fuer Spielende
-     */
-    public void clearUser() {
-        this.user = null;
-    }
-
 }

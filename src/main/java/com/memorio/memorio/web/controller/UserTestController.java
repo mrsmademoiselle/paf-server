@@ -1,9 +1,9 @@
 package com.memorio.memorio.web.controller;
 
-import com.memorio.memorio.entities.GameHistory;
 import com.memorio.memorio.entities.User;
 import com.memorio.memorio.repositories.UserRepository;
 import com.memorio.memorio.services.GameHistoryService;
+import com.memorio.memorio.web.dto.GameHistoryDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,11 +52,11 @@ public class UserTestController {
      * random Werte zurückgegeben.
      */
     @GetMapping("/history/test")
-    public ResponseEntity<GameHistory> getUserHistoryTest(@RequestHeader(name = "Username") String username) {
-        GameHistory gameHistory = gameHistoryService.getGameHistoryForUser(username);
-        logger.info("Returning game history for user " + username + ": " + gameHistory);
+    public ResponseEntity<GameHistoryDto> getUserHistoryTest(@RequestHeader(name = "Username") String username) {
+        GameHistoryDto gameHistoryDto = gameHistoryService.getGameHistoryForUser(username);
+        logger.info("Returning game history for user " + username + ": " + gameHistoryDto);
 
-        return ResponseEntity.ok(gameHistory);
+        return ResponseEntity.ok(gameHistoryDto);
     }
 
 }

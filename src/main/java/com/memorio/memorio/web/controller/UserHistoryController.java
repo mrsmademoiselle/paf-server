@@ -1,9 +1,9 @@
 package com.memorio.memorio.web.controller;
 
-import com.memorio.memorio.entities.GameHistory;
 import com.memorio.memorio.entities.User;
 import com.memorio.memorio.services.GameHistoryService;
 import com.memorio.memorio.services.UserAuthService;
+import com.memorio.memorio.web.dto.GameHistoryDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +32,10 @@ public class UserHistoryController {
     }
 
     @GetMapping("/history")
-    public ResponseEntity<GameHistory> getUserHistory(@RequestHeader(name = "Authorization") String jwtToken) {
+    public ResponseEntity<GameHistoryDto> getUserHistory(@RequestHeader(name = "Authorization") String jwtToken) {
         User user = userAuthService.getUserFromJwt(jwtToken);
 
-        logger.info("Schicke GameHistory an Client " + user.getUsername() + " zurück...");
+        logger.info("Schicke GameHistoryDto an Client " + user.getUsername() + " zurück...");
         return ResponseEntity.ok(gameHistoryService.getGameHistoryForUser(user.getUsername()));
     }
 }
