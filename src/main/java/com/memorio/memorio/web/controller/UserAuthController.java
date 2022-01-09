@@ -3,7 +3,7 @@ package com.memorio.memorio.web.controller;
 
 import com.memorio.memorio.services.UserAuthService;
 import com.memorio.memorio.services.UserService;
-import com.memorio.memorio.web.dto.JwtResponse;
+import com.memorio.memorio.web.dto.TokenDto;
 import com.memorio.memorio.web.dto.UserAuthDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +61,7 @@ public class UserAuthController {
     public ResponseEntity<?> loginUser(@Valid @RequestBody UserAuthDto userAuthDto) throws Exception {
         final String token = userAuthService.authenticateAndGetTokenForUserCredentials(userAuthDto.getUsername(), userAuthDto.getPassword());
         logger.info("Login erfolgreich.");
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(new TokenDto(token));
     }
 
     /**

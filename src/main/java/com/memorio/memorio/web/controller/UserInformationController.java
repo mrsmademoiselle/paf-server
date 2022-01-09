@@ -4,8 +4,8 @@ package com.memorio.memorio.web.controller;
 import com.memorio.memorio.entities.User;
 import com.memorio.memorio.services.UserAuthService;
 import com.memorio.memorio.services.UserService;
-import com.memorio.memorio.web.dto.JwtResponse;
-import com.memorio.memorio.web.dto.UserDataResponse;
+import com.memorio.memorio.web.dto.TokenDto;
+import com.memorio.memorio.web.dto.UserInfoDto;
 import com.memorio.memorio.web.dto.UserUpdateDto;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public class UserInformationController {
         // für den FX-Client müssen wir das Bild einmal encoden, da wird es dort dann leichter parsen können
         String encodedString = java.util.Base64.getEncoder().encodeToString(img);
 
-        return ResponseEntity.ok(new UserDataResponse(user.getUsername(), encodedString, img));
+        return ResponseEntity.ok(new UserInfoDto(user.getUsername(), encodedString, img));
     }
 
     @GetMapping("/info/image")
@@ -66,7 +66,7 @@ public class UserInformationController {
     @PostMapping("/update")
     public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto, BindingResult bindingResult, @RequestHeader(name = "Authorization") String jwtToken) throws Exception {
         String token = userAuthService.updateUser(userUpdateDto, jwtToken);
-        return ResponseEntity.ok(new JwtResponse(token));
+        return ResponseEntity.ok(new TokenDto(token));
     }
 
     @PostMapping("/image/upload")
@@ -95,7 +95,7 @@ public class UserInformationController {
         userService.saveUserImage(user.getUsername(), getDefaultImg());
         String encodedString = java.util.Base64.getEncoder().encodeToString(getDefaultImg());
 
-        return ResponseEntity.ok(new UserDataResponse(user.getUsername(), encodedString, getDefaultImg()));
+        return ResponseEntity.ok(new UserInfoDto(user.getUsername(), encodedString, getDefaultImg()));
     }
 
     private byte[] getDefaultImg() {

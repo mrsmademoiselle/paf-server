@@ -8,6 +8,9 @@ import lombok.ToString;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+/**
+ * DTO für Empfangen von Userdaten beim login/registering
+ */
 @EqualsAndHashCode
 @ToString
 @Getter

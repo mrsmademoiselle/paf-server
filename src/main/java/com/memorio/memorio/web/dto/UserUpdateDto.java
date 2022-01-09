@@ -6,6 +6,9 @@ import lombok.ToString;
 
 import javax.validation.constraints.Pattern;
 
+/**
+ * DTO für Empfangen von Userdaten für das Updaten der Userinformationen (UserProfil)
+ */
 @ToString
 @Getter
 @Setter
