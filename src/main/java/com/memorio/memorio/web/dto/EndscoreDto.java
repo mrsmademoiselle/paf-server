@@ -2,6 +2,7 @@ package com.memorio.memorio.web.dto;
 
 import com.memorio.memorio.entities.User;
 import com.memorio.memorio.entities.UserScore;
+import com.memorio.memorio.exceptions.MemorioRuntimeException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,18 +25,24 @@ public class EndscoreDto {
     }
 
     public EndscoreDto(List<UserScore> scoreListe) {
-        //Zum identifiezieren des Gewinners werden die Punkte abgeglichen
+        //Zum identifizieren des Gewinners werden die Punkte abgeglichen
         this.scoreListe = scoreListe;
 
+        if (scoreListe.size() != 2)
+            throw new MemorioRuntimeException("EndscoreDto: Es müssen genau 2 UserScores existieren!");
+
+        this.winner = setWinner(scoreListe);
+    }
+
+    private User setWinner(List<UserScore> scoreListe) {
         UserScore user1 = scoreListe.get(0);
         UserScore user2 = scoreListe.get(1);
 
         if (user1.getMoves() < user2.getMoves()) {
-            this.winner = user2.getUser();
-        } else if (user1.getMoves() == user2.getMoves()) {
-            this.winner = null;
+            return user2.getUser();
+            // auch wenn unentschieden ist, gewinnt stumpf user1 :-)
         } else {
-            this.winner = user1.getUser();
+            return user1.getUser();
         }
     }
 }
