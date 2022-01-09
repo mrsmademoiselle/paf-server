@@ -36,7 +36,9 @@ public class Game {
      * https://stackoverflow.com/questions/22126397/embeddable-and-elementcollection-nesting
      */
     // FetchType.Eager muss sein, damit die Collection zum Zeitpunkt der Initialisierung da ist
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    // cascade.all = Anwenden aller primären Cascade-Typen, siehe:
+    // https://openjpa.apache.org/builds/2.4.0/apache-openjpa/docs/jpa_overview_meta_field.html#jpa_overview_meta_cascade
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<UserScore> userScores;
 
 

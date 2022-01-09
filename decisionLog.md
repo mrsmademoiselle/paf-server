@@ -6,15 +6,19 @@ TODO:
 
 - Brainstorming Architektur
 - WebsocketServer, speichern des Spiels ausprobieren
-- Controller-Methode testen
-- Null Safety prüfen
 
-- UserScores in Game sind nun eine eigene Entity, weil Embeddables keine Liste von Usern haben darf, da User selbst eine
-  eigene Entity ist.
-    - Lösungsansatz 1: Wir speichern alle UserScores separat ab und holen uns die aus der Datenbank, statt des
-      GameObjekts
-    - Lösungsansatz 2: Wir speichern statt der User nur die Userreferenz (ID oder Usernamen) im UserScore ab, damit darf
-      UserScore dann wieder ein Embeddable sein
+- Game.List<UserScores> sind nun eine eigene Entity (statt Embeddable), weil UserScore.User eine eigene Entity ist und
+  Embeddables keine Entities behinhalten dürfen.
+    - Lösungsansatz 1: Wir speichern die UserScores als eigene Entities in der DB und holen sie uns für die Berechnung
+      der GameHistory, statt des gesamten Game-Objekts. Das würde funktionieren, weil jeder User pro Spiel ohnehin nur
+      ein UserScore-Objekt hat. Wir hätten dann allerdings keinen Bezug mehr zum Spiel selbst, es sei denn, wir würden
+      in UserScore das Feld "gameId" hinzufügen oder Heiratstabellen erstellen. Den Bezug brauchen wir aber zum heutigen
+      Stand ohnehin nicht, womit das "Problem" theoretischer Natur ist.
+    - Lösungsansatz 2: Wir speichern statt der User-Objekte nur die Userreferenz (ID oder Usernamen) im UserScore ab,
+      damit darf UserScore dann wieder ein Embeddable sein, weil String ein primitiver Datentyp ist. Auch das wäre in
+      unserem Fall genug, weil die Usernamen bei uns eindeutig sind und wir die User-Objekte darüber identifizieren und
+      vergleichen können. Die Frage ist nur, ob dieser Ansatz logisch so sinnvoll ist, denn es ist eher ein hacky
+      Workaround als eine Lösung des Problems.
     - Lösungsansatz 3: ???
 
 # Sprint 3
