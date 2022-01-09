@@ -23,8 +23,6 @@ public class User {
     // TODO: Adjust datatype for password
     @Column
     private String password;
-    @OneToOne
-    private UserProfil userProfil;
     // Lob = "Large object" für DB
     @Lob
     @Column
