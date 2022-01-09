@@ -1,4 +1,4 @@
-package com.memorio.memorio.websocket;
+package com.memorio.memorio.valueobjects;
 
 import java.util.Arrays;
 

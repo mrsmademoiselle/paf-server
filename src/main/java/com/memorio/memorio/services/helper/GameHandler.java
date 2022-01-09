@@ -1,9 +1,9 @@
 package com.memorio.memorio.services.helper;
 
-import com.memorio.memorio.entities.FlipStatus;
 import com.memorio.memorio.entities.Game;
 import com.memorio.memorio.entities.User;
 import com.memorio.memorio.entities.UserScore;
+import com.memorio.memorio.valueobjects.FlipStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

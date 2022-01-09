@@ -1,4 +1,4 @@
-package com.memorio.memorio.entities;
+package com.memorio.memorio.valueobjects;
 
 public enum FlipStatus {
     FLIPPED,

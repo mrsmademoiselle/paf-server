@@ -1,5 +1,6 @@
 package com.memorio.memorio.entities;
 
+import com.memorio.memorio.valueobjects.FlipStatus;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
