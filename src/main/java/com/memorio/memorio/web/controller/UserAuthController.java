@@ -37,7 +37,7 @@ public class UserAuthController {
      * Wenn Username bereits vorhanden gebe 400 wenn User noch nicht vorhanden 200
      */
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody UserAuthDto userAuthDto, BindingResult bindingResult) throws Exception {
+    public ResponseEntity<?> register(@Valid @RequestBody UserAuthDto userAuthDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             logger.warn("{} hat das falsche Format. Fehler: {}", userAuthDto, bindingResult.getAllErrors());
@@ -58,7 +58,7 @@ public class UserAuthController {
      * wenn User gefunden werden kann und Zugangsdatem stimmen gebe Token sonst Exception mit 500
      */
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody UserAuthDto userAuthDto) throws Exception {
+    public ResponseEntity<?> loginUser(@Valid @RequestBody UserAuthDto userAuthDto) {
         final String token = userAuthService.authenticateAndGetTokenForUserCredentials(userAuthDto.getUsername(), userAuthDto.getPassword());
         logger.info("Login erfolgreich.");
         return ResponseEntity.ok(new TokenDto(token));

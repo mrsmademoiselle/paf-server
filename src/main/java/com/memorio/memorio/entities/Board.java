@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Setter
 public class Board {
 
-    // https://stackoverflow.com/questions/22126397/embeddable-and-elementcollection-nesting
     private List<Card> cardSet;
 
     public Board() {
@@ -46,11 +45,12 @@ public class Board {
     public boolean flipCard(String cardId) {
         List<Card> cardSet = getCardSet();
 
-        // hole die Karte, die geflippt werden soll
+        // finde Karte, die geflippt werden soll
         Card currentCard = cardSet.stream()
                 .filter(card -> card.getId().equals(cardId))
                 .findFirst().orElse(null);
 
+        // wenn wir unsere Karte nicht finden, brich ab. Dann darf der Nutzer nochmal ziehen.
         if (currentCard == null) return false;
 
         // hole alle Karten, die bereits vom User in dieser Runde aufgedeckt wurden
@@ -62,31 +62,36 @@ public class Board {
     }
 
     /**
-     * Evaluiert, ob und wann welche Karten umgedreht werden sollen
+     * Evaluiert, ob und wann welche Karten umgedreht werden sollen und flippt die Karten entsprechend.
+     * Gibt boolean zurück, der angibt, ob ein matching-Pair gefunden wurde oder nicht.
      */
     private boolean handleCardFlipping(Card currentCard, List<Card> allCardsWaitingToBeFlipped) {
-        // Wenn es keine Karten gibt die auf das flippen warten, bringe currentCard in den Wartemodus bis zum nächsten Kartenzug
+        // Wenn es keine Karten gibt die auf das flippen warten (= erster Zug), bringe unsere Karte in
+        // den Wartemodus bis zum nächsten Kartenzug
         if (allCardsWaitingToBeFlipped.size() == 0) {
             currentCard.waitToFlip();
+
             return false;
         } else if (allCardsWaitingToBeFlipped.size() == 1) {
-            // Wenn es eine Karte gibt die auf das flippen wartet und sie mit unserer Karte matcht, flippe beide
             Card cardWaitingToBeFlipped = allCardsWaitingToBeFlipped.get(0);
 
+            // Wenn es eine Karte gibt die auf das flippen wartet und sie mit unserer Karte matcht, flippe beide
             if (cardWaitingToBeFlipped.getPairId() == currentCard.getPairId()) {
-                currentCard.flipCard();
-                cardWaitingToBeFlipped.flipCard();
+                currentCard.flipUp();
+                cardWaitingToBeFlipped.flipUp();
+
                 return true;
             } else { // ansonsten unflippe beide
-                currentCard.unflipCard();
-                cardWaitingToBeFlipped.unflipCard();
+                currentCard.flipDown();
+                cardWaitingToBeFlipped.flipDown();
+
                 return false;
             }
         } else {
             // wenn mehr als 1 Karte wartet (darf eigentlich nicht passieren),
             // dann ist was schiefgegangen und wir unflippen alle erstmal
 
-            allCardsWaitingToBeFlipped.forEach(Card::unflipCard);
+            allCardsWaitingToBeFlipped.forEach(Card::flipDown);
             return false;
         }
     }

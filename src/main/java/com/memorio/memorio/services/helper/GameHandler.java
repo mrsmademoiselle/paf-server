@@ -3,6 +3,7 @@ package com.memorio.memorio.services.helper;
 import com.memorio.memorio.entities.Game;
 import com.memorio.memorio.entities.User;
 import com.memorio.memorio.entities.UserScore;
+import com.memorio.memorio.exceptions.MemorioRuntimeException;
 import com.memorio.memorio.valueobjects.FlipStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +15,8 @@ import org.slf4j.LoggerFactory;
  * TODO WebsocketServer und GameHandler auseinanderziehen
  */
 public class GameHandler {
+    private final Logger logger = LoggerFactory.getLogger(GameHandler.class);
     private Game gameInstance;
-    private Logger logger = LoggerFactory.getLogger(GameHandler.class);
 
     public GameHandler(Game game) {
         this.gameInstance = game;
@@ -24,6 +25,13 @@ public class GameHandler {
     public GameHandler() {
     }
 
+    /**
+     * Flippt die Karten entsprechend ihres Flipstatus'. Updated den UserScore wenn notwendig.
+     * Ändert den Spieler-Am-Zug wenn notwendig.
+     * <p>
+     * Gibt boolean zurück der aussagt, ob es noch weitere Karten gibt, die gezogen werden können, oder nicht.
+     * Wenn dieser boolean false ist, kann das Spiel beendet werden.
+     */
     public boolean flipCard(String cardId) {
         boolean foundMatchingPair = gameInstance.getBoard().flipCard(cardId);
 
@@ -32,10 +40,14 @@ public class GameHandler {
         } else {
             switchCurrentTurnIfNeeded();
         }
+
         return hasAnyUnflippedCardsLeft();
 
     }
 
+    /**
+     * Evaluiert, ob es irgendwelche Karten gibt, die noch nicht umgedreht wurden.
+     */
     private boolean hasAnyUnflippedCardsLeft() {
         boolean hasAnyUnflippedCards = gameInstance.getBoard().getCardSet().stream()
                 .anyMatch(card -> card.getFlipStatus().equals(FlipStatus.NOT_FLIPPED));
@@ -56,12 +68,15 @@ public class GameHandler {
         if (!isFirstCard) gameInstance.switchUser();
     }
 
+    /**
+     * Erhöht den Userscore des Users, der gerade am Zug ist.
+     */
     private void updateUserScore() {
         // update user score, wenn ein matchendes Kartenpaar gefunden wurde
         User currentTurn = gameInstance.getCurrentTurn();
         UserScore userScoreToUpdate = gameInstance.getUserScores().stream()
                 .filter(userScore -> userScore.getUser().equals(currentTurn))
-                .findFirst().orElseThrow(RuntimeException::new);
+                .findFirst().orElseThrow(MemorioRuntimeException::new);
         userScoreToUpdate.increaseScore();
         logger.info("User Scores wurden erfolgreich geupdated.");
     }

@@ -18,6 +18,10 @@ public class GameHistoryDto {
 
     @Deprecated
     public GameHistoryDto() {
+        this.totalGames = 0;
+        this.wins = 0;
+        this.losses = 0;
+        this.averageMoves = 0;
     }
 
     public GameHistoryDto(int totalGames, int wins, int averageMoves) {

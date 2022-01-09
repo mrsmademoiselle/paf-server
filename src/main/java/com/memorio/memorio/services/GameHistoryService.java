@@ -13,7 +13,7 @@ import java.util.Random;
 
 @Service
 public class GameHistoryService {
-    private GameRepository gameRepository;
+    private final GameRepository gameRepository;
 
     @Autowired
     public GameHistoryService(GameRepository gameRepository) {
@@ -26,6 +26,7 @@ public class GameHistoryService {
     public GameHistoryDto getGameHistoryForUser(String username) {
         List<Game> gamesOfUser = gameRepository.findByUserScoresUserUsername(username);
 
+        // TODO später soll hier ein leeres Objekt zurückgegeben werden
         if (gamesOfUser.size() == 0) return createGameHistoryWithRandomValues();
 
         int winCount = calculateWinCount(gamesOfUser, username);
@@ -34,6 +35,10 @@ public class GameHistoryService {
         return new GameHistoryDto(gamesOfUser.size(), winCount, averageMoves);
     }
 
+    /**
+     * Methode, ein GameHistoryDto mit randomisierten Werten erstellt und zurückgibt.
+     * Ist für Testzwecke gedacht und kann nach dem UserHistory-Sprint rausgenommen werden.
+     */
     private GameHistoryDto createGameHistoryWithRandomValues() {
         Random random = new Random();
         int maxGames = random.nextInt(20);
@@ -43,6 +48,9 @@ public class GameHistoryService {
         return new GameHistoryDto(maxGames, winCount, averageMoves);
     }
 
+    /**
+     * Berechnet die Menge aller Spiele, die der User mit diesem usernamen gewonnen hat, und gibt sie als int zurück.
+     */
     private int calculateWinCount(List<Game> allGames, String username) {
         int totalWins = 0;
 
@@ -60,6 +68,9 @@ public class GameHistoryService {
         return totalWins;
     }
 
+    /**
+     * Berechnet die Menge der durchschnittlichen Züge des Spielers mit diesem Usernamen und gibt sie als int zurück.
+     */
     private int calculateAverageMoves(List<Game> allGames, String username) {
         int totalGames = allGames.size();
         Integer totalSumOfPoints = allGames.stream()

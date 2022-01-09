@@ -6,6 +6,6 @@ package com.memorio.memorio.exceptions;
  */
 public class MatchNotFoundException extends Exception {
     public MatchNotFoundException() {
-        super("Kein Game möglich");
+        super("Es sind nicht genug Spieler in der Warteschlange, um ein Match zu starten.");
     }
 }

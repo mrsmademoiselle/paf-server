@@ -21,9 +21,4 @@ public class UserInfoDto {
         this.profilbild = profilbild;
         this.profileImage = profileImage;
     }
-
-    public UserInfoDto(String username, byte[] profileImage) {
-        this.username = username;
-        this.profileImage = profileImage;
-    }
 }

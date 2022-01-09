@@ -34,11 +34,11 @@ public class Card {
         this.flipStatus = FlipStatus.WAITING_TO_FLIP;
     }
 
-    public void flipCard() {
+    public void flipUp() {
         this.flipStatus = FlipStatus.FLIPPED;
     }
 
-    public void unflipCard() {
+    public void flipDown() {
         this.flipStatus = FlipStatus.NOT_FLIPPED;
     }
 }

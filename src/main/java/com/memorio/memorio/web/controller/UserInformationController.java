@@ -65,6 +65,10 @@ public class UserInformationController {
 
     @PostMapping("/update")
     public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto, BindingResult bindingResult, @RequestHeader(name = "Authorization") String jwtToken) throws Exception {
+        if (bindingResult.hasErrors()) {
+            logger.warn("Der Username hat das falsche Format.");
+            return new ResponseEntity<>("Der Username entspricht nicht dem richtigen Format.", HttpStatus.BAD_REQUEST);
+        }
         String token = userAuthService.updateUser(userUpdateDto, jwtToken);
         return ResponseEntity.ok(new TokenDto(token));
     }

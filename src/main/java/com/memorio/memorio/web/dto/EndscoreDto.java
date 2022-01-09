@@ -40,8 +40,7 @@ public class EndscoreDto {
 
         if (user1.getMoves() < user2.getMoves()) {
             return user2.getUser();
-            // auch wenn unentschieden ist, gewinnt stumpf user1 :-)
-        } else {
+        } else { // auch wenn unentschieden ist, gewinnt stumpf user1 :-)
             return user1.getUser();
         }
     }

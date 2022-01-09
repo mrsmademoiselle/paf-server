@@ -8,11 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.nio.charset.Charset;
 
 /**
  * Utilklasse für Bereitstellung von geläufigen JWT-Funktionen.
@@ -43,7 +43,8 @@ public class JwtTokenUtil implements Serializable {
 
     // Secret rauslesen damit wir rueckwirkend infos aus den Tokens ziehen koennen
     private Claims getAllClaimsFromToken(String token) {
-	return Jwts.parser().setSigningKey(secret.getBytes(Charset.forName("UTF-8"))).parseClaimsJws(token.replace("{", "").replace("}","")).getBody();
+        return Jwts.parser().setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
+                .parseClaimsJws(token.replace("{", "").replace("}", "")).getBody();
     }
 
     // Pruefen ob Token bereits abgelaufen
@@ -69,9 +70,10 @@ public class JwtTokenUtil implements Serializable {
     // URL-Sichere Serialisieren des Tokens fuer spaeteres konvertieren
     private String doGenerateToken(Map<String, Object> claims, String subject) {
 
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+        return Jwts.builder().setClaims(claims).setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-                .signWith(SignatureAlgorithm.HS512, secret.getBytes(Charset.forName("UTF-8"))).compact();
+                .signWith(SignatureAlgorithm.HS512, secret.getBytes(StandardCharsets.UTF_8)).compact();
     }
 
     // Validieren ueber Username und TTL
