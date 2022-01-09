@@ -209,11 +209,17 @@ public class UserController {
      * <p>
      * Da wir uns in MemorioApplication.java Testdaten anlegen, können hiermit diese Testdaten
      * vom Server abgerufen werden, ohne dass das Spiel erst komplett durchgespielt werden muss. ;-)
+     * <p>
+     * Gibt für User, die noch keine Spiele gespielt haben, random Werte zurück, da es beim Einloggen
+     * mit den Testdaten aufgrund der Passworthashes noch Probleme gibt.
+     * Somit können wir uns jetzt auf den Clients neue Spieler erstellen, und für diese werden direkt
+     * random Werte zurückgegeben.
      */
     @GetMapping("/history/test")
     public ResponseEntity<GameHistory> getUserHistoryTest(@RequestHeader(name = "Username") String username) {
         GameHistory gameHistory = gameHistoryService.getGameHistoryForUser(username);
         logger.info("Returning game history for user " + username + ": " + gameHistory);
+        System.out.println(userRepository.findAll());
         return ResponseEntity.ok(gameHistory);
     }
 

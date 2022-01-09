@@ -357,7 +357,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
             gameRepository.save(game);
             logger.info("Game-Objekt erfolgreich in der Datenbank gespeichert.");
-            
+
             // ende das Match
             dissolveMatch(player.getMatch());
 
@@ -411,7 +411,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
             matchPlayer();
 
             // Game-Objekt erstellen
-            Game game = new Game(new Board(), player.getUser(), player.getUser(), player.getSubscriber().getUser());
+            Game game = new Game(new Board(), player.getUser(), player.getSubscriber().getUser());
             String message = MemorioJsonMapper.getStringFromObject(game);
 
             // und an alle Teilnehmer des Matches schicken

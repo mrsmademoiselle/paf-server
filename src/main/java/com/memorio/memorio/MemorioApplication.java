@@ -55,11 +55,11 @@ public class MemorioApplication implements CommandLineRunner {
 
         // 1. Spiel: 8:0 für unseren User
         int points1 = 15;
-        Game game1 = new Game(new Board(), userToTest, userToTest, user2);
+        Game game1 = new Game(new Board(), userToTest, user2);
         increaseScoresOfGameBy(game1, points1, 0);
         // 2. Spiel: 1:2 für den anderen User
         int points2 = 2;
-        Game game2 = new Game(new Board(), user3, userToTest, user3);
+        Game game2 = new Game(new Board(), userToTest, user3);
         increaseScoresOfGameBy(game2, points2, 2);
 
         List<Game> allGames = Arrays.asList(game1, game2);
@@ -83,23 +83,23 @@ public class MemorioApplication implements CommandLineRunner {
     private void createDummyData() {
 
         // Testuser
-        User user1 = new User("usi", "usi");
-        User user2 = new User("busi", "busi");
-        User user3 = new User("kusi", "kusi");
-        User user4 = new User("lusi", "lusi");
+        User user1 = new User("usi", "$2a$10$Hcf4C7hinGBHt9CSkF1tW.0cEcybdimjKCjiShN.A2nWqnHsfwg7y");
+        User user2 = new User("busi", "$2a$10$Hcf4C7hinGBHt9CSkF1tW.0cEcybdimjKCjiShN.A2nWqnHsfwg7y");
+        User user3 = new User("kusi", "$2a$10$Hcf4C7hinGBHt9CSkF1tW.0cEcybdimjKCjiShN.A2nWqnHsfwg7y");
+        User user4 = new User("lusi", "$2a$10$Hcf4C7hinGBHt9CSkF1tW.0cEcybdimjKCjiShN.A2nWqnHsfwg7y");
 
         userRepository.saveAll(Arrays.asList(user1, user2, user3, user4));
         System.out.println("----------");
         System.out.println("Registered basic users: " + user1.getUsername() + ", " + user2.getUsername() + ", " + user3.getUsername() + ", " + user4.getUsername());
         System.out.println("----------");
 
-        Game game1 = new Game(new Board(), user1, user1, user2);
+        Game game1 = new Game(new Board(), user1, user2);
         game1.getUserScores().get(0).increaseScoreByRandomAmount();
         game1.getUserScores().get(1).increaseScoreByRandomAmount();
-        Game game2 = new Game(new Board(), user2, user2, user3);
+        Game game2 = new Game(new Board(), user2, user3);
         game2.getUserScores().get(0).increaseScoreByRandomAmount();
         game2.getUserScores().get(1).increaseScoreByRandomAmount();
-        Game game3 = new Game(new Board(), user4, user4, user2);
+        Game game3 = new Game(new Board(), user4, user2);
         game3.getUserScores().get(0).increaseScoreByRandomAmount();
         game3.getUserScores().get(1).increaseScoreByRandomAmount();
 

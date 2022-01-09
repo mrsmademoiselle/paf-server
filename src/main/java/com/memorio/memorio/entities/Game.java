@@ -44,9 +44,13 @@ public class Game {
     public Game() {
     }
 
-    public Game(Board board, User currentTurn, User user1, User user2) {
+    /**
+     * Erstellt ein Game-Objekt anhand der Parameter.
+     * User1 ist der User, der zuerst ziehen darf.
+     */
+    public Game(Board board, User user1, User user2) {
         this.board = board;
-        this.currentTurn = currentTurn;
+        this.currentTurn = user1;
 
         UserScore userScore1 = new UserScore(user1);
         UserScore userScore2 = new UserScore(user2);

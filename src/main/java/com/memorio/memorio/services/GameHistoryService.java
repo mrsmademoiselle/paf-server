@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class GameHistoryService {
@@ -25,11 +26,22 @@ public class GameHistoryService {
     public GameHistory getGameHistoryForUser(String username) {
         List<Game> gamesOfUser = gameRepository.findByUserScoresUserUsername(username);
 
+        if (gamesOfUser.size() == 0) return createGameHistoryWithRandomValues();
+
         int winCount = calculateWinCount(gamesOfUser, username);
         int averageMoves = calculateAverageMoves(gamesOfUser, username);
         int losses = gamesOfUser.size() - winCount;
 
         return new GameHistory(gamesOfUser.size(), winCount, losses, averageMoves);
+    }
+
+    private GameHistory createGameHistoryWithRandomValues() {
+        Random random = new Random();
+        int maxGames = random.nextInt(20);
+        int averageMoves = random.nextInt(40);
+        int winCount = random.nextInt(maxGames);
+        int losses = maxGames - winCount;
+        return new GameHistory(maxGames, winCount, losses, averageMoves);
     }
 
     private int calculateWinCount(List<Game> allGames, String username) {
