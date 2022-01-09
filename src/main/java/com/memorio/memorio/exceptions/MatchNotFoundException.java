@@ -1,4 +1,4 @@
-package com.memorio.memorio.exception;
+package com.memorio.memorio.exceptions;
 
 
 /**
