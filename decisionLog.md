@@ -7,6 +7,24 @@ TODO:
 - Brainstorming Architektur
 - WebsocketServer, speichern des Spiels ausprobieren
 
+## UserAuthService
+
+- Anlegen für UserAuthService um mehrfach wiederholten Code zu minimieren
+    - kümmert sich um alle Auth-relevanten Dinge, wie z.B. authenticate, getUserFromJwt, generateToken, etc
+
+## UserController
+
+- Auseinanderziehen des UserControllers in mehrere je nach Anwendungszweck
+    - UserAuthenticationController für login/register
+    - UserHistoryController für UserHistory
+    - UserInformationController für das Updaten/Ausgeben der Userinfo
+    - UserTestController für alles, was uns beim Testen hilft (kann gegen Ende des Projekts gelöscht werden)
+- Idealerweise hat jeder Controller einen separaten Prefix (UserAuthController z.B. user/auth, UserInfoController
+  user/info).
+    - Da das aber mit den Clients abgesprochen werden muss, ist das noch nicht umgesetzt.
+
+## Game.List<UserScore>
+
 - Game.List<UserScores> sind nun eine eigene Entity (statt Embeddable), weil UserScore.User eine eigene Entity ist und
   Embeddables keine Entities behinhalten dürfen.
     - Lösungsansatz 1: Wir speichern die UserScores als eigene Entities in der DB und holen sie uns für die Berechnung
