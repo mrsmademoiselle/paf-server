@@ -33,7 +33,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
     // Adresse und Port
     private final static InetSocketAddress address = new InetSocketAddress("127.0.0.1", 8888);
     private static MemorioWebSocketServer instance = null;
-    Logger logger = LoggerFactory.getLogger(MemorioWebSocketServer.class);
+    private final Logger logger = LoggerFactory.getLogger(MemorioWebSocketServer.class);
     List<String> lostConnectionJwt = new ArrayList<>();
     // hier kommt jeder neue Player rein.
     private Queue<Player> playerQueue = new LinkedList<>();
@@ -55,6 +55,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
         if (instance == null) {
             instance = new MemorioWebSocketServer(address);
         }
+
         return instance;
     }
 
@@ -75,7 +76,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
             handleMessage(conn, jsonMap);
         } catch (Exception e) {
-            logger.error("error:" + e);
+            logger.error(e.toString());
         }
     }
 
@@ -105,8 +106,11 @@ public class MemorioWebSocketServer extends WebSocketServer {
         Player player = findPlayerByMatchConnection(conn);
 
         if (player != null) {
-            dissolveMatch(player.getMatch());
+            sendEndscoreToClientsOfConnection(conn);
             logger.info("Verbindung geschlossen: " + player.getUser().getUsername());
+        } else {
+            player = findPlayerInQueueByConnection(conn);
+            if (player != null) playerQueue.remove(player);
         }
     }
 
