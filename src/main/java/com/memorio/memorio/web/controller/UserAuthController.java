@@ -24,7 +24,7 @@ import javax.validation.Valid;
 public class UserAuthController {
     private final UserService userService;
     private final UserAuthService userAuthService;
-    private final Logger logger = LoggerFactory.getLogger(UserTestController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserAuthController.class);
 
     @Autowired
     public UserAuthController(UserService userService, UserAuthService userAuthService) {

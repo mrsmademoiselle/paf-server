@@ -23,7 +23,7 @@ import javax.transaction.Transactional;
 public class UserHistoryController {
     private final GameHistoryService gameHistoryService;
     private final UserAuthService userAuthService;
-    private final Logger logger = LoggerFactory.getLogger(UserTestController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserHistoryController.class);
 
     @Autowired
     public UserHistoryController(GameHistoryService gameHistoryService, UserAuthService userAuthService) {

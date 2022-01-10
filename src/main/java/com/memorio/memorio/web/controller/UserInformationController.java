@@ -33,7 +33,7 @@ public class UserInformationController {
     private final UserService userService;
     private final UserAuthService userAuthService;
 
-    private final Logger logger = LoggerFactory.getLogger(UserTestController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserInformationController.class);
 
     @Autowired
     public UserInformationController(UserService userService, UserAuthService userAuthService) {

@@ -21,7 +21,6 @@ public class MemorioJsonMapper {
         // das muss eine LinkedHashMap bleiben, damit die Reihenfolge der JSON-Werte nicht variiert!
         LinkedHashMap<String, String> map = mapper.readValue(s, LinkedHashMap.class);
 
-        logger.info("JSON wurde erfolgreich in Map<String, String> geparsed: " + s);
         return map;
     }
 

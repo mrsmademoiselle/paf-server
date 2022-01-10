@@ -64,7 +64,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             // Laden des Users und validieren
             if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
-                logger.info("User " + username + " wurde verifiziert");
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
