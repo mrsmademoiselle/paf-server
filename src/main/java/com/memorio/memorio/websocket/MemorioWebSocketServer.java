@@ -248,7 +248,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 Player player = findPlayerByMatchConnection(conn);
                 if (player == null) throw new MemorioRuntimeException("Dieser Spieler ist für kein Spiel registriert.");
 
-                if (!gameHandler.getGame().getCurrentTurn().equals(player.getUser()))
+                if (!gameHandler.getGame().getCurrentTurn().getUsername().equals(player.getUser().getUsername()))
                     throw new MemorioRuntimeException("Dieser Spieler ist gerade nicht am Zug.");
 
                 // Flip-Logik
