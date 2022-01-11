@@ -65,7 +65,6 @@ public class GameService implements Runnable {
         javafx.application.Platform.runLater(()->{
             this.sceneManager.loadLobby();
         });
-        //sceneManager.loadGame();
     }
 
     public void stopLookingForGame() {

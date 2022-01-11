@@ -23,6 +23,8 @@ public class WebSocketConnection extends WebSocketClient {
 
     private SceneManager sceneManager = null;
     private GameService gameService = GameService.getInstance();
+    // Checken ob das Spiel schon am laufen ist
+    private boolean firstGame = false;
 
     public WebSocketConnection(URI address, SceneManager sceneManager) {
         super(address);
@@ -35,21 +37,6 @@ public class WebSocketConnection extends WebSocketClient {
      */
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-
-        /*
-        Ausfuehren des JavaFX UI Render im Mainthread ueber Runlater. vgl Decision Log
-        Das muessen wir machen weil der JavaFX Kontext im Mainthread ist. Wenn die Aenderungen in einem
-        Childthread machen weis der Mainthread mit dem Kontext nichts darueber. Ueber runLater() fuehren wir die Aufgabe im
-        Mainthread aus, sobald er Zeit dafuer hat.
-         */
-        try {
-            javafx.application.Platform.runLater(()->{
-                sceneManager.loadGame();
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // Senden der Loginnachricht im WS Thread
         mSend(MessageKeys.LOGIN, "");
     }
 
@@ -78,6 +65,25 @@ public class WebSocketConnection extends WebSocketClient {
 
     @Override
     public void onMessage(String message){
+
+        if (!this.firstGame){
+            this.firstGame = true;
+        /*
+        Ausfuehren des JavaFX UI Render im Mainthread ueber Runlater. vgl Decision Log
+        Das muessen wir machen weil der JavaFX Kontext im Mainthread ist. Wenn die Aenderungen in einem
+        Childthread machen weis der Mainthread mit dem Kontext nichts darueber. Ueber runLater() fuehren wir die Aufgabe im
+        Mainthread aus, sobald er Zeit dafuer hat.
+         */
+            try {
+                javafx.application.Platform.runLater(()->{
+                    sceneManager.loadGame();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            // Senden der Loginnachricht im WS Thread
+        }
+
         // Nachrichtenhandling - Die Nachricht wird zum JSON und weiter an handlemessag uebergeben
         JSONObject jo = new JSONObject(message);
         handleMessage(jo);
@@ -97,7 +103,7 @@ public class WebSocketConnection extends WebSocketClient {
 
     /**
      * Nachrichtenhandlen Zwischenstation im Websocket fuer das behandeln der Nachrichten
-     * @param message
+     * @param message Eingehende Nachricht aus WS
      */
     public void handleMessage(JSONObject message){
         //Dafuer sorgen das die Nachricht nicht abgehandelt wird BEVOR der Gamecontroller durch den

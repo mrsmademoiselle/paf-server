@@ -1,0 +1,12 @@
+.title_box {
+    -fx-border-color: black;
+    -fx-border-width: 0 0 2 0;
+    -fx-font-size: 20px;
+}
+
+.teggBogg{
+    -fx-padding: 30px;
+    -fx-border-insets: 30px;
+    -fx-background-insets: 30px;
+    -fx-font-size: 20px;
+}

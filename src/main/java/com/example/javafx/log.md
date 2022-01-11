@@ -6,6 +6,16 @@ Datum: ? <br> Von: ?
 
 --- 
 
+## Sprint KW 2
+### Lobby
+Es gab im FX Client mal eine Lobby mit "Ladebild". Die hatten wir im vorherigen Sprint angehalten damit wir direkt ins game kamen.
+Das Problem ist, dass die aktuelle Logik davon ausgeht, das die lobby "uebersprungen" wird.
+Um ein grosses umbauen der Logik zu vermeiden haben wir entschieden, dass die aktuelle View in welchem der User landet wenn er spielen will,
+im ersten Zustand die neue Lobby wird. Dazu haben wir den Text angepasst, um das den User zu visualisieren. Prgorammatisch und vom Flow her verhaelt es sich gleich.
+Man kommt damit quasi erst ins game, wenn ein zweiter Spieler gefunden wurde. Vorher bleibt man in dem pseudo Zustand und wartet auf einen zweiten Spieler.
+
+---
+
 ## Sprint: 1
 
 Datum: 11.12.-23.12. <br> Von: Franzi

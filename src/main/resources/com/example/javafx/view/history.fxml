@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<Pane xmlns="http://javafx.com/javafx" fx:id="page"
+      xmlns:fx="http://javafx.com/fxml"
+      stylesheets="@../css/history.css"
+      fx:controller="com.example.javafx.controller.HistoryController">
+    <fx:include fx:id="navbar" source="navbar.fxml"/>
+    <fx:include fx:id="banner" source="banner.fxml"/>
+
+    <Pane prefHeight="${controller.heightWithOffset}" prefWidth="${controller.widthWithOffset}"
+          layoutY="${controller.offsetY}" layoutX="${controller.offsetX}">
+        <HBox styleClass="title_box" alignment="CENTER_LEFT" prefWidth="${controller.widthWithOffset}">
+            <Label styleClass="profile_title">Historie</Label>
+        </HBox>
+        <VBox  prefWidth="${controller.widthWithOffset / 2}" alignment="CENTER_LEFT" styleClass="teggBogg">
+            <Text fx:id="sum">Gespielte Spiele</Text>
+            <Text fx:id="wins">Foo</Text>
+            <Text fx:id="looses">Hello World</Text>
+            <Text fx:id="avg">Hello World</Text>
+        </VBox>
+    </Pane>
+
+</Pane>
