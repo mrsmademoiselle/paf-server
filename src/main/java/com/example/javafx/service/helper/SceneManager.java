@@ -21,6 +21,7 @@ public class SceneManager {
     private URL generalCSS;
     private URL gameScene;
     private URL endScreen;
+    private URL history;
     private static final SceneManager instance = new SceneManager();
 
     // Aktuelle Scene
@@ -63,6 +64,7 @@ public class SceneManager {
 
     public void loadHistory() {
         this.currentScene = "history";
+        this.loadScene(this.history);
     }
 
     public void setStage(Stage stage) {
@@ -83,6 +85,8 @@ public class SceneManager {
     public void setLoginScene(URL loginScene) {
         this.loginScene = loginScene;
     }
+
+    public void setHistoryScene(URL historyScene){this.history = historyScene;}
 
     public void setLobbyScene(URL lobbyScene) {
         this.lobbyScene = lobbyScene;

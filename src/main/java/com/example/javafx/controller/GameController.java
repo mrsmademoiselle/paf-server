@@ -61,8 +61,8 @@ public class GameController extends PapaController {
         logBox.setBackground(Background.EMPTY);
         updateScore(0, 0);
 
-        setTurn("Niemand ist dran!");
-        newSysMessage("Field initialized hahaha");
+        setTurn("Suche Spiele...");
+        newSysMessage("Sucht nach Spielen...");
     }
 
     public void newSysMessage(String msg){
@@ -80,21 +80,6 @@ public class GameController extends PapaController {
      * @param event Event
      */
     public void onCardFlip(Card card, MouseEvent event){
-        /*
-        if(card.getFlipped()){
-            card.setFlipped(false);
-            // Rueckseite anzeigen
-            renderBackSide(card);
-        } else {
-            // Bild vom Server anzeigen
-            renderFront(card);
-            // Senden der geflippten Card auf dem Server
-            GameService gameService = GameService.getInstance();
-            gameService.getWebSocketConnection().mSend(
-                    MessageKeys.FLIPPED, card.getCardId()
-            );
-            System.out.println("Nachricht wurde gesendet");
-        }*/
 
         if(!card.getFlipped()){
             // Bild vom Server anzeigen
