@@ -7,12 +7,17 @@ Datum: ? <br> Von: ?
 --- 
 
 ## Sprint KW 2
+
+### Historie
+Einfache Historie Darstellung
+
+### Matchinfo
+Es wird aus den Nachrichten die wir bekommen immer das Bild herausgezogen.
+Begruendung: Wir bekommen die Nachricht so oder so im vollem Umfang und koennen daher so oder so das gesamte UI auch aktualisierung.
+Wir haetten kein Vorteil das initial zu setzen, zumal die initiale Prueufng des Gamestarts nun raus aus dem Controller ist.
+
 ### Lobby
-Es gab im FX Client mal eine Lobby mit "Ladebild". Die hatten wir im vorherigen Sprint angehalten damit wir direkt ins game kamen.
-Das Problem ist, dass die aktuelle Logik davon ausgeht, das die lobby "uebersprungen" wird.
-Um ein grosses umbauen der Logik zu vermeiden haben wir entschieden, dass die aktuelle View in welchem der User landet wenn er spielen will,
-im ersten Zustand die neue Lobby wird. Dazu haben wir den Text angepasst, um das den User zu visualisieren. Prgorammatisch und vom Flow her verhaelt es sich gleich.
-Man kommt damit quasi erst ins game, wenn ein zweiter Spieler gefunden wurde. Vorher bleibt man in dem pseudo Zustand und wartet auf einen zweiten Spieler.
+Lobby wieder aktiv. Auslagen der Pruefung des Gamestarts.
 
 ---
 
