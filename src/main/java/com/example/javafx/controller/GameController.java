@@ -191,7 +191,7 @@ public class GameController extends PapaController {
      * @param message Nachricht aus WS
      */
     public void digestGame(JSONObject message){
-        System.out.println(message);
+        //System.out.println(message);
         // Unterscheidung Spiel und Endscore
 
         // Wenn die Nachricht ein Board enthaelt ist es entweder die aller erste Nachricht oder eine Gamenachricht
