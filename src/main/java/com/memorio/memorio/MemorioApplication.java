@@ -13,11 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,15 +37,25 @@ public class MemorioApplication implements CommandLineRunner {
     User userToTest = null;
 
     public static void main(String[] args) {
-        SpringApplication.run(MemorioApplication.class, args);
+        SpringApplication application = new SpringApplication(MemorioApplication.class);
 
         // starte den WebSocketServer in einem neuen Thread.
         // TODO den WebSocketServer korrekt herunterfahren mit server.close() oder so...
         MemorioWebSocketServer server = MemorioWebSocketServer.getInstance();
-        new Thread(() -> {
-            server.start();
-        }).start();
+        new Thread(server::start).start();
+
+        application.addListeners((ApplicationListener<ContextClosedEvent>) event -> {
+            try {
+                System.out.println("WebsocketServer wird beendet...");
+                server.stop();
+                System.out.println("WebsocketServer erfolgreich heruntergefahren");
+            } catch (IOException | InterruptedException e) {
+                System.out.println("WebsocketServer konnte nicht heruntergefahren werden.");
+                e.printStackTrace();
+            }
+        });
         System.out.println("Startup successful");
+        application.run(args);
     }
 
     @Override
