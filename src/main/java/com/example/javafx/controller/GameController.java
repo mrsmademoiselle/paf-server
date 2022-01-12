@@ -16,6 +16,10 @@ import javafx.scene.text.Text;
 import javafx.event.EventHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import javafx.scene.shape.Rectangle;
+
+import java.awt.*;
+import java.io.ByteArrayInputStream;
 
 
 public class GameController extends PapaController {
@@ -28,6 +32,12 @@ public class GameController extends PapaController {
 
     @FXML
     ListView logBox;
+
+    @FXML
+    Rectangle pImg1;
+
+    @FXML
+    Rectangle pImg2;
 
     @FXML
     NavbarController navbarController;
@@ -213,6 +223,17 @@ public class GameController extends PapaController {
             JSONObject s2 = (JSONObject)scores.get(1);
             updateScore(((Integer) s1.get("moves")), (Integer) s2.get("moves"));
 
+            // Setzen der Bilder
+            // img = s1.get("image")
+            // img = s2.get("image")
+
+           // pImg1.setFill(new ImagePattern(new Image (new ByteArrayInputStream(java.util.Base64.getDecoder().decode(s1.getString("image"))))));
+           // pImg2.setFill(new ImagePattern(new Image (new ByteArrayInputStream(java.util.Base64.getDecoder().decode(s2.getString("image"))))));
+            setUserMatchImages(s1,1);
+            setUserMatchImages(s2,2);
+            //card.setFill(new ImagePattern(pic));
+
+
             // handling vom Endscore objekt
         } else if (message.has("winner")) {
             //do the endscorestuff
@@ -226,6 +247,42 @@ public class GameController extends PapaController {
             gameService.setWinner((String) winner.get("username"));
             // Weiterleiten auf Endgamescreen
             SceneManager.getInstance().loadEdscreen();
+        }
+    }
+
+    /**
+     * Setzen der Spielerbilder
+     * @param jo JSON von dem User
+     * @param counter Feld wo es gesetzt werden soll
+     */
+    private void setUserMatchImages(JSONObject jo, int counter){
+        // Herausholen des user-teils aus dem JO
+        JSONObject userJO = (JSONObject)jo.get("user");
+
+        // Laden des Bildes, bzw nicht laden des Bildes
+        byte[] image = {1};
+        if (userJO.get("image") != null){
+            image = java.util.Base64.getDecoder().decode(userJO.getString("image"));
+        }
+        // Wenn es kein Bild im JSON gab, ist image durch die vorherige Pruefung leer, daher laden des Defaultbildes
+        if (image.length < 100){
+            Image pic = FileManager.getPic("standard_profile_pic.png");
+            // Bilder Setzen, abhaengig wo wir es setzen wollen
+            if (counter == 1){
+                pImg1.setFill(new ImagePattern(pic));
+            }
+            if (counter == 2) {
+                pImg2.setFill(new ImagePattern(pic));
+            }
+        }else{
+            System.out.println("ES GAB EIN BILD");
+            // Bilder Setzen, abhaengig wo wir es setzen wollen, wenn Bild da ist
+            if (counter == 1){
+            pImg1.setFill(new ImagePattern(new Image (new ByteArrayInputStream(image))));
+        }
+        if (counter == 2) {
+            pImg2.setFill(new ImagePattern(new Image(new ByteArrayInputStream(image))));
+        }
         }
     }
 }

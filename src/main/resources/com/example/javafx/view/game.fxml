@@ -32,9 +32,9 @@
                         <Text styleClass="turn" fx:id="turn">Hello</Text>
                         <HBox prefWidth="${controller.widthWithOffset /3}" styleClass="score" alignment="CENTER">
                             <children>
-                                <Rectangle stroke="blue" width="80" height="80" arcHeight="40" arcWidth="40"/>
+                                <Rectangle fx:id="pImg1" stroke="blue" width="80" height="80" arcHeight="40" arcWidth="40"/>
                                 <Text fx:id="score">2:3</Text>
-                                <Rectangle stroke="blue" width="80" height="80" arcHeight="40" arcWidth="40"/>
+                                <Rectangle fx:id="pImg2" stroke="blue" width="80" height="80" arcHeight="40" arcWidth="40"/>
                             </children>
                         </HBox>
                         <VBox alignment="TOP_RIGHT">

@@ -87,7 +87,7 @@ public class WebSocketConnection extends WebSocketClient {
         // Nachrichtenhandling - Die Nachricht wird zum JSON und weiter an handlemessag uebergeben
         JSONObject jo = new JSONObject(message);
         handleMessage(jo);
-        System.out.println("Message wurde verarbeitet " + message);
+        //System.out.println("Message wurde verarbeitet " + message);
     }
 
     @Override
