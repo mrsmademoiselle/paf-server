@@ -11,7 +11,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
 import javax.ws.rs.NotFoundException;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -57,6 +62,17 @@ public class UserService implements UserDetailsService {
             // User generieren
             User newUser = new User(user.getUsername(), bcryptEncoder.encode(user.getPassword()));
             userRepository.save(newUser);
+            // Bild setzen
+            URL url = Thread.currentThread().getContextClassLoader().getResource("images/default.jpg");
+            try {
+                BufferedImage bufferImage = ImageIO.read(url);
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                ImageIO.write(bufferImage, "jpg", output);
+                byte[] data = output.toByteArray();
+                this.saveUserImage(user.getUsername(), data);
+            } catch (IOException e) {
+                System.out.println("Problem beim laden des Defaultbildes!");
+            }
             return true;
 
         } catch (Exception e) {
