@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class Board {
 
     private List<Card> cardSet;
+    private List<String> temporarilyFlippedCards = new ArrayList<>();
 
     public Board() {
         this.cardSet = createCardSet();
@@ -43,6 +44,8 @@ public class Board {
      * Returnt true wenn ein matchendes Kartenpaar gefunden wurde, ansonsten false.
      */
     public boolean flipCard(String cardId) {
+        // Entferne alle Elemente, die beim letzten Zug temporär aufgedeckt werden sollten.
+        temporarilyFlippedCards.clear();
         List<Card> cardSet = getCardSet();
 
         // finde Karte, die geflippt werden soll
@@ -84,6 +87,9 @@ public class Board {
             } else { // ansonsten unflippe beide
                 currentCard.flipDown();
                 cardWaitingToBeFlipped.flipDown();
+                // füge sie zur Liste hinzu, damit die Clients sie beide temporär aufdecken können
+                temporarilyFlippedCards.add(currentCard.getId());
+                temporarilyFlippedCards.add(cardWaitingToBeFlipped.getId());
 
                 return false;
             }
