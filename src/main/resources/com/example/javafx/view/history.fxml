@@ -19,7 +19,7 @@
         <HBox styleClass="title_box" alignment="CENTER_LEFT" prefWidth="${controller.widthWithOffset}">
             <Label styleClass="profile_title">Historie</Label>
         </HBox>
-        <VBox  prefWidth="${controller.widthWithOffset / 2}" alignment="CENTER_LEFT" styleClass="teggBogg">
+        <VBox  prefWidth="${controller.widthWithOffset / 2}" alignment="CENTER_LEFT" styleClass="textBox">
             <Text fx:id="sum">Gespielte Spiele</Text>
             <Text fx:id="wins">Foo</Text>
             <Text fx:id="looses">Hello World</Text>

@@ -65,8 +65,6 @@ public class GameController extends PapaController {
         // Herauslesen des Usernamen um zu pruefen ob der User zuerst dran ist
         username = gameService.getUsernamebyToken();
 
-        //setBoard();
-
         logBox.setEditable(false);
         logBox.setBackground(Background.EMPTY);
         updateScore(0, 0);
@@ -99,7 +97,6 @@ public class GameController extends PapaController {
             gameService.getWebSocketConnection().mSend(
                     MessageKeys.FLIPPED, card.getCardId()
             );
-            System.out.println("Nachricht wurde gesendet");
         }
     }
 
@@ -167,8 +164,6 @@ public class GameController extends PapaController {
                         renderFront(card);
                         break;
                     case "WAITING_TO_FLIP":
-                        System.out.println("Ich flibbe jetzt: " + card.getCardSource());
-                        //renderBackSide(card);
                         renderFront(card);
                         break;
                     default:
@@ -191,7 +186,6 @@ public class GameController extends PapaController {
      * @param message Nachricht aus WS
      */
     public void digestGame(JSONObject message){
-        //System.out.println(message);
         // Unterscheidung Spiel und Endscore
 
         // Wenn die Nachricht ein Board enthaelt ist es entweder die aller erste Nachricht oder eine Gamenachricht
@@ -224,15 +218,8 @@ public class GameController extends PapaController {
             updateScore(((Integer) s1.get("moves")), (Integer) s2.get("moves"));
 
             // Setzen der Bilder
-            // img = s1.get("image")
-            // img = s2.get("image")
-
-           // pImg1.setFill(new ImagePattern(new Image (new ByteArrayInputStream(java.util.Base64.getDecoder().decode(s1.getString("image"))))));
-           // pImg2.setFill(new ImagePattern(new Image (new ByteArrayInputStream(java.util.Base64.getDecoder().decode(s2.getString("image"))))));
             setUserMatchImages(s1,1);
             setUserMatchImages(s2,2);
-            //card.setFill(new ImagePattern(pic));
-
 
             // handling vom Endscore objekt
         } else if (message.has("winner")) {

@@ -14,6 +14,10 @@ public class EndScreenController extends PapaController {
 
     @FXML
     protected void initialize(){
-        finalText.setText(gameService.getWinner());
+        if(gameService.getWinner() == null ){
+            finalText.setText("Es ist unentschieden!");
+        }else{
+            finalText.setText(gameService.getWinner() + " hat gewonnen!" );
+        }
     }
 }

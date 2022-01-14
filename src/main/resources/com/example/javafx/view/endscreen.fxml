@@ -9,6 +9,7 @@
 <?import javafx.scene.text.Text?>
 <Pane xmlns="http://javafx.com/javafx" fx:id="page"
       xmlns:fx="http://javafx.com/fxml"
+      stylesheets="@../css/endscreen.css"
       fx:controller="com.example.javafx.controller.EndScreenController">
     <fx:include fx:id="navbar" source="navbar.fxml"/>
 
