@@ -8,6 +8,11 @@ public class TokenManager {
     private static TokenManager instance;
 
     private TokenManager() {
+        /*
+        Wenn man zwei JavaFX-Clients mit IntelliJ startet, wird this.prefs für beide Clients genau denselben absoluten Pfad haben, weil der Kontext derselbe ist.
+        Das führt zwangsläufig dazu, dass beide Clients denselben JWT haben.
+        Es ist deshalb (aktuell!) nicht möglich, das Spiel mit zwei JavaFX-Clients zu spielen, sondern nur Cross-Platform.
+         */
         this.prefs = Preferences.userNodeForPackage(this.getClass());
         setToken("");
     }
