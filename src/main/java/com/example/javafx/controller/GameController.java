@@ -266,7 +266,7 @@ public class GameController extends PapaController {
         }
         // Wenn es kein Bild im JSON gab, ist image durch die vorherige Pruefung leer, daher laden des Defaultbildes
         if (image.length < 100){
-            Image pic = FileManager.getPic("standard_profile_pic.png");
+            Image pic = FileManager.getPic("default.jpg");
             // Bilder Setzen, abhaengig wo wir es setzen wollen
             if (counter == 1){
                 pImg1.setFill(new ImagePattern(pic));

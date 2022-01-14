@@ -105,7 +105,7 @@ public class RegistrationController extends PapaController {
 
     public void setProfilePic() {
         if (imageBytes == null || imageBytes.length == 0) {
-            Image pic = FileManager.getPic("standard_profile_pic.png");
+            Image pic = FileManager.getPic("default.jpg");
             profilePic.setFill(new ImagePattern(pic));
             profilePic.setStrokeWidth(3);
             profilePic.setStroke(Color.WHITE);

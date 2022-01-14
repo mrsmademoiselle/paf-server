@@ -55,7 +55,7 @@ public class ProfileController extends PapaController {
         // eigentlich sollte diese Zeile in unserem Fall nicht mehr auftreten, aber vorsichtshalber
         // lasse ich sie erstmal drin.
         if (userDto.getProfilePic() == null || userDto.getProfilePic().length == 0) {
-            Image pic = FileManager.getPic("standard_profile_pic.png");
+            Image pic = FileManager.getPic("default.jpg");
             profilePic.setFill(new ImagePattern(pic));
             profilePic.setRadius(80);
         } else {
