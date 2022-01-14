@@ -2,11 +2,6 @@
 
 Von: Franzi
 
-TODO:
-
-- Brainstorming Architektur
-- WebsocketServer, speichern des Spiels ausprobieren
-
 ## UserAuthService
 
 - Anlegen für UserAuthService um mehrfach wiederholten Code zu minimieren

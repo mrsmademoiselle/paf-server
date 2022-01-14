@@ -30,6 +30,17 @@ public class Card {
         this.id = UUID.randomUUID().toString();
     }
 
+    /**
+     * Factory-Methode die eine Karte mit den reingegebenen Werten erstellt
+     */
+    public static Card createCard(String id, int paiId, FlipStatus flipStatus) {
+        Card card = new Card();
+        card.setId(id);
+        card.setPairId(paiId);
+        card.setFlipStatus(flipStatus);
+        return card;
+    }
+
     public void waitToFlip() {
         this.flipStatus = FlipStatus.WAITING_TO_FLIP;
     }

@@ -1,10 +1,12 @@
 package com.memorio.memorio.entities;
 
+import com.memorio.memorio.exceptions.MemorioRuntimeException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,6 +62,13 @@ public class Game {
         this.userScores = Arrays.asList(userScore1, userScore2);
     }
 
+    public Game(long lobbyCode, Board board, UserScore userscore1, UserScore userScore2, User currentTurn) {
+        this.lobbyCode = lobbyCode;
+        this.board = board;
+        this.currentTurn = currentTurn;
+        this.userScores = Arrays.asList(userscore1, userScore2);
+    }
+
     /**
      * Setzt den User als "User am Zug", der als letztes *nicht* am Zug war.
      */
@@ -70,5 +79,26 @@ public class Game {
                 .findFirst().get().getUser();
 
         setCurrentTurn(jetztAmZug);
+    }
+
+    /**
+     * Erstellt ein neues Game-Objekt mit den Werten wie dieses Objekt.
+     */
+    public Game copy() {
+        if (userScores.size() != 2) throw new MemorioRuntimeException("Es müssen genau 2 Userscores vorhanden sein");
+
+        // jede Karte muss neu erstellt werden, damit wir nicht ausversehen dieselben OBjekte (wgeen Speicherreferenzen) aktualisieren
+        List<Card> cardList = new ArrayList<>();
+        this.getBoard().getCardSet().forEach(card -> cardList.add(Card.createCard(card.getId(), card.getPairId(), card.getFlipStatus())));
+
+        Game game = new Game();
+        // Board muss neu erstellt werden
+        Board board = Board.createBoard(cardList);
+        game.setBoard(board);
+        game.setCurrentTurn(getCurrentTurn());
+        game.setLobbyCode(lobbyCode);
+        // UserScores können gleich bleiben, weil wir diese für die SPielkopie nicht anfassen
+        game.setUserScores(userScores);
+        return game;
     }
 }

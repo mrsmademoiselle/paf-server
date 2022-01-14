@@ -10,6 +10,7 @@ import com.memorio.memorio.repositories.UserRepository;
 import com.memorio.memorio.services.helper.BeanUtil;
 import com.memorio.memorio.services.helper.GameHandler;
 import com.memorio.memorio.services.helper.MemorioJsonMapper;
+import com.memorio.memorio.valueobjects.FlipStatus;
 import com.memorio.memorio.valueobjects.MessageKeys;
 import com.memorio.memorio.web.dto.EndscoreDto;
 import org.java_websocket.WebSocket;
@@ -253,14 +254,41 @@ public class MemorioWebSocketServer extends WebSocketServer {
 
                 // Flip-Logik
                 String cardId = jsonMap.get(actionFlag);
-                boolean hasAnyUnflippedCardsLeft = gameHandler.flipCard(cardId);
 
-                // Response an Client senden, Game oder EndscoreDto
-                if (hasAnyUnflippedCardsLeft) {
-                    sendGameToAllClientsOfConnection(conn);
-                } else {
-                    sendEndscoreToClientsOfConnection(conn);
-                }
+                /* Game-Kopie erstellen, in der die Karte geflippt wird.
+                Diese Kopie wird vor der tatsächlichen Kartenevaluation die Clients geschickt,
+                um die Aufdeckung der zweiten Karte zu visualisieren.
+                 */
+                // GAmekopie erstellen
+                Game gameCopy = gameHandler.getGame().copy();
+                // Karte umdrehen
+                gameCopy.getBoard().getCardSet().stream()
+                        .filter(card -> card.getId().equals(cardId))
+                        .findFirst().get().setFlipStatus(FlipStatus.FLIPPED);
+                logger.info("sending copy to clients");
+                // GAmekopie an Clients schicken
+                sendGameToAllClientsOfConnection(conn, gameCopy);
+
+                long timeBefore = System.currentTimeMillis();
+
+                WebSocket finalConn = conn;
+                // nach 1 Sekunde wird das richtige Game-Objekt mit den tatsächlichen Feldern geschickt
+                TimerTask task = new TimerTask() {
+                    public void run() {
+                        boolean hasAnyUnflippedCardsLeft = gameHandler.flipCard(cardId);
+
+                        logger.info("flipCard-Dauer: " + (System.currentTimeMillis() - timeBefore));
+                        // Response an Client senden, Game oder EndscoreDto
+                        if (hasAnyUnflippedCardsLeft) {
+                            sendGameToAllClientsOfConnection(finalConn, null);
+                        } else {
+                            sendEndscoreToClientsOfConnection(finalConn);
+                        }
+                    }
+                };
+                Timer timer = new Timer("Timer");
+                timer.schedule(task, 1000L);
+
                 break;
             case CANCEL_GAME:
                 // prüfen, ob sich die RemoteAddress von diesem Client geändert hat oder nicht
@@ -397,9 +425,11 @@ public class MemorioWebSocketServer extends WebSocketServer {
     /**
      * Sendet Game-Instanz an alle Clients einer Verbindung
      */
-    private void sendGameToAllClientsOfConnection(WebSocket conn) {
+    private void sendGameToAllClientsOfConnection(WebSocket conn, Game game) {
         try {
-            Game game = gameHandler.getGame();
+            if (game == null) {
+                game = gameHandler.getGame();
+            }
             String message = MemorioJsonMapper.getStringFromObject(game);
 
             Player player = findPlayerByMatchConnection(conn);
