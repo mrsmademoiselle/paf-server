@@ -5,7 +5,6 @@ import com.example.javafx.service.helper.HttpConnector;
 import com.example.javafx.service.helper.MessageKeys;
 import com.example.javafx.service.helper.SceneManager;
 import com.example.javafx.service.helper.WebSocketConnection;
-import javafx.scene.Scene;
 import org.json.JSONObject;
 
 import java.net.URI;
@@ -14,6 +13,8 @@ import java.net.URISyntaxException;
 public class GameService implements Runnable {
     // Gameservice der Threadbaren Websocket startet
 
+    // Singleton pattern. Dadurch haben wir eine zentrale Verbindung gebunden an einen Service
+    private static GameService instance;
     SceneManager sceneManager = SceneManager.getInstance();
     WebSocketConnection connection = null;
     Thread thread = null;
@@ -22,20 +23,19 @@ public class GameService implements Runnable {
     // Gewinner persistieren
     String winner;
 
-    // Singleton pattern. Dadurch haben wir eine zentrale Verbindung gebunden an einen Service
-    private static GameService instance;
+    private GameService() {
+    }
 
-    /**
-     * Setzen der aktuellen GameController Instanz. Geschieht im GameController selber
-     * Damit soll sichergestellt werden, dass immer die aktuellste GameController Instanz im GameService ist
-     * @param controller Aktueller GameController
-     */
-    public void setGameController(GameController controller){
-        this.gameController = controller;
+    public static GameService getInstance() {
+        if (instance == null) {
+            instance = new GameService();
+        }
+        return instance;
     }
 
     /**
      * Methode zum extrahieren der aktuellen GameController instanz - wird im Websocket verwendet
+     *
      * @return Aktuelle GameController instanz
      */
     public GameController getGameController() {
@@ -44,25 +44,31 @@ public class GameService implements Runnable {
     }
 
     /**
+     * Setzen der aktuellen GameController Instanz. Geschieht im GameController selber
+     * Damit soll sichergestellt werden, dass immer die aktuellste GameController Instanz im GameService ist
+     *
+     * @param controller Aktueller GameController
+     */
+    public void setGameController(GameController controller) {
+        this.gameController = controller;
+    }
+
+    /**
      * Methode zum extrahieren der Websocketconnection um darueber zu kommunizieren
+     *
      * @return Die Websocketconnection
      */
-    public WebSocketConnection getWebSocketConnection(){
+    public WebSocketConnection getWebSocketConnection() {
         return connection;
     }
 
-    public static GameService getInstance() {
-        if(instance == null){
-            instance = new GameService();
-        }
-        return instance;
-    }
-    private GameService(){}
-
     public void lookForGame() throws URISyntaxException {
+        while (thread != null && thread.isAlive()) {
+            System.out.println("Thread lebt noch, Öffnen einer neuen Queue nicht möglich");
+        }
         thread = new Thread(getInstance());
         thread.start();
-        javafx.application.Platform.runLater(()->{
+        javafx.application.Platform.runLater(() -> {
             this.sceneManager.loadLobby();
         });
     }
@@ -74,17 +80,19 @@ public class GameService implements Runnable {
 
     // Beenden WS Verbindung und beendet Thread
     public void stop() {
-        if(connection != null){
-            try{
+        if (connection != null) {
+            try {
                 // Dissolven der Verbindung wenn die die Verbindung geschlossen wird
-                connection.mSend(MessageKeys.DISSOLVE,"");
+                connection.mSend(MessageKeys.DISSOLVE, "");
                 connection.close();
-                System.out.print("Connection abgebaut - Thread noch am leben");
-            } catch (Exception e){System.out.println(e);}
+                System.out.println("Connection abgebaut - Thread noch am leben");
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
-        if(thread != null) {
-            System.out.println("Thread beendet - Connection abgebaut");
+        if (thread != null) {
             thread.interrupt();
+            System.out.println("Thread beendet - Connection abgebaut");
         }
     }
 
@@ -93,18 +101,21 @@ public class GameService implements Runnable {
         try {
             connection = new WebSocketConnection(new URI("ws://127.0.0.1:8888"), sceneManager);
             connection.connect();
-        } catch(Exception e){System.out.println(e);}
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     //TODO: DOKUMENTATION
     //Testen der verheiratung von GameController und Gameservice sowie Websocket
-    public void testActivatedGameController(){
+    public void testActivatedGameController() {
         // Aufrufen der Testmethode im WS, dort wird der GameController aus dem Service gezogen
         connection.activateGameController();
     }
 
     /**
      * Herausziehen des Usernamens durch den Token
+     *
      * @return Username des Users
      */
     public String getUsernamebyToken() {
@@ -116,11 +127,11 @@ public class GameService implements Runnable {
         return jsonObject.getString("username");
     }
 
-    public void setWinner(String winner){
-        this.winner = winner;
+    public String getWinner() {
+        return this.winner;
     }
 
-    public String getWinner(){
-        return this.winner;
+    public void setWinner(String winner) {
+        this.winner = winner;
     }
 }

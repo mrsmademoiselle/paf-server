@@ -262,7 +262,6 @@ public class GameController extends PapaController {
                 pImg2.setFill(new ImagePattern(pic));
             }
         }else{
-            System.out.println("ES GAB EIN BILD");
             // Bilder Setzen, abhaengig wo wir es setzen wollen, wenn Bild da ist
             if (counter == 1){
             pImg1.setFill(new ImagePattern(new Image (new ByteArrayInputStream(image))));

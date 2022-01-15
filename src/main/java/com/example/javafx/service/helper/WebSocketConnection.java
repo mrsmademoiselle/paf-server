@@ -1,20 +1,14 @@
 package com.example.javafx.service.helper;
 
-import java.net.URI;
-import java.util.Map;
-
 import com.example.javafx.controller.GameController;
-import com.example.javafx.controller.PapaController;
-import com.example.javafx.model.GameDto;
 import com.example.javafx.service.GameService;
-import com.example.javafx.service.MemorioJsonMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import javafx.fxml.FXMLLoader;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.net.URI;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Klasse für Websocket-Kommunikation.
@@ -25,6 +19,7 @@ public class WebSocketConnection extends WebSocketClient {
     private GameService gameService = GameService.getInstance();
     // Checken ob das Spiel schon am laufen ist
     private boolean firstGame = false;
+    private boolean continueHeartbeat = true;
 
     public WebSocketConnection(URI address, SceneManager sceneManager) {
         super(address);
@@ -33,40 +28,59 @@ public class WebSocketConnection extends WebSocketClient {
 
     /**
      * Wird aufgerufen wenn der Socketserver gestartet wird - sendet das Login SIgnal an den Server
+     *
      * @param handshakedata - Vorgegeben, verwendetn wir gerade nicht
      */
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         mSend(MessageKeys.LOGIN, "");
+        this.continueHeartbeat = true;
+        heartbeat();
     }
 
     /**
      * Methode zum senden einer Nachricht
+     *
      * @param messageKey Nachrichtenflag - siehe Nachrichtentabelle oder Messagekeyenum
-     * @param payload - DIe Payload zur entsprechenden Nachricht
+     * @param payload    - DIe Payload zur entsprechenden Nachricht
      */
-    public void mSend(MessageKeys messageKey, String payload){
-        System.out.println("mSend: " + messageKey + " " + payload);
+    public void mSend(MessageKeys messageKey, String payload) {
         send("{\"" + messageKey + "\":\"" + payload + "\"" +
                 ",\"JWT\":" + "\"" + TokenManager.getInstance().getToken() + "\"}");
     }
 
+    public void heartbeat() {
+        if (continueHeartbeat) {
+            mSend(MessageKeys.HEARTBEAT, null);
+            // jede Sekunde wird ein Heartbeat gesendet
+            TimerTask task = new TimerTask() {
+                public void run() {
+                    heartbeat();
+                }
+            };
+            Timer timer = new Timer("Heartbeat Timer");
+            timer.schedule(task, 1000L);
+        }
+    }
+
     /**
      * Senden des beendensignals an den Server
-     * @param code Unbenutzt
+     *
+     * @param code   Unbenutzt
      * @param reason Unbenutzt
      * @param remote Unbenutzt
      */
     @Override
-    public void onClose(int code, String reason, boolean remote){
+    public void onClose(int code, String reason, boolean remote) {
         //TODO: Checken ob noch was gesendet wird this.mSend(MessageKeys.DISSOLVE, "");
         //System.out.println("closed with exit code " + code + " additional info: " + reason);
+        this.continueHeartbeat = false;
     }
 
     @Override
-    public void onMessage(String message){
+    public void onMessage(String message) {
 
-        if (!this.firstGame){
+        if (!this.firstGame) {
             this.firstGame = true;
         /*
         Ausfuehren des JavaFX UI Render im Mainthread ueber Runlater. vgl Decision Log
@@ -75,7 +89,7 @@ public class WebSocketConnection extends WebSocketClient {
         Mainthread aus, sobald er Zeit dafuer hat.
          */
             try {
-                javafx.application.Platform.runLater(()->{
+                javafx.application.Platform.runLater(() -> {
                     sceneManager.loadGame();
                 });
             } catch (Exception e) {
@@ -91,10 +105,12 @@ public class WebSocketConnection extends WebSocketClient {
     }
 
     @Override
-    public void onError(Exception e){System.out.println(e);}
+    public void onError(Exception e) {
+        System.out.println(e);
+    }
 
     //Testmethode zum testen der Verbindung vom Socket zum Gamecontroller
-    public void activateGameController(){
+    public void activateGameController() {
         // Herausholen des GameControler aus dem Service
         GameController controller = gameService.getGameController();
         System.out.println("Teste Verschmelzung FUSSSSION");
@@ -103,12 +119,13 @@ public class WebSocketConnection extends WebSocketClient {
 
     /**
      * Nachrichtenhandlen Zwischenstation im Websocket fuer das behandeln der Nachrichten
+     *
      * @param message Eingehende Nachricht aus WS
      */
-    public void handleMessage(JSONObject message){
+    public void handleMessage(JSONObject message) {
         //Dafuer sorgen das die Nachricht nicht abgehandelt wird BEVOR der Gamecontroller durch den
         //Mainthread gerendert wird, sonst kommt es zu einer Exception
-        while (gameService.getGameController() == null){
+        while (gameService.getGameController() == null) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -120,7 +137,7 @@ public class WebSocketConnection extends WebSocketClient {
 
         // Update des Ui wieder in den Mainthread lagern
         try {
-            javafx.application.Platform.runLater(()->{
+            javafx.application.Platform.runLater(() -> {
                 controller.digestGame(message);
             });
         } catch (Exception e) {
