@@ -25,6 +25,9 @@ public class HistoryController extends PapaController{
     protected void initialize(){
         Response<String> res = HttpConnector.get("user/history");
         JSONObject jo = new JSONObject(res.getBody().toString());
+        if (!jo.has("totalGames") || !jo.has("wins") || !jo.has("losses") || !jo.has("averageMoves")){
+            throw new RuntimeException("HistoryController: Seite konnte nicht initialisiert werden, weil Felder im JSON fehlen.");
+        }
         sum.setText("Anzahl Spiele: " + jo.get("totalGames").toString());
         wins.setText("Davon gewonnen: " + jo.get("wins").toString());
         looses.setText("Davon verloren: " + jo.get("losses").toString());
