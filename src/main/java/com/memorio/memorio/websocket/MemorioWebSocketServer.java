@@ -14,6 +14,7 @@ import com.memorio.memorio.valueobjects.FlipStatus;
 import com.memorio.memorio.valueobjects.MessageKeys;
 import com.memorio.memorio.web.dto.EndscoreDto;
 import org.java_websocket.WebSocket;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.slf4j.Logger;
@@ -435,11 +436,16 @@ public class MemorioWebSocketServer extends WebSocketServer {
             Player player = findPlayerByMatchConnection(conn);
             if (player == null) throw new MemorioRuntimeException("Dieser Spieler ist für kein Spiel registriert.");
 
+            System.out.println("subscriber: " + player.getSubscriber().getUser().getUsername());
             player.getSubscriber().getWebsocketConnection().send(message);
+            System.out.println("player: " + player.getUser().getUsername());
             player.getWebsocketConnection().send(message);
             logger.info("Game Objekt erfolgreich an alle Clients gesendet.");
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            logger.error("Game-Objekt konnte nicht in String geparst werden: " + game);
+        } catch (WebsocketNotConnectedException websocketNotConnectedException) {
+            logger.error("Ein Spieler hat eine fehlerhafte Websocketverbindung. Das Spiel wird abgebrochen.");
+            dissolveMatch(findPlayerByMatchConnection(conn).getMatch());
         }
 
     }
