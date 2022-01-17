@@ -31,6 +31,8 @@ public class GameController extends PapaController {
 
     @FXML
     Text turn;
+    @FXML
+    Text cooldown;
 
     @FXML
     ListView logBox;
@@ -98,12 +100,12 @@ public class GameController extends PapaController {
      */
     public void onCardFlip(Card card, MouseEvent event) {
         if (!hasCooldown) {
-            System.out.println("setting cooldown true");
+            cooldown.setText("Bitte warten.");
             hasCooldown = true;
             TimerTask task = new TimerTask() {
                 public void run() {
-                    System.out.println("setting cooldown false");
                     hasCooldown = false;
+                    cooldown.setText("");
                 }
             };
             Timer timer = new Timer("Cooldown Timer");
