@@ -41,8 +41,8 @@ public class GameHistoryService {
      */
     private GameHistoryDto createGameHistoryWithRandomValues() {
         Random random = new Random();
-        int maxGames = random.nextInt(20);
-        int averageMoves = random.nextInt(40);
+        int maxGames = random.nextInt(20) + 1;
+        int averageMoves = random.nextInt(8) + 1;
         int winCount = random.nextInt(maxGames);
 
         return new GameHistoryDto(maxGames, winCount, averageMoves);
