@@ -1,9 +1,11 @@
 package com.example.javafx.controller;
-import com.example.javafx.model.*;
+
+import com.example.javafx.model.Card;
 import com.example.javafx.service.GameService;
 import com.example.javafx.service.helper.FileManager;
 import com.example.javafx.service.helper.MessageKeys;
 import com.example.javafx.service.helper.SceneManager;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -12,14 +14,14 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.event.EventHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import javafx.scene.shape.Rectangle;
 
-import java.awt.*;
 import java.io.ByteArrayInputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class GameController extends PapaController {
@@ -50,6 +52,7 @@ public class GameController extends PapaController {
     private int WIGGLE = 30;
     private String username;
     private boolean isThisUserTurn = false;
+    private boolean hasCooldown = false;
 
 
     @FXML
@@ -73,43 +76,63 @@ public class GameController extends PapaController {
         newSysMessage("Sucht nach Spielen...");
     }
 
-    public void newSysMessage(String msg){
+    public void newSysMessage(String msg) {
         Text text = new Text();
         text.setText(msg);
         logBox.getItems().add(text);
     }
 
-    public void setTurn(String msg){turn.setText(msg);}
-    public void updateScore(int score1, int score2){score.setText(score1 + " : " + score2);}
+    public void setTurn(String msg) {
+        turn.setText(msg);
+    }
+
+    public void updateScore(int score1, int score2) {
+        score.setText(score1 + " : " + score2);
+    }
 
     /**
      * Flippen der karte
-     * @param card Karte die gedreht werden soll
+     *
+     * @param card  Karte die gedreht werden soll
      * @param event Event
      */
-    public void onCardFlip(Card card, MouseEvent event){
+    public void onCardFlip(Card card, MouseEvent event) {
+        if (!hasCooldown) {
+            System.out.println("setting cooldown true");
+            hasCooldown = true;
+            TimerTask task = new TimerTask() {
+                public void run() {
+                    System.out.println("setting cooldown false");
+                    hasCooldown = false;
+                }
+            };
+            Timer timer = new Timer("Cooldown Timer");
+            timer.schedule(task, 2000L);
 
-        if(!card.getFlipped()){
-            // Bild vom Server anzeigen
-            renderFront(card);
-            // Senden der geflippten Card auf dem Server
-            GameService gameService = GameService.getInstance();
-            gameService.getWebSocketConnection().mSend(
-                    MessageKeys.FLIPPED, card.getCardId()
-            );
+            if (!card.getFlipped()) {
+                // Bild vom Server anzeigen
+                renderFront(card);
+                // Senden der geflippten Card auf dem Server
+                GameService gameService = GameService.getInstance();
+                gameService.getWebSocketConnection().mSend(
+                        MessageKeys.FLIPPED, card.getCardId()
+                );
+            }
         }
     }
 
     /**
      * Rendert die leere Rueckseite einer Karte
+     *
      * @param card Karte deren Rueckseite angezeigt werden soll
      */
-    public void renderBackSide(Card card){
+    public void renderBackSide(Card card) {
         card.setFlipped(false);
         Image pic = FileManager.getPic("cardPattern.jpg");
         card.setFill(new ImagePattern(pic));
     }
-    public void renderFront(Card card){
+
+    public void renderFront(Card card) {
         card.setFlipped(true);
         card.setFill(new ImagePattern(new Image(card.getCardSource())));
         newSysMessage(card.getCardSource());
@@ -117,9 +140,10 @@ public class GameController extends PapaController {
 
     /**
      * Setzen und updaten des Boards
+     *
      * @param
      */
-    public void setBoard(JSONArray cardSet){
+    public void setBoard(JSONArray cardSet) {
 
         gameGrid.setHgap(10);
         gameGrid.setVgap(10);
@@ -128,8 +152,8 @@ public class GameController extends PapaController {
         final double cardX = cardY;
 
         int counter = 0;
-        for(int y = 0; y < CARDS_Y; y++){
-            for(int x = 0; x < CARDS_X; x++) {
+        for (int y = 0; y < CARDS_Y; y++) {
+            for (int x = 0; x < CARDS_X; x++) {
                 Card card = new Card();
                 // styling
                 card.setHeight(cardX);
@@ -143,7 +167,7 @@ public class GameController extends PapaController {
                 card.setOnMouseClicked((new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        if(isThisUserTurn){
+                        if (isThisUserTurn) {
                             onCardFlip(card, event);
                         }
                     }
@@ -152,11 +176,11 @@ public class GameController extends PapaController {
                 // Setzen der Farben - wir ziehen uns die Pair ID und verarbeiten sie in die CardSource
                 JSONObject jCard = (JSONObject) cardSet.get(counter);
                 // Setzend er Cardsource, muss hier passieren da wir jedes mal das Board rendern sonst ist das Feld leer
-                card.setCardSource("http://localhost:9090/public/"+ jCard.get("pairId") +".jpg");
+                card.setCardSource("http://localhost:9090/public/" + jCard.get("pairId") + ".jpg");
                 // Setzen des Flipped Status
                 String flipped = jCard.get("flipStatus").toString();
 
-                switch(flipped) {
+                switch (flipped) {
                     case "NOT_FLIPPED":
                         renderBackSide(card);
                         break;
@@ -183,21 +207,22 @@ public class GameController extends PapaController {
 
     /**
      * Verarbeiten der Gamenachricht und vorbereiten fuer weiteres Handling
+     *
      * @param message Nachricht aus WS
      */
-    public void digestGame(JSONObject message){
+    public void digestGame(JSONObject message) {
         // Unterscheidung Spiel und Endscore
 
         // Wenn die Nachricht ein Board enthaelt ist es entweder die aller erste Nachricht oder eine Gamenachricht
         // Es muss also der User bestimmt werden der dran ist und das Board aktualisiert werden
-        if(message.has("board")) {
+        if (message.has("board")) {
 
             // Herauslesen des Scores und des aktuellen Zuges
-            JSONObject turn = (JSONObject)message.get("currentTurn");
-            JSONArray scores = (JSONArray)message.get("userScores");
+            JSONObject turn = (JSONObject) message.get("currentTurn");
+            JSONArray scores = (JSONArray) message.get("userScores");
 
             //Handeln des ersten zuges und blockieren der Karten
-            if(turn.get("username").toString().equals(this.username)){
+            if (turn.get("username").toString().equals(this.username)) {
                 this.isThisUserTurn = true;
             } else {
                 System.out.println("User ist nicht dran: " + turn.get("username"));
@@ -205,26 +230,26 @@ public class GameController extends PapaController {
             }
 
             //do the board stuff
-            JSONObject board = (JSONObject)message.get("board");
-            JSONArray cardset = (JSONArray)board.get("cardSet");
+            JSONObject board = (JSONObject) message.get("board");
+            JSONArray cardset = (JSONArray) board.get("cardSet");
 
             // uebergen der Karten auf das Board
             setBoard(cardset);
             setTurn("Spieler: " + turn.get("username") + " ist dran!");
 
             // Setzen der Scores
-            JSONObject s1 = (JSONObject)scores.get(0);
-            JSONObject s2 = (JSONObject)scores.get(1);
+            JSONObject s1 = (JSONObject) scores.get(0);
+            JSONObject s2 = (JSONObject) scores.get(1);
             updateScore(((Integer) s1.get("moves")), (Integer) s2.get("moves"));
 
             // Setzen der Bilder
-            setUserMatchImages(s1,1);
-            setUserMatchImages(s2,2);
+            setUserMatchImages(s1, 1);
+            setUserMatchImages(s2, 2);
 
             // handling vom Endscore objekt
         } else if (message.has("winner")) {
             //do the endscorestuff
-            JSONObject winner = (JSONObject)message.get("winner");
+            JSONObject winner = (JSONObject) message.get("winner");
             // Setzen des Siegers
             setTurn("Sieger ist: " + (String) winner.get("username"));
             // Beenden der WS-Verbindung und Thread beenden
@@ -239,36 +264,37 @@ public class GameController extends PapaController {
 
     /**
      * Setzen der Spielerbilder
-     * @param jo JSON von dem User
+     *
+     * @param jo      JSON von dem User
      * @param counter Feld wo es gesetzt werden soll
      */
-    private void setUserMatchImages(JSONObject jo, int counter){
+    private void setUserMatchImages(JSONObject jo, int counter) {
         // Herausholen des user-teils aus dem JO
-        JSONObject userJO = (JSONObject)jo.get("user");
+        JSONObject userJO = (JSONObject) jo.get("user");
 
         // Laden des Bildes, bzw nicht laden des Bildes
         byte[] image = {1};
-        if (userJO.get("image") != null){
+        if (userJO.get("image") != null) {
             image = java.util.Base64.getDecoder().decode(userJO.getString("image"));
         }
         // Wenn es kein Bild im JSON gab, ist image durch die vorherige Pruefung leer, daher laden des Defaultbildes
-        if (image.length < 100){
+        if (image.length < 100) {
             Image pic = FileManager.getPic("default.jpg");
             // Bilder Setzen, abhaengig wo wir es setzen wollen
-            if (counter == 1){
+            if (counter == 1) {
                 pImg1.setFill(new ImagePattern(pic));
             }
             if (counter == 2) {
                 pImg2.setFill(new ImagePattern(pic));
             }
-        }else{
+        } else {
             // Bilder Setzen, abhaengig wo wir es setzen wollen, wenn Bild da ist
-            if (counter == 1){
-            pImg1.setFill(new ImagePattern(new Image (new ByteArrayInputStream(image))));
-        }
-        if (counter == 2) {
-            pImg2.setFill(new ImagePattern(new Image(new ByteArrayInputStream(image))));
-        }
+            if (counter == 1) {
+                pImg1.setFill(new ImagePattern(new Image(new ByteArrayInputStream(image))));
+            }
+            if (counter == 2) {
+                pImg2.setFill(new ImagePattern(new Image(new ByteArrayInputStream(image))));
+            }
         }
     }
 }
