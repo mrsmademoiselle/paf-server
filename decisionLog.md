@@ -1,7 +1,7 @@
 # Sprint 4
 
 Von: Franzi
-
+ 
 ## UserAuthService
 
 - Anlegen für UserAuthService um mehrfach wiederholten Code zu minimieren
