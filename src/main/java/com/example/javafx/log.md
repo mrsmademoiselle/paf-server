@@ -1,7 +1,7 @@
 # Logtagebuch
 
 ## Sprint: ?
-
+ 
 Datum: ? <br> Von: ?
 
 --- 
@@ -9,14 +9,17 @@ Datum: ? <br> Von: ?
 ## Sprint KW 2
 
 ### Historie
+
 Einfache Historie Darstellung
 
 ### Matchinfo
-Es wird aus den Nachrichten die wir bekommen immer das Bild herausgezogen.
-Begruendung: Wir bekommen die Nachricht so oder so im vollem Umfang und koennen daher so oder so das gesamte UI auch aktualisierung.
-Wir haetten kein Vorteil das initial zu setzen, zumal die initiale Prueufng des Gamestarts nun raus aus dem Controller ist.
+
+Es wird aus den Nachrichten die wir bekommen immer das Bild herausgezogen. Begruendung: Wir bekommen die Nachricht so
+oder so im vollem Umfang und koennen daher so oder so das gesamte UI auch aktualisierung. Wir haetten kein Vorteil das
+initial zu setzen, zumal die initiale Prueufng des Gamestarts nun raus aus dem Controller ist.
 
 ### Lobby
+
 Lobby wieder aktiv. Auslagen der Pruefung des Gamestarts.
 
 ---
@@ -86,62 +89,72 @@ FileManager übernimmt datei-relevante Aufgaben, z.B. das Managen von FileChoose
 Ressourcen. Diese Aufgaben wurden in mehreren ComponentControllern verwendet und 1:1 stumpf kopiert, weswegen ich ein
 Auslagern sinnvoll fand.
 
-
 # Sprint: 2
 
 Datum: 27.12.-31.12. <br> Von: Chris
 
 ### Websocket
 
-Bisher verwendet der Client eine simple SocketConnection, welche nicht das Websocket-Protokoll implementiert. Daher wäre 
-so auch keine Verbindung zum WebSocketServer möglich. Dafür wurde die "org.java-websocket" - Dependency hinzugefügt (also einmal mvn clean install ausführen).
-Die Klasse SocketConnector heißt nun WebSocketConnection um das Protokoll zu verdeutlichen. 
+Bisher verwendet der Client eine simple SocketConnection, welche nicht das Websocket-Protokoll implementiert. Daher wäre
+so auch keine Verbindung zum WebSocketServer möglich. Dafür wurde die "org.java-websocket" - Dependency hinzugefügt (
+also einmal mvn clean install ausführen). Die Klasse SocketConnector heißt nun WebSocketConnection um das Protokoll zu
+verdeutlichen.
 
-Die Klasse GameService ist nun ein Singleton. Zudem haben sich die Methoden verändert. Es gibt nun eine Methode "lookForGame", welche eine WebSocketConnection
-in einem neuen Thread erstellt und den Ladebildschirm läd (loadLobby). später können wir dann in der Connection abfangen wenn ein Match gefunden wurde und 
-die GameView laden. Ebenfalls implementiert sind eine stop-methode und eine stopLookingForGames-methode. Der Unterschied der beiden liegt darin dass stop nur
-die Connection schließt und den Thread beendet, stopLookingForGames ruft stop auf und läd außerdem die HomeView (Profil).
+Die Klasse GameService ist nun ein Singleton. Zudem haben sich die Methoden verändert. Es gibt nun eine Methode "
+lookForGame", welche eine WebSocketConnection in einem neuen Thread erstellt und den Ladebildschirm läd (loadLobby).
+später können wir dann in der Connection abfangen wenn ein Match gefunden wurde und die GameView laden. Ebenfalls
+implementiert sind eine stop-methode und eine stopLookingForGames-methode. Der Unterschied der beiden liegt darin dass
+stop nur die Connection schließt und den Thread beendet, stopLookingForGames ruft stop auf und läd außerdem die
+HomeView (Profil).
 
-Die GameController Klasse kann nun ein Spielfeld mit CARD_X * CARD_Y Karten rendern. Es existieren ebenfalls Methoden um Score und "turn" zu updaten.
+Die GameController Klasse kann nun ein Spielfeld mit CARD_X * CARD_Y Karten rendern. Es existieren ebenfalls Methoden um
+Score und "turn" zu updaten.
 
 ### Bug-Ladeanimation
-Immer wenn JavaFX bezogene Dinge in einem Thread passieren, der NICHT der JavaFX Main Thread ist, kommt es zu einer Exception.
-Das Liegt daran, dass der Hauptthread, der den JavaFX Kontext hat, nicht ueber die Aenderungen informiert wird.
-das bedeutet, dass wenn in einem Childthread irgendwelche Scene wechsel passieren sollen, der Mainthread darueber informiert werden muss.
-Hierzu gibt es zwei Methoden:
-1. Den Wechsel der Scene, Rerender etc. in Mainthread ausfuerhren. Dazu muss aber ein Event oder die Information dorch hochbubblen.
-2. Die gewuenschte Funktion SPAETER ueber den Mainthread ausfuehren lassen. Dazu gibt es in javafx.application.Plattform die runLater() Methode
-die Methode Queued die Gewunschte Funktion und lasst sie im Mainthread mit dem JavaFX Kontext laufen, sobald der Mainthread dafuer zeit hat.
-3. 
+
+Immer wenn JavaFX bezogene Dinge in einem Thread passieren, der NICHT der JavaFX Main Thread ist, kommt es zu einer
+Exception. Das Liegt daran, dass der Hauptthread, der den JavaFX Kontext hat, nicht ueber die Aenderungen informiert
+wird. das bedeutet, dass wenn in einem Childthread irgendwelche Scene wechsel passieren sollen, der Mainthread darueber
+informiert werden muss. Hierzu gibt es zwei Methoden:
+
+1. Den Wechsel der Scene, Rerender etc. in Mainthread ausfuerhren. Dazu muss aber ein Event oder die Information dorch
+   hochbubblen.
+2. Die gewuenschte Funktion SPAETER ueber den Mainthread ausfuehren lassen. Dazu gibt es in javafx.application.Plattform
+   die runLater() Methode die Methode Queued die Gewunschte Funktion und lasst sie im Mainthread mit dem JavaFX Kontext
+   laufen, sobald der Mainthread dafuer zeit hat.
+3.
 
 ### Nachrichtenuebermittling - Kommunikation vom WS zum Controller
-Damit wir aenderungen im Controller durchnehmen koennen muss er, entsprechend den Nachrichten aus dem WS, auktualisiert werde.
-Dazu wurde der Gameservice erweitert. 
-Er hat nun ein Attribut fuer den GameController, in dem die GameController instanz, ist die gerade gerendert ist
-Im GameController wird in der initialize() der GameService reingeholt und dort direkt die aktuelle Instanz des GameControllers ubergeben
-Im WebSocketConnection kann dann uber das Feld im GameService auf die Instanz des GameControllers zugegriffen werden
-Dadurch koennen wir nun die GameController view aktualisieren und uber den GameService mit dem Socket reden
+
+Damit wir aenderungen im Controller durchnehmen koennen muss er, entsprechend den Nachrichten aus dem WS, auktualisiert
+werde. Dazu wurde der Gameservice erweitert. Er hat nun ein Attribut fuer den GameController, in dem die GameController
+instanz, ist die gerade gerendert ist Im GameController wird in der initialize() der GameService reingeholt und dort
+direkt die aktuelle Instanz des GameControllers ubergeben Im WebSocketConnection kann dann uber das Feld im GameService
+auf die Instanz des GameControllers zugegriffen werden Dadurch koennen wir nun die GameController view aktualisieren und
+uber den GameService mit dem Socket reden
 
 ### UI Update ueber GameDTO
+
 Eine Idee das UI ueber z.B. Databinding zu aktualiesieren ist es, das gameDto aus dem WS in den Controller zu bekommen
-Dazu wurde der GameService erweitert. Dieser uebernimmt das "Data-juggling" in den Controller, wo wir, so die Idee, auf die Felder des GameDtos
-zugreifen koennen. Darueber kann man dan via Binding arbeiten oder direkt die Felder aktualisieren, aber so waere zumindest schonmal
-das DTO an einer Stelle wo es fuer weitere Gamelogik/UI Dinge genutzt werden kann.
+Dazu wurde der GameService erweitert. Dieser uebernimmt das "Data-juggling" in den Controller, wo wir, so die Idee, auf
+die Felder des GameDtos zugreifen koennen. Darueber kann man dan via Binding arbeiten oder direkt die Felder
+aktualisieren, aber so waere zumindest schonmal das DTO an einer Stelle wo es fuer weitere Gamelogik/UI Dinge genutzt
+werden kann.
 
 ## Gamelogik
-Das meiste geschieht in digestGame und setBoard. In Setboard rendern wir die Karten auf Grundlade des Boards
-was aus der Nachricht vom Server gezogen wird. Vorher wird der Score und der Turn gesetzt.
-Dannach wird geschaut was es fuer eine Nachricht ist. Entsprechend kommt das Handling
+
+Das meiste geschieht in digestGame und setBoard. In Setboard rendern wir die Karten auf Grundlade des Boards was aus der
+Nachricht vom Server gezogen wird. Vorher wird der Score und der Turn gesetzt. Dannach wird geschaut was es fuer eine
+Nachricht ist. Entsprechend kommt das Handling
 
 ## Endscore
+
 Aktuell wird der
 
-
 ### Fragen
+
 - Im Client gibt es ebenfalls Enums, die wir verwendet wollten, allerdings bekommen wir dort nur Enumobjekte
 - Warum matchdto im state???
-- Wie machen wir das mit dem Endscore?
-Fuer Chris und mich ist es okay das einfach auf eine weitere View zu leiten
-  Wo wir nur den GEwinner ausgeben und das wars, mehr steht da nicht
-  Damit koennen wir dann die Socketverbindung noch beenden und das SPiel komplett
-  beenden
+- Wie machen wir das mit dem Endscore? Fuer Chris und mich ist es okay das einfach auf eine weitere View zu leiten Wo
+  wir nur den GEwinner ausgeben und das wars, mehr steht da nicht Damit koennen wir dann die Socketverbindung noch
+  beenden und das SPiel komplett beenden
