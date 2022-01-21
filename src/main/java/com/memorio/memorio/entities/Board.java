@@ -1,5 +1,6 @@
 package com.memorio.memorio.entities;
 
+import com.memorio.memorio.exceptions.MemorioRuntimeException;
 import com.memorio.memorio.valueobjects.FlipStatus;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +35,7 @@ public class Board {
         board.setCardSet(cardSet);
         return board;
     }
-    
+
     private List<Card> createCardSet() {
         List<Card> cardset = new ArrayList<>();
         for (int i = 2; i <= 17; i++) {
@@ -100,9 +101,12 @@ public class Board {
         } else {
             // wenn mehr als 1 Karte wartet (darf eigentlich nicht passieren),
             // dann ist was schiefgegangen und wir unflippen alle erstmal
-
-            allCardsWaitingToBeFlipped.forEach(Card::flipDown);
-            return false;
+            try {
+                allCardsWaitingToBeFlipped.forEach(Card::flipDown);
+                throw new MemorioRuntimeException("Mehr als 1 Karte is WAITING_TO_FLIP. Decke alle Karten zu.");
+            } catch (MemorioRuntimeException e) {
+                return false;
+            }
         }
     }
 }
