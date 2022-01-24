@@ -51,6 +51,7 @@ public class GameController extends PapaController {
 
     private int CARDS_X = 4;
     private int CARDS_Y = 4;
+    //
     private int WIGGLE = 30;
     private String username;
     private boolean isThisUserTurn = false;
@@ -84,10 +85,19 @@ public class GameController extends PapaController {
         logBox.getItems().add(text);
     }
 
+    /**
+     * Ausgabe des Spielers der gerade dran ist
+     * @param msg Die Nachricht die die Flags enthaelt
+     */
     public void setTurn(String msg) {
         turn.setText(msg);
     }
 
+    /**
+     * Score aktualisieren
+     * @param score1
+     * @param score2
+     */
     public void updateScore(int score1, int score2) {
         score.setText(score1 + " : " + score2);
     }
@@ -99,6 +109,9 @@ public class GameController extends PapaController {
      * @param event Event
      */
     public void onCardFlip(Card card, MouseEvent event) {
+        /*
+        Cooldown Timer um das verarbeiten und das "spamen" der Karten zu verbessner
+         */
         if (!hasCooldown) {
             cooldown.setText("Bitte warten.");
             hasCooldown = true;
@@ -129,21 +142,26 @@ public class GameController extends PapaController {
      * @param card Karte deren Rueckseite angezeigt werden soll
      */
     public void renderBackSide(Card card) {
+        card.setFill(Color.TRANSPARENT);
         card.setFlipped(false);
         Image pic = FileManager.getPic("cardPattern.jpg");
         card.setFill(new ImagePattern(pic));
     }
 
+    /**
+     * Rendert die aufgedeckte Karte
+     * @param card Karte die aufgedeckt werden soll
+     */
     public void renderFront(Card card) {
+        card.setFill(Color.TRANSPARENT);
         card.setFlipped(true);
         card.setFill(new ImagePattern(new Image(card.getCardSource())));
         newSysMessage(card.getCardSource());
     }
 
     /**
-     * Setzen und updaten des Boards
-     *
-     * @param
+     * Methode zum setzen und aktualisieren des Boards
+     * @param cardSet Das kartenset um das Board zu aktualiserein
      */
     public void setBoard(JSONArray cardSet) {
 
@@ -158,6 +176,7 @@ public class GameController extends PapaController {
             for (int x = 0; x < CARDS_X; x++) {
                 Card card = new Card();
                 // styling
+                card.setFill(Color.TRANSPARENT);
                 card.setHeight(cardX);
                 card.setWidth(cardY);
                 card.setArcHeight(50);
