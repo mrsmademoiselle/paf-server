@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Main-Class: com.example.javafx.MemorioApplication
+Class-Path: jackson-annotations-2.13.0.jar jackson-databind-2.13.0.jar j
+ son-20160810.jar slf4j-api-1.7.32.jar javafx-controls-11.0.2.jar javafx
+ -base-11.0.2-win.jar javafx-graphics-11.0.2.jar Java-WebSocket-1.5.2.ja
+ r javafx-fxml-11.0.2.jar javafx-controls-11.0.2-win.jar javafx-graphics
+ -11.0.2-win.jar bootstrapfx-core-0.4.0.jar jackson-core-2.13.0.jar java
+ fx-base-11.0.2.jar cvurl-io-1.5.jar javafx-fxml-11.0.2-win.jar
+
