@@ -15,8 +15,7 @@ public class GameHistoryDto {
     private int wins;
     private int losses;
     private int averageMoves;
-
-    @Deprecated
+    
     public GameHistoryDto() {
         this.totalGames = 0;
         this.wins = 0;

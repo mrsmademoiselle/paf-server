@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class GameHistoryService {
@@ -27,25 +26,12 @@ public class GameHistoryService {
         List<Game> gamesOfUser = gameRepository.findByUserScoresUserUsername(username);
 
         // TODO später soll hier ein leeres Objekt zurückgegeben werden
-        if (gamesOfUser.size() == 0) return createGameHistoryWithRandomValues();
+        if (gamesOfUser.isEmpty()) return new GameHistoryDto();
 
         int winCount = calculateWinCount(gamesOfUser, username);
         int averageMoves = calculateAverageMoves(gamesOfUser, username);
 
         return new GameHistoryDto(gamesOfUser.size(), winCount, averageMoves);
-    }
-
-    /**
-     * Methode, ein GameHistoryDto mit randomisierten Werten erstellt und zurückgibt.
-     * Ist für Testzwecke gedacht und kann nach dem UserHistory-Sprint rausgenommen werden.
-     */
-    private GameHistoryDto createGameHistoryWithRandomValues() {
-        Random random = new Random();
-        int maxGames = random.nextInt(20) + 1;
-        int averageMoves = random.nextInt(8) + 1;
-        int winCount = random.nextInt(maxGames);
-
-        return new GameHistoryDto(maxGames, winCount, averageMoves);
     }
 
     /**
