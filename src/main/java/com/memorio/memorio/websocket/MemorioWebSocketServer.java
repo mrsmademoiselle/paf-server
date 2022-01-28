@@ -444,7 +444,7 @@ public class MemorioWebSocketServer extends WebSocketServer {
         } catch (JsonProcessingException e) {
             logger.error("Game-Objekt konnte nicht in String geparst werden: " + game);
         } catch (WebsocketNotConnectedException websocketNotConnectedException) {
-            logger.error("Ein Spieler hat eine fehlerhafte Websocketverbindung. Das Spiel wird abgebrochen.");
+            logger.error("Ein Spieler hat eine fehlerhafte Websocketverbindung. Das Spiel wird abgebrochen. " + websocketNotConnectedException.getCause() + " " + websocketNotConnectedException.getMessage() + " " + websocketNotConnectedException.getStackTrace());
             dissolveMatch(findPlayerByMatchConnection(conn).getMatch());
         }
 
