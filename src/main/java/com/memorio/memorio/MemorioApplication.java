@@ -42,13 +42,7 @@ public class MemorioApplication implements CommandLineRunner {
         // starte den WebSocketServer in einem neuen Thread.
         // TODO den WebSocketServer korrekt herunterfahren mit server.close() oder so...
         MemorioWebSocketServer server = MemorioWebSocketServer.getInstance();
-        try {
-            new Thread(server::start).start();
-        }catch (Exception exception){
-            System.out.println("Ports bereits gebunden. Fahre Server herunter. Bitte schliesse Applikationen die auf 8080 und 9090 lauschen und starte Server neu!");
-            System.exit(0);
-        }
-
+        new Thread(server::start).start();
 
         application.addListeners((ApplicationListener<ContextClosedEvent>) event -> {
             try {
