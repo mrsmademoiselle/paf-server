@@ -112,7 +112,7 @@ Score und "turn" zu updaten.
 
 ### Bug-Ladeanimation
 
-Immer wenn JavaFX bezogene Dinge in einem Thread passieren, der NICHT der JavaFX Main Thread ist, kommt es zu einer
+Immer wenn JavaFX bezogene Dinge in einem Thread passieren, der NICHT der JavaFX com.example.javafx.Main Thread ist, kommt es zu einer
 Exception. Das Liegt daran, dass der Hauptthread, der den JavaFX Kontext hat, nicht ueber die Aenderungen informiert
 wird. das bedeutet, dass wenn in einem Childthread irgendwelche Scene wechsel passieren sollen, der Mainthread darueber
 informiert werden muss. Hierzu gibt es zwei Methoden:
