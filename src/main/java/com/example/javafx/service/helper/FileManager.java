@@ -6,8 +6,16 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 
+/**
+ * Hilfsklasse fuer Ressourcenzugriffe
+ */
 public class FileManager {
 
+    /**
+     * Bildauswahl oeffnen
+     * @param page
+     * @return
+     */
     public static File openImageChooser(Pane page) {
         // File Chooser für Bildauswahl
         FileChooser fileChooser = new FileChooser();
@@ -18,6 +26,11 @@ public class FileManager {
         return selectedFile;
     }
 
+    /**
+     * Laden von Bildern aus Ressources
+     * @param fileName Name des zu ladenden Bildes
+     * @return Bild das geladen wird
+     */
     public static Image getPic(String fileName) {
         File folder = new File("src/main/resources/com/example/javafx/images");
         if (folder.exists()) {
