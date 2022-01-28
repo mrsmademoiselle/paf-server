@@ -55,7 +55,13 @@ public class MemorioWebSocketServer extends WebSocketServer {
      */
     public static MemorioWebSocketServer getInstance() {
         if (instance == null) {
-            instance = new MemorioWebSocketServer(address);
+            try {
+                instance = new MemorioWebSocketServer(address);
+
+            }catch (Exception exception){
+                System.out.println("Ports bereits gebunden. Fahre Server herunter. Bitte schliesse Applikationen die auf 8080 und 9090 lauschen und starte Server neu!");
+                System.exit(0);
+            }
         }
 
         return instance;
@@ -122,6 +128,8 @@ public class MemorioWebSocketServer extends WebSocketServer {
     @Override
     public void onError(WebSocket conn, Exception ex) {
         logger.error("onError: " + Arrays.toString(ex.getStackTrace()));
+        System.out.println("Ports bereits gebunden. Fahre Server herunter. Bitte schliesse Applikationen die auf 8080 und 9090 lauschen und starte Server neu!");
+        System.exit(0);
     }
 
     /**
