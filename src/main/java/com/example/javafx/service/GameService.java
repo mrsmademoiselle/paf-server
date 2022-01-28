@@ -62,12 +62,17 @@ public class GameService implements Runnable {
         return connection;
     }
 
+    /**
+     * Suchen nach Spiel, Starten der WS Verbindung
+     * @throws URISyntaxException
+     */
     public void lookForGame() throws URISyntaxException {
         while (thread != null && thread.isAlive()) {
             System.out.println("Thread lebt noch, Öffnen einer neuen Queue nicht möglich");
         }
         thread = new Thread(getInstance());
         thread.start();
+        // Weiterleiten zur Lobbyview
         javafx.application.Platform.runLater(() -> {
             this.sceneManager.loadLobby();
         });
