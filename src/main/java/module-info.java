@@ -8,7 +8,7 @@ module com.example.javafx {
     requires Java.WebSocket;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
-
+ 
     opens com.example.javafx to javafx.fxml;
     exports com.example.javafx;
     exports com.example.javafx.controller;

@@ -13,9 +13,6 @@ public class FileManager {
 
     /**
      * Bildauswahl oeffnen
-     *
-     * @param page
-     * @return
      */
     public static File openImageChooser(Pane page) {
         // File Chooser für Bildauswahl
@@ -23,10 +20,10 @@ public class FileManager {
         fileChooser.setTitle("Profilbild hochladen");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-        File selectedFile = fileChooser.showOpenDialog(page.getScene().getWindow());
-        return selectedFile;
+
+        return fileChooser.showOpenDialog(page.getScene().getWindow());
     }
-  
+
     /**
      * Laden von Bildern aus Ressources
      *

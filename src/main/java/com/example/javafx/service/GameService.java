@@ -64,8 +64,6 @@ public class GameService implements Runnable {
 
     /**
      * Suchen nach Spiel, Starten der WS Verbindung
-     *
-     * @throws URISyntaxException
      */
     public void lookForGame() throws URISyntaxException {
         while (thread != null && thread.isAlive()) {
@@ -74,9 +72,7 @@ public class GameService implements Runnable {
         thread = new Thread(getInstance());
         thread.start();
         // Weiterleiten zur Lobbyview
-        javafx.application.Platform.runLater(() -> {
-            this.sceneManager.loadLobby();
-        });
+        javafx.application.Platform.runLater(() -> this.sceneManager.loadLobby());
     }
 
     public void stopLookingForGame() {

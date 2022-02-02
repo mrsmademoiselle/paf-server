@@ -3,9 +3,7 @@ package com.example.javafx.model;
 import javafx.scene.shape.Rectangle;
 
 public class Card extends Rectangle {
-
-    private String pairId;
-    private int[][] cardPosition;
+    
     private String cardSource;
     private boolean flipped = false;
     private String cardId;
@@ -18,22 +16,6 @@ public class Card extends Rectangle {
         this.flipped = val;
     }
 
-    public void setPosition(int[][] position) {
-        this.cardPosition = position;
-    }
-
-    public String getPairId() {
-        return pairId;
-    }
-
-    // cardId = PairID
-    public void setPairId(String id) {
-        this.pairId = id;
-    }
-
-    public int[][] getCardPosition() {
-        return cardPosition;
-    }
 
     public String getCardSource() {
         return this.cardSource;

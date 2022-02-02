@@ -19,10 +19,9 @@ public class HttpConnector {
     public static boolean checkUserAUth() {
         Response<String> response = HttpConnector.get("user/check");
 
-        // TODO evtl in 401 umändern falls Serverprobleme auftreten
         return response.status() == HttpStatus.OK;
     }
-    
+
     public static Response<String> get(String urlString) {
         CVurl cVurl = new CVurl();
         TokenManager tokenManager = TokenManager.getInstance();
@@ -30,7 +29,6 @@ public class HttpConnector {
         String token = tokenManager.getToken();
         // GET Request
         Response<String> response = cVurl.get(PREFIX + urlString)
-                // TODO map später auslagern, content-type evtl anpassen
                 .headers(Map.of(
                         "Content-Type", "application/x-www-form-urlencoded",
                         "Authorization", token))

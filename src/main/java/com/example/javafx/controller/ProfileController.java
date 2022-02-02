@@ -89,7 +89,6 @@ public class ProfileController extends LayoutController {
         if (successful) {
             if (profilePic != null && profilePic.length > 0) {
                 // falls Bildupload nicht geklappt hat, zeige Fehlerbanner an
-                // evtl TODO: Banner für Userinfo & Bild auseinanderziehen
                 if (!userService.uploadImage(profilePic)) {
                     successful = false;
                 }

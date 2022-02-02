@@ -26,9 +26,9 @@ public class MemorioApplication extends javafx.application.Application {
         double applicationWidth = primaryScreen.getWidth() < 1920 ? primaryScreen.getWidth() : 1920;
         double applicationHeight = primaryScreen.getHeight() < 1080 ? primaryScreen.getHeight() : 1080;
 
-        sceneManager.setScale(applicationWidth, applicationHeight);
+        sceneManager.setScale(applicationHeight, applicationWidth);
         sceneManager.setStage(stage);
-        
+
         sceneManager.setLoginScene(getClass().getResource("view/login.fxml"));
         sceneManager.setRegisterScene(getClass().getResource("view/register.fxml"));
         sceneManager.setLobbyScene(getClass().getResource("view/lobby.fxml"));

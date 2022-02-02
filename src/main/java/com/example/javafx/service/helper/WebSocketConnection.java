@@ -15,8 +15,8 @@ import java.util.TimerTask;
  */
 public class WebSocketConnection extends WebSocketClient {
 
-    private SceneManager sceneManager = null;
     private GameService gameService = GameService.getInstance();
+    private SceneManager sceneManager = null;
     // Checken ob das Spiel schon am laufen ist
     private boolean firstGame = false;
     private boolean continueHeartbeat = true;
@@ -72,7 +72,6 @@ public class WebSocketConnection extends WebSocketClient {
      */
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        //TODO: Checken ob noch was gesendet wird this.mSend(MessageKeys.DISSOLVE, "");
         //System.out.println("closed with exit code " + code + " additional info: " + reason);
         this.continueHeartbeat = false;
     }
@@ -89,9 +88,7 @@ public class WebSocketConnection extends WebSocketClient {
         Mainthread aus, sobald er Zeit dafuer hat.
          */
             try {
-                javafx.application.Platform.runLater(() -> {
-                    sceneManager.loadGame();
-                });
+                javafx.application.Platform.runLater(() -> sceneManager.loadGame());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -108,7 +105,7 @@ public class WebSocketConnection extends WebSocketClient {
     public void onError(Exception e) {
         System.out.println(e);
     }
- 
+
     //Testmethode zum testen der Verbindung vom Socket zum Gamecontroller
     public void activateGameController() {
         // Herausholen des GameControler aus dem Service
@@ -137,9 +134,7 @@ public class WebSocketConnection extends WebSocketClient {
 
         // Update des Ui wieder in den Mainthread lagern
         try {
-            javafx.application.Platform.runLater(() -> {
-                controller.digestGame(message);
-            });
+            javafx.application.Platform.runLater(() -> controller.digestGame(message));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -5,7 +5,7 @@ import java.util.prefs.Preferences;
 public class TokenManager {
 
     private static TokenManager instance;
-    private Preferences prefs;
+    private final Preferences prefs;
 
     private TokenManager() {
         /*

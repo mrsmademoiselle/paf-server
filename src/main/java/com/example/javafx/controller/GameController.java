@@ -5,7 +5,6 @@ import com.example.javafx.service.GameService;
 import com.example.javafx.service.helper.FileManager;
 import com.example.javafx.service.helper.MessageKeys;
 import com.example.javafx.service.helper.SceneManager;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -26,33 +25,25 @@ import java.util.TimerTask;
 
 public class GameController extends LayoutController {
 
+    private static final int CARDS_X = 4;
+    private static final int CARDS_Y = 4;
+    private static final int WIGGLE = 30;
     @FXML
     Text score;
-
     @FXML
     Text turn;
     @FXML
     Text cooldown;
-
     @FXML
     ListView logBox;
-
     @FXML
     Rectangle pImg1;
-
     @FXML
     Rectangle pImg2;
-
     @FXML
     NavbarController navbarController;
-
     @FXML
     GridPane gameGrid;
-
-    private int CARDS_X = 4;
-    private int CARDS_Y = 4;
-    //
-    private int WIGGLE = 30;
     private String username;
     private boolean isThisUserTurn = false;
     private boolean hasCooldown = false;
@@ -95,10 +86,7 @@ public class GameController extends LayoutController {
     }
 
     /**
-     * Score aktualisieren
-     *
-     * @param score1
-     * @param score2
+     * Score visuell aktualisieren
      */
     public void updateScore(int score1, int score2) {
         score.setText(score1 + " : " + score2);
@@ -188,12 +176,9 @@ public class GameController extends LayoutController {
                 // styling end
 
                 //Handeln der Kartenturns - wenn user nicht dran ist, passiert bei Klick auf Karten nichts
-                card.setOnMouseClicked((new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        if (isThisUserTurn) {
-                            onCardFlip(card, event);
-                        }
+                card.setOnMouseClicked((event -> {
+                    if (isThisUserTurn) {
+                        onCardFlip(card, event);
                     }
                 }));
 
@@ -207,8 +192,6 @@ public class GameController extends LayoutController {
                         renderBackSide(card);
                         break;
                     case "FLIPPED":
-                        renderFront(card);
-                        break;
                     case "WAITING_TO_FLIP":
                         renderFront(card);
                         break;
@@ -219,7 +202,6 @@ public class GameController extends LayoutController {
 
                 // Hinzufuegen der Karte auf dem Grid
                 gameGrid.add(card, x, y);
-                card.setPairId("" + jCard.get("pairId"));
                 // setzen der CardID fuer den Server
                 card.setCardId("" + jCard.get("id"));
                 counter++;
@@ -255,7 +237,7 @@ public class GameController extends LayoutController {
             // Setzen der Karten auf das Board
             setBoard(cardset);
             setTurn("Spieler: " + turn.get("username") + " ist dran!");
- 
+
             // Setzen der Scores
             JSONArray scores = (JSONArray) message.get("userScores");
             JSONObject s1 = (JSONObject) scores.get(0);
