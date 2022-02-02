@@ -52,7 +52,7 @@ public class NavbarController extends LayoutController {
         logo.setFitHeight(30);
         logo.setFitHeight(30);
     }
-    
+
     public void logout() {
         gameService.stop();
         TokenManager tokenManager = TokenManager.getInstance();

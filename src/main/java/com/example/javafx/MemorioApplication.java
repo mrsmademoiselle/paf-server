@@ -18,9 +18,6 @@ public class MemorioApplication extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        //Parent view = FXMLLoader.load(getClass().getResource("view/register.fxml"));
-        //Parent view = FXMLLoader.load(getClass().getResource("view/login.fxml"));
-
         SceneManager sceneManager = SceneManager.getInstance();
 
         Rectangle2D primaryScreen = Screen.getPrimary().getVisualBounds();
@@ -31,8 +28,7 @@ public class MemorioApplication extends javafx.application.Application {
 
         sceneManager.setScale(applicationWidth, applicationHeight);
         sceneManager.setStage(stage);
-
-        //TODO: Move into scene conntroller
+        
         sceneManager.setLoginScene(getClass().getResource("view/login.fxml"));
         sceneManager.setRegisterScene(getClass().getResource("view/register.fxml"));
         sceneManager.setLobbyScene(getClass().getResource("view/lobby.fxml"));
@@ -54,7 +50,7 @@ public class MemorioApplication extends javafx.application.Application {
     }
 
     @Override
-    public void stop(){
+    public void stop() {
         gameService.stop();
     }
 

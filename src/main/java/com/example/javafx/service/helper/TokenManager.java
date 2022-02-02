@@ -4,8 +4,8 @@ import java.util.prefs.Preferences;
 
 public class TokenManager {
 
-    private Preferences prefs;
     private static TokenManager instance;
+    private Preferences prefs;
 
     private TokenManager() {
         /*
@@ -24,15 +24,15 @@ public class TokenManager {
         return instance;
     }
 
-    public void setToken(String token) {
-        this.prefs.put("token", token);
-    }
-
     public void clearToken() {
         this.prefs.put("token", "");
     }
 
     public String getToken() {
         return this.prefs.get("token", "Ich feuer gerade");
+    }
+
+    public void setToken(String token) {
+        this.prefs.put("token", token);
     }
 }

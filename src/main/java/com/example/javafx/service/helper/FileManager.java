@@ -13,6 +13,7 @@ public class FileManager {
 
     /**
      * Bildauswahl oeffnen
+     *
      * @param page
      * @return
      */
@@ -25,9 +26,10 @@ public class FileManager {
         File selectedFile = fileChooser.showOpenDialog(page.getScene().getWindow());
         return selectedFile;
     }
-
+  
     /**
      * Laden von Bildern aus Ressources
+     *
      * @param fileName Name des zu ladenden Bildes
      * @return Bild das geladen wird
      */

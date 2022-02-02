@@ -22,8 +22,7 @@ public class HttpConnector {
         // TODO evtl in 401 umändern falls Serverprobleme auftreten
         return response.status() == HttpStatus.OK;
     }
-
-    //cVurl get und post
+    
     public static Response<String> get(String urlString) {
         CVurl cVurl = new CVurl();
         TokenManager tokenManager = TokenManager.getInstance();
@@ -45,15 +44,6 @@ public class HttpConnector {
 
         return response;
     }
-
-    /**
-     * TODO: Wrapper Methode die aus einer Liste/Array eine Map macht und die in postCvurl eingibt
-     * // Wrapper Methode fuer die Headers damit nicht immer eine Map eingegeben werden muss
-     * public static String postCvurl2(String url, String... params){
-     * Map<String, String> map = new HashMap<>();
-     * return postCvurl(url,);
-     * }
-     */
 
     public static boolean post(String url, Object object) {
         CVurl cVurl = new CVurl();

@@ -4,15 +4,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 
 public class SceneManager {
 
+    private static final SceneManager instance = new SceneManager();
     private Stage stage;
     private double APPLICATION_WIDTH;
     private double APPLICATION_HEIGHT;
-
     // check Auth hier einbauen und auf /register /login prüfen
     private URL loginScene;
     private URL registerScene;
@@ -22,8 +23,6 @@ public class SceneManager {
     private URL gameScene;
     private URL endScreen;
     private URL history;
-    private static final SceneManager instance = new SceneManager();
-
     // Aktuelle Scene
     private String currentScene;
 
@@ -34,7 +33,9 @@ public class SceneManager {
         return instance;
     }
 
-    public String getCurrentScene(){return this.currentScene;}
+    public String getCurrentScene() {
+        return this.currentScene;
+    }
 
     // Laden von Scenen/Views
     public void loadLogin() {
@@ -57,7 +58,7 @@ public class SceneManager {
         this.loadScene(this.profile);
     }
 
-    public void loadEdscreen(){
+    public void loadEdscreen() {
         this.currentScene = "edscreen";
         this.loadScene(this.endScreen);
     }
@@ -76,7 +77,9 @@ public class SceneManager {
         this.profile = stage;
     }
 
-    public void setEndScreen(URL stage) {this.endScreen = stage;}
+    public void setEndScreen(URL stage) {
+        this.endScreen = stage;
+    }
 
     public Stage loadStage() {
         return this.stage;
@@ -86,7 +89,9 @@ public class SceneManager {
         this.loginScene = loginScene;
     }
 
-    public void setHistoryScene(URL historyScene){this.history = historyScene;}
+    public void setHistoryScene(URL historyScene) {
+        this.history = historyScene;
+    }
 
     public void setLobbyScene(URL lobbyScene) {
         this.lobbyScene = lobbyScene;
@@ -97,7 +102,7 @@ public class SceneManager {
     }
 
     public void loadGame() {
-        this.currentScene ="game";
+        this.currentScene = "game";
         this.loadScene(this.gameScene);
     }
 

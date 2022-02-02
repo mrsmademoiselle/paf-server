@@ -15,7 +15,7 @@ public class BannerController extends LayoutController {
 
     @FXML
     Pane banner;
-
+ 
     @FXML
     StackPane stackP;
 

@@ -7,8 +7,5 @@ public enum MessageKeys {
     LOGIN,
     DISSOLVE,
     FLIPPED,
-    CANCEL,
     HEARTBEAT,
-    JWT,
-    NONE,
 }

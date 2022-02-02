@@ -64,6 +64,7 @@ public class GameService implements Runnable {
 
     /**
      * Suchen nach Spiel, Starten der WS Verbindung
+     *
      * @throws URISyntaxException
      */
     public void lookForGame() throws URISyntaxException {
@@ -111,7 +112,6 @@ public class GameService implements Runnable {
         }
     }
 
-    //TODO: DOKUMENTATION
     //Testen der verheiratung von GameController und Gameservice sowie Websocket
     public void testActivatedGameController() {
         // Aufrufen der Testmethode im WS, dort wird der GameController aus dem Service gezogen

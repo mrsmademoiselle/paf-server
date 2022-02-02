@@ -108,7 +108,7 @@ public class WebSocketConnection extends WebSocketClient {
     public void onError(Exception e) {
         System.out.println(e);
     }
-
+ 
     //Testmethode zum testen der Verbindung vom Socket zum Gamecontroller
     public void activateGameController() {
         // Herausholen des GameControler aus dem Service

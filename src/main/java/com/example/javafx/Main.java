@@ -1,5 +1,4 @@
 package com.example.javafx;
-import javafx.application.Application;
 
 public class Main {
 

@@ -5,7 +5,7 @@ import com.example.javafx.service.helper.HttpConnector;
 import org.json.JSONObject;
 
 public class UserService {
-
+ 
     public UserDto getUserInfo() {
         String body = HttpConnector.get("user/info").getBody();
 

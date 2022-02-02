@@ -45,7 +45,7 @@ public class ProfileController extends LayoutController {
     public void initialize() {
         userDto = userService.getUserInfo();
         usernameTextfield.setText(userDto.getUsername());
-        
+
         setProfilePic();
         addInputListenersForTextfields();
     }

@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
 import org.json.JSONObject;
 
 public class HistoryController extends LayoutController {
-
+ 
     @FXML
     Text wins;
 

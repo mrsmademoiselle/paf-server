@@ -4,7 +4,6 @@ public class UserDto {
     private String username;
     private String password;
     private byte[] profilePic;
-    // ...?
 
     @Deprecated
     public UserDto() {
@@ -13,11 +12,6 @@ public class UserDto {
     public UserDto(String username, byte[] profilePic) {
         this.username = username;
         this.profilePic = profilePic;
-    }
-
-    public UserDto(String username, String password) {
-        this.username = username;
-        this.password = password;
     }
 
     public UserDto(String username, String password, byte[] profilePic) {

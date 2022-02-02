@@ -26,7 +26,7 @@ public class RegistrationController extends LayoutController {
     // Bedeutet, dass dieses Feld in der fxml-Datei referenziert wird
     @FXML
     Button submit;
-
+ 
     @FXML
     TextField username;
 

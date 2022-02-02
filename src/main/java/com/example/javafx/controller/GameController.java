@@ -255,7 +255,7 @@ public class GameController extends LayoutController {
             // Setzen der Karten auf das Board
             setBoard(cardset);
             setTurn("Spieler: " + turn.get("username") + " ist dran!");
-
+ 
             // Setzen der Scores
             JSONArray scores = (JSONArray) message.get("userScores");
             JSONObject s1 = (JSONObject) scores.get(0);
@@ -272,7 +272,7 @@ public class GameController extends LayoutController {
 
             // Setzen des Siegers
             setTurn("Sieger ist: " + (String) winner.get("username"));
-            
+
             // Beenden der WS-Verbindung und Thread beenden
             GameService gameService = GameService.getInstance();
             gameService.stop();

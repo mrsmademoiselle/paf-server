@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
 
 public class EndScreenController extends LayoutController {
     GameService gameService = GameService.getInstance();
-
+ 
     @FXML
     Text finalText;
 
