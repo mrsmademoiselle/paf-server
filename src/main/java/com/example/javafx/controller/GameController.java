@@ -24,7 +24,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class GameController extends PapaController {
+public class GameController extends LayoutController {
 
     @FXML
     Text score;
@@ -87,6 +87,7 @@ public class GameController extends PapaController {
 
     /**
      * Ausgabe des Spielers der gerade dran ist
+     *
      * @param msg Die Nachricht die die Flags enthaelt
      */
     public void setTurn(String msg) {
@@ -95,6 +96,7 @@ public class GameController extends PapaController {
 
     /**
      * Score aktualisieren
+     *
      * @param score1
      * @param score2
      */
@@ -109,9 +111,8 @@ public class GameController extends PapaController {
      * @param event Event
      */
     public void onCardFlip(Card card, MouseEvent event) {
-        /*
-        Cooldown Timer um das verarbeiten und das "spamen" der Karten zu verbessner
-         */
+        /* Quickfix: Timer wegen serverseitigem Cooldown von 1s. Damit wir nicht die zweite Karte ziehen können, bevor der
+        Server-Cooldown abgelaufen ist - denn dann würden die Karten visuell flackern.    */
         if (!hasCooldown) {
             cooldown.setText("Bitte warten.");
             hasCooldown = true;
@@ -150,6 +151,7 @@ public class GameController extends PapaController {
 
     /**
      * Rendert die aufgedeckte Karte
+     *
      * @param card Karte die aufgedeckt werden soll
      */
     public void renderFront(Card card) {
@@ -161,6 +163,7 @@ public class GameController extends PapaController {
 
     /**
      * Methode zum setzen und aktualisieren des Boards
+     *
      * @param cardSet Das kartenset um das Board zu aktualiserein
      */
     public void setBoard(JSONArray cardSet) {
@@ -184,7 +187,7 @@ public class GameController extends PapaController {
                 card.setStyle("-fx-cursor: hand");
                 // styling end
 
-                //Handeln der Kartenturns - wenn user nicht dran passiert bei Klick auf Karten nichts
+                //Handeln der Kartenturns - wenn user nicht dran ist, passiert bei Klick auf Karten nichts
                 card.setOnMouseClicked((new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
@@ -194,11 +197,9 @@ public class GameController extends PapaController {
                     }
                 }));
 
-                // Setzen der Farben - wir ziehen uns die Pair ID und verarbeiten sie in die CardSource
                 JSONObject jCard = (JSONObject) cardSet.get(counter);
-                // Setzend er Cardsource, muss hier passieren da wir jedes mal das Board rendern sonst ist das Feld leer
+                // Setzen der Cardsource, muss hier passieren da wir jedes mal das Board rendern sonst ist das Feld leer
                 card.setCardSource("http://localhost:9090/public/" + jCard.get("pairId") + ".jpg");
-                // Setzen des Flipped Status
                 String flipped = jCard.get("flipStatus").toString();
 
                 switch (flipped) {
@@ -232,15 +233,13 @@ public class GameController extends PapaController {
      * @param message Nachricht aus WS
      */
     public void digestGame(JSONObject message) {
-        // Unterscheidung Spiel und Endscore
 
         // Wenn die Nachricht ein Board enthaelt ist es entweder die aller erste Nachricht oder eine Gamenachricht
         // Es muss also der User bestimmt werden der dran ist und das Board aktualisiert werden
         if (message.has("board")) {
 
-            // Herauslesen des Scores und des aktuellen Zuges
+            // Setzen des aktuellen Zuges
             JSONObject turn = (JSONObject) message.get("currentTurn");
-            JSONArray scores = (JSONArray) message.get("userScores");
 
             //Handeln des ersten zuges und blockieren der Karten
             if (turn.get("username").toString().equals(this.username)) {
@@ -250,29 +249,30 @@ public class GameController extends PapaController {
                 this.isThisUserTurn = false;
             }
 
-            //do the board stuff
             JSONObject board = (JSONObject) message.get("board");
             JSONArray cardset = (JSONArray) board.get("cardSet");
 
-            // uebergen der Karten auf das Board
+            // Setzen der Karten auf das Board
             setBoard(cardset);
             setTurn("Spieler: " + turn.get("username") + " ist dran!");
 
             // Setzen der Scores
+            JSONArray scores = (JSONArray) message.get("userScores");
             JSONObject s1 = (JSONObject) scores.get(0);
             JSONObject s2 = (JSONObject) scores.get(1);
             updateScore(((Integer) s1.get("moves")), (Integer) s2.get("moves"));
 
-            // Setzen der Bilder
+            // Setzen der User-Bilder
             setUserMatchImages(s1, 1);
             setUserMatchImages(s2, 2);
 
             // handling vom Endscore objekt
         } else if (message.has("winner")) {
-            //do the endscorestuff
             JSONObject winner = (JSONObject) message.get("winner");
+
             // Setzen des Siegers
             setTurn("Sieger ist: " + (String) winner.get("username"));
+            
             // Beenden der WS-Verbindung und Thread beenden
             GameService gameService = GameService.getInstance();
             gameService.stop();

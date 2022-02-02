@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class LobbyController extends PapaController {
+public class LobbyController extends LayoutController {
 
     @FXML
     ImageView loading;
@@ -24,6 +24,8 @@ public class LobbyController extends PapaController {
         loading.setFitWidth(50);
     }
 
-    public void cancel(){gameService.stopLookingForGame();}
+    public void cancel() {
+        gameService.stopLookingForGame();
+    }
 
 }

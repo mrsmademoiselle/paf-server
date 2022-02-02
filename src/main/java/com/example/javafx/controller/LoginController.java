@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-public class LoginController extends PapaController {
+public class LoginController extends LayoutController {
 
     @FXML
     TextField usernameTextfield;

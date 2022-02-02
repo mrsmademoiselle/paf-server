@@ -8,7 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 
-public class BannerController extends PapaController {
+public class BannerController extends LayoutController {
 
     @FXML
     Label text;

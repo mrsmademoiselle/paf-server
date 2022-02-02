@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class RegistrationController extends PapaController {
+public class RegistrationController extends LayoutController {
 
     // Bedeutet, dass dieses Feld in der fxml-Datei referenziert wird
     @FXML
@@ -51,11 +51,9 @@ public class RegistrationController extends PapaController {
 
     @FXML
     BannerController bannerController;
-
-    private byte[] imageBytes;
-
     UserService userService = new UserService();
     SceneManager sceneManager = SceneManager.getInstance();
+    private byte[] imageBytes;
 
     @FXML
     protected void initialize() {

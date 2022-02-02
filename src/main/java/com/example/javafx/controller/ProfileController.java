@@ -16,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class ProfileController extends PapaController {
+public class ProfileController extends LayoutController {
 
     @FXML
     Pane page;
@@ -45,8 +45,7 @@ public class ProfileController extends PapaController {
     public void initialize() {
         userDto = userService.getUserInfo();
         usernameTextfield.setText(userDto.getUsername());
-
-        // TODO tatsächliches Bild vom Server nehmen
+        
         setProfilePic();
         addInputListenersForTextfields();
     }

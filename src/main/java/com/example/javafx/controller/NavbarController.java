@@ -4,7 +4,6 @@ import com.example.javafx.service.GameService;
 import com.example.javafx.service.helper.FileManager;
 import com.example.javafx.service.helper.SceneManager;
 import com.example.javafx.service.helper.TokenManager;
-import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -12,7 +11,7 @@ import javafx.scene.image.ImageView;
 
 import java.net.URISyntaxException;
 
-public class NavbarController extends PapaController {
+public class NavbarController extends LayoutController {
 
     @FXML
     ImageView logo;
@@ -33,7 +32,7 @@ public class NavbarController extends PapaController {
 
         //Buttons deaktivieren wenn in der game oder lobby view
         if (this.sceneManager.getCurrentScene().contains("game") ||
-                this.sceneManager.getCurrentScene().contains("lobby")){
+                this.sceneManager.getCurrentScene().contains("lobby")) {
             startGameButton.setDisable(true);
         }
     }
@@ -53,8 +52,7 @@ public class NavbarController extends PapaController {
         logo.setFitHeight(30);
         logo.setFitHeight(30);
     }
-
-    // TODO evtl verschieben
+    
     public void logout() {
         gameService.stop();
         TokenManager tokenManager = TokenManager.getInstance();
@@ -76,7 +74,7 @@ public class NavbarController extends PapaController {
     public void startGame() {
         try {
             gameService.lookForGame();
-        } catch (URISyntaxException e){
+        } catch (URISyntaxException e) {
             System.out.println(e);
         }
     }

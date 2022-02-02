@@ -3,7 +3,6 @@ package com.example.javafx.controller;
 import javafx.stage.Screen;
 
 /**
- * Naming TODO.
  * <p>
  * Abstrakte Klasse für Verwendung von layoutrelevanten Werten zur Laufzeit.
  * Alle Component-Controller sollten diese Datei extenden. Im FXML können die Werte dann verwendet werden,
@@ -17,7 +16,7 @@ import javafx.stage.Screen;
  * Fehler, weil die Property ja schon "gebindet" ist. Das kann man entweder umgehen indem man stattdessen "Pane" verwendet,
  * oder indem man der StackPane die Property "managed=false" gibt.
  */
-public abstract class PapaController {
+public abstract class LayoutController {
 
     /**
      * erstellt Padding an den Seiten für Bildschirminhalt
