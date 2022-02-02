@@ -6,6 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repo Klasse fuer zu speichernde und gespeicherte Gameobjekte
+ */
+
 @Repository
 public interface GameRepository extends CrudRepository<Game, Long> {
     List<Game> findAll();

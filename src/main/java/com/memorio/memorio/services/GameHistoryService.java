@@ -25,7 +25,6 @@ public class GameHistoryService {
     public GameHistoryDto getGameHistoryForUser(String username) {
         List<Game> gamesOfUser = gameRepository.findByUserScoresUserUsername(username);
 
-        // TODO später soll hier ein leeres Objekt zurückgegeben werden
         if (gamesOfUser.isEmpty()) return new GameHistoryDto();
 
         int winCount = calculateWinCount(gamesOfUser, username);

@@ -15,10 +15,20 @@ public class BeanUtil implements ApplicationContextAware {
 
     private static ApplicationContext context;
 
+    /**
+     * Gibt Bean aus Sprintkontext wieder
+     * @param beanClass Bean
+     * @return Gesuchte Bean
+     */
     public static <T> T getBean(Class<T> beanClass) {
         return context.getBean(beanClass);
     }
 
+    /**
+     * Setzt Springkontext um spaeter auf eine Bean zugreifen zu koennen
+     * @param applicationContext Springkontext
+     * @throws BeansException Bean-Exception
+     */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         context = applicationContext;

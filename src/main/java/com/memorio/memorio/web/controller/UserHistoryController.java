@@ -31,6 +31,11 @@ public class UserHistoryController {
         this.userAuthService = userAuthService;
     }
 
+    /**
+     * History-Endpunkt, dient zum Laden von History eines Users
+     * @param jwtToken Token des Users dessen History wiedergebgen werden soll
+     * @return Response mit History des Users
+     */
     @GetMapping("/history")
     public ResponseEntity<GameHistoryDto> getUserHistory(@RequestHeader(name = "Authorization") String jwtToken) {
         User user = userAuthService.getUserFromJwt(jwtToken);

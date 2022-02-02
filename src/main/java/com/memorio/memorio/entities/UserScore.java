@@ -28,6 +28,10 @@ public class UserScore {
     public UserScore() {
     }
 
+    /**
+     * Verknuepft User mit userscore
+     * @param user
+     */
     public UserScore(User user) {
         this.user = user;
         this.moves = 0;
@@ -38,10 +42,17 @@ public class UserScore {
         this.moves += new Random().nextInt(10 - 1) + 1;
     }
 
+    /**
+     * Erhoeht Score um Param
+     * @param i Scoreerhoehung
+     */
     public void increaseScoreBy(int i) {
         this.moves += i;
     }
 
+    /**
+     * Erhoeht Score um 1
+     */
     public void increaseScore() {
         this.moves++;
     }

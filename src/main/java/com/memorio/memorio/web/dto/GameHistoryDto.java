@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * History DTO
+ */
 @Getter
 @Setter
 @ToString

@@ -29,6 +29,7 @@ public class Board {
 
     /**
      * Factory-Methode die ein neues Board mit den reingegebenen Werten erstellt und zurückgibt
+     * @param cardSet Kartenset mit dem das Board angelegt werden soll
      */
     public static Board createBoard(List<Card> cardSet) {
         Board board = new Board();
@@ -36,6 +37,10 @@ public class Board {
         return board;
     }
 
+    /**
+     * Erstellt ein Kartenset und randomisiert es
+     * @return Erstelltes, randomisiertes, Kartenset
+     */
     private List<Card> createCardSet() {
         List<Card> cardset = new ArrayList<>();
         for (int i = 2; i <= 17; i++) {
@@ -50,7 +55,6 @@ public class Board {
     /**
      * Ist dafür zuständig, den Flipstatus einer Karte beim Umdrehen zu setzen.
      * Dafür wird geprüft, ob die Karte mit anderen, umgedrehten Karten matcht.
-     * <p>
      * Returnt true wenn ein matchendes Kartenpaar gefunden wurde, ansonsten false.
      */
     public boolean flipCard(String cardId) {

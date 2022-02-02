@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+/**
+ * Token DTO
+ */
 @Getter
 @Setter
 public class TokenDto implements Serializable {

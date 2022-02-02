@@ -33,6 +33,11 @@ public class User {
     public User() {
     }
 
+    /**
+     * Benutzerobjekt
+     * @param username Username
+     * @param password Passwort
+     */
     public User(String username, String password) {
         this.username = username;
         this.password = password;

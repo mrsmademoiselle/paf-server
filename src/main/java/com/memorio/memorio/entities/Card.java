@@ -24,6 +24,10 @@ public class Card {
     public Card() {
     }
 
+    /**
+     * Karte
+     * @param pairID Die PairID der Karte
+     */
     public Card(int pairID) {
         this.pairId = pairID;
         this.flipStatus = FlipStatus.NOT_FLIPPED;
@@ -41,14 +45,23 @@ public class Card {
         return card;
     }
 
+    /**
+     * Setze Flipstatus auf WAITING_TO_FLIP
+     */
     public void waitToFlip() {
         this.flipStatus = FlipStatus.WAITING_TO_FLIP;
     }
 
+    /**
+     * Setze Flipstatus auf FLIPPED
+     */
     public void flipUp() {
         this.flipStatus = FlipStatus.FLIPPED;
     }
 
+    /**
+     * Setze Flipstatus auf NOT_FLIPPED
+     */
     public void flipDown() {
         this.flipStatus = FlipStatus.NOT_FLIPPED;
     }

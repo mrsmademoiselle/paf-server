@@ -15,6 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         // für welche Controller-Pfade soll corsmapping gelten
+        // Localhost:3000 ist die React Applikation
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000");
         // hier sind noch weitere Konfigurationen möglich, z.B. .allowedMethods und .allowedHeaders,

@@ -62,6 +62,14 @@ public class Game {
         this.userScores = Arrays.asList(userScore1, userScore2);
     }
 
+    /**
+     * Zusammengesetztes Gameobjekt
+     * @param lobbyCode Lobbycode des Spiels
+     * @param board Zugehoeriges Board zum Spiel
+     * @param userscore1 Erster User
+     * @param userScore2 Zweiter User
+     * @param currentTurn User der gerade dran ist
+     */
     public Game(long lobbyCode, Board board, UserScore userscore1, UserScore userScore2, User currentTurn) {
         this.lobbyCode = lobbyCode;
         this.board = board;

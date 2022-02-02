@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Dient der Persistierung und Verarbeitung eines einzigen Game-Objekts zur Laufzeit.
  * Jedes Spiel hat somit seine eigene GameHandler Instanz.
- * <p>
- * TODO WebsocketServer und GameHandler auseinanderziehen
  */
 public class GameHandler {
     private final Logger logger = LoggerFactory.getLogger(GameHandler.class);
@@ -28,13 +26,13 @@ public class GameHandler {
     /**
      * Flippt die Karten entsprechend ihres Flipstatus'. Updated den UserScore wenn notwendig.
      * Ändert den Spieler-Am-Zug wenn notwendig.
-     * <p>
      * Gibt boolean zurück der aussagt, ob es noch weitere Karten gibt, die gezogen werden können, oder nicht.
      * Wenn dieser boolean false ist, kann das Spiel beendet werden.
      */
     public boolean flipCard(String cardId) {
+        // Holt das Board aus dem Game aus dem GameHandler und flippt die Card
         boolean foundMatchingPair = gameInstance.getBoard().flipCard(cardId);
-
+        // Wenn Match gefunden wurde
         if (foundMatchingPair) {
             updateUserScore();
         } else {
@@ -49,6 +47,7 @@ public class GameHandler {
      * Evaluiert, ob es irgendwelche Karten gibt, die noch nicht umgedreht wurden.
      */
     private boolean hasAnyUnflippedCardsLeft() {
+        // Durch die karten durchgehen und schauen ob Karten mit NOT_FLIPPED Status im Cardset sind
         boolean hasAnyUnflippedCards = gameInstance.getBoard().getCardSet().stream()
                 .anyMatch(card -> card.getFlipStatus().equals(FlipStatus.NOT_FLIPPED));
 
@@ -81,10 +80,18 @@ public class GameHandler {
         logger.info("User Scores wurden erfolgreich geupdated.");
     }
 
+    /**
+     * Gameobjekt aus Gamehandler wiedergeben
+     * @return Game aus Gamehandler
+     */
     public Game getGame() {
         return gameInstance;
     }
 
+    /**
+     * Game in Gamehandler uebergeben
+     * @param game Das in den Gamehandler uebergeben werden soll
+     */
     public void setGame(Game game) {
         gameInstance = game;
     }

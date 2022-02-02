@@ -54,6 +54,11 @@ public class UserService implements UserDetailsService {
     }
 
 
+    /**
+     * Persistiert User
+     * @param user Zu speichernden User
+     * @return true wenn Objekt persistiert, false wenn Exception eintritt
+     */
     public boolean saveUser(UserAuthDto user) {
         if (this.userRepository.existsByUsername(user.getUsername())) {
             return false;
@@ -65,6 +70,8 @@ public class UserService implements UserDetailsService {
             // Bild setzen
             URL url = Thread.currentThread().getContextClassLoader().getResource("images/default.jpg");
             try {
+                // Standardbild "lesen" und im aktuellen User setzen, auch wenn er ein eigenes Bild hochladen wird
+                // Persistieren wir praeventiv schonmal das Defaultbild
                 BufferedImage bufferImage = ImageIO.read(url);
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
                 ImageIO.write(bufferImage, "jpg", output);
@@ -80,18 +87,27 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * User aktualisieren
+     * @param username Name des zu aktualisierenden Users
+     * @param userUpdateDto Neues Objekt mit Infos die uebertragen werden sollen
+     * @return User wenn aktualisieren erfolgreich, Null wenn nichts geschehen
+     */
     public User updateUser(String username, UserUpdateDto userUpdateDto) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         User user = userOptional.orElseThrow(NotFoundException::new);
 
         try {
-            // franzi schickt leere Usernamen/passwörter mit, wenn die nicht gesetzt sind
+            // usernamen aktualisieren
             if (userUpdateDto.getUsername() != null && !userUpdateDto.getUsername().isBlank()) {
                 user.setUsername(userUpdateDto.getUsername());
             }
+            // PW aktualisieren
             if (userUpdateDto.getPassword() != null && !userUpdateDto.getPassword().isBlank()) {
+                // Vor dem aktualisieren des Passworts muss es noch durch den bcryptEncoder verarbeitet werden fuer JWT
                 user.setPassword(bcryptEncoder.encode(userUpdateDto.getPassword()));
             }
+            // Bild aktualisieren
             if (userUpdateDto.getImg() != null && userUpdateDto.getImg().length > 0) {
                 user.setImage(userUpdateDto.getImg());
             }
@@ -103,6 +119,12 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Persistieren des Benutzerbildes
+     * @param username Username des Users dessen Bild aktualisiert werden soll
+     * @param userImage Bild als Byte-Array
+     * @return true wenn neues Bild gesetzt wurde, false wenn es Probleme gab
+     */
     public boolean saveUserImage(String username, byte[] userImage) {
         if (!this.userRepository.existsByUsername(username)) {
             return false;
@@ -118,6 +140,12 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Laden von Benutzerdetails
+     * @param username Username des users
+     * @return Userdetails
+     * @throws UsernameNotFoundException Exceptionhandling
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> optional = userRepository.findByUsername(username);

@@ -20,6 +20,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    /**
+     *Websecururity Klasse
+     * Wird fuer das JWT Handling benoetigt
+     */
 
     private final JwtAuthenticationExceptionHandler jwtAuthenticationExceptionHandler;
     private final UserService userService;
@@ -49,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        // csrf aus machen, da nicht benoetigt bzw keine anforderung
+        // csrf aus machen, da nicht benoetigt
         httpSecurity.csrf().disable()
                 .cors().and()
                 // auth-header check fuer folgende Endpunkte deaktivieren

@@ -383,7 +383,9 @@ public class MemorioWebSocketServer extends WebSocketServer {
         return userRepository.findByUsername(usernameFromToken);
     }
 
-
+    /**
+     * Sendet Endscore DTO an Clients aus WS Verbindungn
+     */
     private void sendEndscoreToClientsOfConnection(WebSocket conn) {
         try {
             GameRepository gameRepository = BeanUtil.getBean(GameRepository.class);

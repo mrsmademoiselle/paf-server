@@ -41,6 +41,9 @@ public class UserInformationController {
         this.userAuthService = userAuthService;
     }
 
+    /**
+     * Info-Endpunkt fuer Benutzerprofil
+     */
     @GetMapping("/info")
     public ResponseEntity<?> getUserInfo(@RequestHeader(name = "Authorization") String jwtToken) {
         User user = userAuthService.getUserFromJwt(jwtToken);
@@ -52,6 +55,9 @@ public class UserInformationController {
         return ResponseEntity.ok(new UserInfoDto(user.getUsername(), encodedString, img));
     }
 
+    /**
+     * Image-Endpunkt fuer das Bild
+     */
     @GetMapping("/info/image")
     public ResponseEntity<?> getUserImage(@RequestHeader(name = "Authorization") String jwtToken) {
         User user = userAuthService.getUserFromJwt(jwtToken);
@@ -63,6 +69,9 @@ public class UserInformationController {
         return ResponseEntity.ok(image);
     }
 
+    /**
+     * Update-Endpunkt fuer das Benutzerprofil, wenn das Profil aktualisiert wird
+     */
     @PostMapping("/update")
     public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdateDto userUpdateDto, BindingResult bindingResult, @RequestHeader(name = "Authorization") String jwtToken) throws Exception {
         if (bindingResult.hasErrors()) {
@@ -73,6 +82,9 @@ public class UserInformationController {
         return ResponseEntity.ok(new TokenDto(token));
     }
 
+    /**
+     * Bild-Hochlade Endpunkt
+     */
     @PostMapping("/image/upload")
     public ResponseEntity<?> uploadImage(@RequestBody byte[] decodedBytes, @RequestHeader(name = "Authorization") String jwtToken) {
         // notwendig für JavaFX, weil Jackson byte[] automatisch mit byte64 encoded.
@@ -91,6 +103,9 @@ public class UserInformationController {
         return ResponseEntity.ok("");
     }
 
+    /**
+     * Entfernt das Bild und setzt ueber den Server das Defaultbild
+     */
     @GetMapping("/image/remove")
     public ResponseEntity<?> removeImage(@RequestHeader(name = "Authorization") String jwtToken) {
         User user = userAuthService.getUserFromJwt(jwtToken);
@@ -102,6 +117,9 @@ public class UserInformationController {
         return ResponseEntity.ok(new UserInfoDto(user.getUsername(), encodedString, getDefaultImg()));
     }
 
+    /**
+     * Laedt Default Bild aus Datei damit es spaeter persistiert und an die Clients vermittelt werden kann
+     */
     private byte[] getDefaultImg() {
         URL url = Thread.currentThread().getContextClassLoader().getResource("images/default.jpg");
         try {
