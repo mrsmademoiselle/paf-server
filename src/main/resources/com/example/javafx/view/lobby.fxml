@@ -6,8 +6,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<Pane xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/lobby.css"
+<Pane xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx" stylesheets="@../css/lobby.css"
       fx:controller="com.example.javafx.controller.LobbyController">
     <fx:include fx:id="navbar" source="navbar.fxml"/>
 

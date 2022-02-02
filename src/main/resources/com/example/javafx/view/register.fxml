@@ -6,7 +6,7 @@
 <Pane xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/login.css" fx:id="page"
       fx:controller="com.example.javafx.controller.RegistrationController">
     <fx:include fx:id="banner" source="banner.fxml"/>
-
+ 
     <Pane layoutY="${controller.offsetY * 1.2}"
           layoutX="${controller.offsetX}" prefWidth="${controller.widthWithOffset}">
         <VBox alignment="TOP_CENTER" prefWidth="${controller.widthWithOffset}"

@@ -8,7 +8,7 @@
       xmlns="http://javafx.com/javafx" stylesheets="@../css/game.css"
       fx:controller="com.example.javafx.controller.GameController">
     <fx:include fx:id="navbar" source="navbar.fxml"/>
-
+ 
     <Pane prefHeight="${controller.heightWithOffset}" prefWidth="${controller.widthWithOffset}"
           layoutY="${controller.offsetY}" layoutX="${controller.offsetX}">
         <HBox prefHeight="${controller.heightWithOffset - 100}"

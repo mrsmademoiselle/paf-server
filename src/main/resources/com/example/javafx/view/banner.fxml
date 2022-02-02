@@ -3,8 +3,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
-<Pane xmlns="http://javafx.com/javafx" fx:id="banner"
-      xmlns:fx="http://javafx.com/fxml" styleClass="banner"
+<Pane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx"
+      fx:id="banner" styleClass="banner"
       fx:controller="com.example.javafx.controller.BannerController"
       prefHeight="50.0" stylesheets="@../css/banner.css" layoutY="50"
       prefWidth="${controller.widthWithoutOffset}">

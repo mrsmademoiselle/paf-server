@@ -3,8 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
-<Pane xmlns="http://javafx.com/javafx" fx:id="page"
-      xmlns:fx="http://javafx.com/fxml" stylesheets="@../css/profile.css"
+<Pane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx"
+      fx:id="page" stylesheets="@../css/profile.css"
       fx:controller="com.example.javafx.controller.ProfileController">
     <fx:include fx:id="navbar" source="navbar.fxml"/>
     <fx:include fx:id="banner" source="banner.fxml"/>
