@@ -277,8 +277,6 @@ public class MemorioWebSocketServer extends WebSocketServer {
                 TimerTask task = new TimerTask() {
                     public void run() {
                         boolean hasAnyUnflippedCardsLeft = gameHandler.flipCard(cardId);
-
-                        logger.info("flipCard-Dauer: " + (System.currentTimeMillis() - timeBefore));
                         // Response an Client senden, Game oder EndscoreDto
                         if (hasAnyUnflippedCardsLeft) {
                             sendGameToAllClientsOfConnection(finalConn, null);

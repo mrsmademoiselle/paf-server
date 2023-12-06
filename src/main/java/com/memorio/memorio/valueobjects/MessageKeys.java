@@ -3,19 +3,12 @@ package com.memorio.memorio.valueobjects;
 import java.util.Arrays;
 
 public enum MessageKeys {
-    // Der Spieler will sich für die Queue registrieren
     REGISTER_QUEUE("LOGIN"),
-    // Der Spieler befindet sich in der Queue und hat noch kein Match gefunden
     DISSOLVE_QUEUE("DISSOLVE"),
-    // eine Karte soll umgedreht werden
     FLIP_CARD("FLIPPED"),
-    // Der Spieler will das laufende Match abbrechen
     CANCEL_GAME("CANCEL"),
-    // Heartbeat
     HEARTBEAT("HEARTBEAT"),
-    // jwt
     JWT("JWT"),
-    // wenn kein anderer Key gefunden wurde
     NONE("NONE");
 
     private final String text;

@@ -29,6 +29,7 @@ public class Board {
 
     /**
      * Factory-Methode die ein neues Board mit den reingegebenen Werten erstellt und zurückgibt
+     *
      * @param cardSet Kartenset mit dem das Board angelegt werden soll
      */
     public static Board createBoard(List<Card> cardSet) {
@@ -39,6 +40,7 @@ public class Board {
 
     /**
      * Erstellt ein Kartenset und randomisiert es
+     *
      * @return Erstelltes, randomisiertes, Kartenset
      */
     private List<Card> createCardSet() {

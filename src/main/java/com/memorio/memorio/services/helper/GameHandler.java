@@ -40,7 +40,6 @@ public class GameHandler {
         }
 
         return hasAnyUnflippedCardsLeft();
-
     }
 
     /**
@@ -82,6 +81,7 @@ public class GameHandler {
 
     /**
      * Gameobjekt aus Gamehandler wiedergeben
+     *
      * @return Game aus Gamehandler
      */
     public Game getGame() {
@@ -90,6 +90,7 @@ public class GameHandler {
 
     /**
      * Game in Gamehandler uebergeben
+     *
      * @param game Das in den Gamehandler uebergeben werden soll
      */
     public void setGame(Game game) {
